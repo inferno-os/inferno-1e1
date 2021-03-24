@@ -1,0 +1,173 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs33.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs35.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="854583">
+<center><h1> emu </h1></center>
+</a><a name="854584">
+emu - Inferno emulator<p>
+</a><a name="854585">
+<h2> Synopsis</h2>
+</a><pre><tt>emu [<em>Options...</em> ]
+</tt></pre></p><a name="855124">
+<h2> Description</h2>
+</a><a name="855126">
+The emu command provides the Inferno emulation environment. The emulator runs as an application under the machine's native operating system, which provides system services.<p>
+</a><a name="855134">
+The emu command starts an Inferno <em>shell</em> (default /dis/sh.dis), whose path name is interpreted in the Inferno file name space, not in the native operating system's name space.<p>
+</a><a name="854590">
+<h2> Options</h2>
+</a><a name="854591">
+Options may be set from the environment variable EMU but are overridden by options supplied on the command line 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="854594">
+-c[0-9]<p>
+</a><td colspan=2 rowspan=1><a name="854596">
+The <kbd>-c </kbd>option determines the manner in which the emulator will process Dis programs.<p>
+</a>
+<tr><td><a name="854600">
+<p>
+</a><td><a name="854602">
+<strong>0 </strong><p>
+</a><td><a name="854604">
+(default)<p>
+</a><a name="854605">
+Unless specified otherwise by the module, <kbd>emu</kbd> uses an interpreter to execute Dis instructions on the native machine.<p>
+</a>
+<tr><td><a name="854608">
+<p>
+</a><td><a name="854610">
+<strong>1</strong><p>
+</a><a name="854611">
+<p>
+</a><td><a name="854613">
+Setting the option argument to non-zero changes the default behavior to compile Dis into native instructions when a module is loaded (just-in-time compilation). This results in faster execution but larger run-time size.<p>
+</a>
+<tr><td><a name="854615">
+<p>
+</a><td><a name="854617">
+<strong>2-9</strong><p>
+</a><td><a name="854619">
+Setting the option argument to larger values engages compiler trace facilities.<p>
+</a>
+<tr><td><a name="854621">
+-g<em>X</em>x<em>Y</em> <p>
+</a><td colspan=2 rowspan=2><a name="854623">
+Define screen width and height in pixels. The default values are 640 and 480 respectively. Values smaller than the defaults are ignored.<p>
+</a>
+<tr><td><a name="854627">
+<p>
+</a>
+<tr><td><a name="854633">
+-f<em>fontpath</em> <p>
+</a><td colspan=2 rowspan=2><a name="854635">
+Specify the default font for the <kbd>tk</kbd> module. The path is interpreted in the Inferno name space. If unspecified, the <kbd>font</kbd> variable has value <kbd>&lt;</kbd><kbd>inferno_root</kbd><kbd>&gt;/fonts/lucm/unicode.9.font</kbd>. <p>
+</a><a name="876476">
+(See Notes section below for value of <kbd>&lt;inferno_root&gt;</kbd>.)<p>
+</a>
+<tr><td><a name="854639">
+ <p>
+</a>
+<tr><td><a name="854645">
+-r<em>rootdir</em><p>
+</a><td colspan=2 rowspan=1><a name="854647">
+Specify directory that <kbd>emu</kbd> will serve as its root instead of <em>&lt;inferno_root&gt;</em>. See Notes below for default values.<p>
+</a>
+<tr><td><a name="854651">
+-s<p>
+</a><td colspan=2 rowspan=1><a name="891838">
+This option specifies how the emulator deals with traps reported by the operating system. By default, traps suspend execution of the offending thread. When the <kbd>-s </kbd>option is set, <kbd>emu</kbd> makes no arrangements to catch traps and, if they occur, the <kbd>emu</kbd> process responds accordingly (e.g., terminates with <kbd>core</kbd> file). This facilitates debugging of the broken process via tools in the host environment.<p>
+</a>
+<tr><td colspan=3 rowspan=1><a name="854657">
+-p<em>poolname</em><em> =</em><em>maxsize</em> <p>
+</a>
+<tr><td><a name="866286">
+<p>
+</a><td colspan=2 rowspan=1><a name="866295">
+Specify the maximum size (in bytes) of the named memory allocation pool. The pools are:<p>
+</a>
+<tr><td><a name="854663">
+<p>
+</a><td><a name="854665">
+main<p>
+</a><td><a name="854667">
+the general malloc arena<p>
+</a>
+<tr><td><a name="854669">
+<p>
+</a><td><a name="854671">
+heap<p>
+</a><td><a name="854673">
+the Dis virtual machine heap<p>
+</a>
+<tr><td><a name="854675">
+<p>
+</a><td><a name="854677">
+image<p>
+</a><td><a name="854679">
+image storage for the display<p>
+</a>
+<tr><td><a name="854681">
+-m[012]<p>
+</a><td colspan=2 rowspan=1><a name="854683">
+Garbage collector mark-and-sweep trace parameter.<p>
+</a>
+<tr><td><a name="854688">
+-7<p>
+</a><td colspan=2 rowspan=1><a name="854690">
+Restrict <kbd>emu</kbd> to 7-bit (128 element) color map. The default is 256 elements. Useful for X-terminals with few color maps.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="854693">
+<h2> Files 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="855141">
+<kbd>/dis/sh.dis</kbd><p>
+</a><td><a name="855143">
+The default Inferno shell.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="854695">
+<h2> See Also</h2>
+</a><a name="854702">
+<a href="mpgs35.htm#854712"><em>limbo</em></a>, and <a href="mpgs26.htm#841311"><em>sh</em></a><p>
+</a><a name="854704">
+<h2> Notes</h2>
+</a><a name="854705">
+Default value of <em>&lt;inferno_root&gt;</em> is <kbd>/usr/inferno</kbd> on Unix-hosted systems and <kbd>\users\inferno</kbd> on Windows-hosted systems.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs33.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs35.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

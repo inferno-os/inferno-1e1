@@ -1,0 +1,17 @@
+OBJS = 	arc.o         lex.o         os-Hp.o     rule.o        varsub.o \
+	bufblock.o    main.o        run.o         word.o \
+	dir.o         match.o       shprint.o     t_ar.o \
+	graph.o       mk.o          parse.o       symtab.o      t_driver.o \
+	job.o         recipe.o      var.o         t_file.o
+
+LIBS = ../../lib9/lib9 ../../libbio/libbio ../../libregexp/libregexp
+
+CC = c89
+CFLAGS =  -D_HPUX_SOURCE +e -I. -I../../include -I../../Hp/s800/include
+
+mk: $(OBJS) $(LIBS)
+	c89 $(OBJS) -o mk $(LIBS)
+	cp mk ../../Hp/s800/bin
+
+.c.o:
+	$(CC) $(CFLAGS) -c $<

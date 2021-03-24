@@ -1,0 +1,35 @@
+<../mkconfig
+<../$SYSHOST/mkhost
+<../$OBJDIR/mkfile
+
+LIB=libmemlayer.$A
+OFILES=\
+	draw.$O\
+	lalloc-$SYSTARG.$O\
+	layerop.$O\
+	ldelete.$O\
+	lhide.$O\
+	line.$O\
+	load.$O\
+	lorigin.$O\
+	lsetrefresh.$O\
+	ltofront.$O\
+	ltorear.$O\
+
+HFILES=\
+	../include/image.h\
+	../include/memimage.h\
+	../include/memlayer.h
+
+<../$SYSTARG/mksyslib
+
+package:QV:
+	$TRUE
+
+lalloc-Hp.$O:		lalloc-x11.c
+lalloc-Irix.$O:		lalloc-x11.c
+lalloc-Solaris.$O:	lalloc-x11.c
+lalloc-Linux.$O:	lalloc-x11.c
+lalloc-Inferno.$O:	lalloc.c
+lalloc-Nt.$O:		lalloc.c
+lalloc-Plan9.$O:	lalloc.c

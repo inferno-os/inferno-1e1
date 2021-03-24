@@ -1,0 +1,47 @@
+<../mkconfig
+<../$SYSHOST/mkhost
+<../$OBJDIR/mkfile
+
+YFLAGS=		-d
+
+TARG=limbo
+LIBS=\
+	bio\
+	math\
+	crypt\
+	9\
+
+OFILES=\
+	asm.$O\
+	alt.$O\
+	case.$O\
+	com.$O\
+	decl.$O\
+	dis.$O\
+	dtocanon.$O\
+	ecom.$O\
+	gen.$O\
+	lex.$O\
+	node.$O\
+	optab.$O\
+	sbl.$O\
+	stubs.$O\
+	type.$O\
+	typecheck.$O\
+	typecompat.$O\
+	y.tab.$O\
+
+HFILES=	limbo.h\
+	fns.h\
+	y.tab.h\
+	../include/interp.h\
+	../include/isa.h\
+
+YFILES=	limbo.y
+
+<../$SYSTARG/mkone
+
+CFLAGS=  '-DINCPATH="'$ROOT_PROD/module'"' $CFLAGS
+
+package:QV:	package-std
+	$TRUE

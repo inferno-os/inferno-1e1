@@ -1,0 +1,62 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs42.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs44.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="866719">
+<center><h1> pointer </h1></center>
+</a><a name="842409">
+Pointer - state of a pointer device such as a mouse<p>
+</a><a name="842410">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";
+draw:= load Draw Draw-&gt;PATH;
+Pointer: adt
+{
+  buttons: int;
+  xy:    Point;
+};
+</tt></pre></p><a name="861004">
+<h2> Description 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="861001">
+buttons<p>
+</a><td><a name="861003">
+Each button on the device corresponds to a bit in buttons; zero bits indicate released (or non-existent), and one bits indicate pressed. The bits, from least to most significant positions, represent the buttons from left to right. <p>
+</a>
+<tr><td><a name="876499">
+xy<p>
+</a><td><a name="876507">
+The pointer's screen coordinates.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="864243">
+The pointer's position and button state is passed through a channel in the Context, as described in <a href="mpgs37.htm#841856"><em>context</em></a>.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs42.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs44.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

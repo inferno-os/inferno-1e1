@@ -1,0 +1,139 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs108.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs110.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="846002">
+<center><h1> ip </h1></center>
+</a><a name="846003">
+ip - TCP, UDP network protocols over IP<p>
+</a><a name="846004">
+<h2> Synopsis</h2>
+</a><pre><tt>bind -a '#I' /net
+/net/tcp/clone
+/net/tcp/<em>n
+</em>/net/tcp/<em>n</em>/data
+/net/tcp/<em>n</em>/ctl
+/net/tcp/<em>n</em>/local
+/net/tcp/<em>n</em>/remote
+/net/tcp/<em>n</em>/status
+/net/tcp/<em>n</em>/listen
+...
+</tt></pre></p><a name="846015">
+<h2> Description</h2>
+</a><a name="846016">
+The IP device provides the interface for protocols that run over IP. TCP and UDP provide the standard internet protocols for reliable stream and unreliable datagram communication.<p>
+</a><a name="846017">
+Each of the protocols is served by the IP device, which represents each connection by a set of device files. The top level directory of each protocol contains a clone file and subdirectories numbered from<kbd> 0</kbd> to the number of connections configured for this protocol. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="846020">
+clone<p>
+</a><td><a name="846022">
+Opening the <kbd>clone</kbd> file reserves a connection. The file descriptor returned from the <a href="mpgs80.htm#844653"><em>open</em></a> will point to the control file, ctl, of the newly allocated connection.<p>
+</a>
+<tr><td><a name="846024">
+ctl<p>
+</a><td><a name="846026">
+Reading the <kbd>ctl</kbd> file returns a text string representing the number of the connection. Connections may be used either to listen for incoming calls or to initiate calls to other machines.<p>
+</a><a name="895729">
+A connection is controlled by writing text strings to the associated <kbd>ctl</kbd> file.<p>
+</a>
+<tr><td><a name="846032">
+data<p>
+</a><td><a name="846034">
+After a connection has been established data may be read from and written to the <kbd>data</kbd> file. For the datagram service UDP, a <kbd>read</kbd> of less than the length of a datagram will cause the entire datagram to be consumed. Each write to the data file will send a single datagram on the network. The TCP protocol provides a stream connection that does not preserve read/write boundaries.<p>
+</a><a name="895732">
+<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="846035">
+Prior to sending data, remote and local addresses must be set for the connection. For outgoing calls the local port number will be allocated randomly if none is set. Addresses are set by writing control messages to the ctl file of the connection. The connection is not established until the <kbd>data</kbd> file is opened. For TCP, the process will block until the remote host has acknowledged the connection. UDP opens always succeed.<p>
+</a><a name="846036">
+The following control messages are supported:<p>
+</a><a name="846037">
+<h3> "connect ipaddress! port [!r]"</h3>
+</a><a name="846038">
+Set the remote IP address and port number for the connection. If the<kbd> r</kbd> flag is supplied and no local address has been specified the system will allocate a restricted port number (less than 1024) for the connection to allow communication with Unix machines' login and <kbd>exec</kbd> services.<p>
+</a><a name="846042">
+<h3> "hangup"</h3>
+</a><a name="877036">
+Terminate the connection.<p>
+</a><a name="877050">
+<h3> "announce X"</h3>
+</a><a name="846043">
+<em>X</em> is a decimal port number or *. Set the local port number to<em> X</em> and accept calls to <em>X</em>. If <em>X</em> is *, accept calls for any port that no process has explicitly announced. The local IP address cannot be set. The announce attempt fails if the connection is already announced or connected.<p>
+</a><a name="846044">
+<h3> "bind X"</h3>
+</a><a name="846045">
+<em>X</em> is a decimal port number or *. Set the local port number to <em>X</em>. This exists to support emulation of BSD sockets and is not used otherwise.<p>
+</a><a name="846047">
+<h3> "header" (UDP only)</h3>
+</a><a name="846048">
+Skip headers on reads and writes.<p>
+</a><a name="846050">
+Port numbers must be in the range 1 to 32767. If a local port has not been announced prior to a connect a local port number will be allocated automatically. Local ports are allocated from 5000 up.<p>
+</a><a name="846068">
+Several files report the status of a connection. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="846053">
+remote<p>
+</a><td><a name="846055">
+The <kbd>remote</kbd> file provides the IP address and port number for the remote side of the connection.<p>
+</a>
+<tr><td><a name="846057">
+local<p>
+</a><td><a name="846059">
+The <kbd>local</kbd> files contain the IP address and port number for the local side of the connection.<p>
+</a>
+<tr><td><a name="846061">
+status<p>
+</a><td><a name="846063">
+The <kbd>status</kbd> file contains protocol-dependent information to help debug network connections.<p>
+</a>
+<tr><td><a name="846065">
+listen<p>
+</a><td><a name="846067">
+A process may accept incoming connections by opening the <kbd>listen</kbd> file. The <kbd>open</kbd> will block until a new connection request arrives. Then <kbd>open</kbd> will return an open file descriptor that points to the control file of the newly accepted connection. This procedure will accept all calls for the given protocol.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="846069">
+In general it should not be necessary to use the file system interface to the networks. The <kbd>dial</kbd>, <kbd>announce</kbd>, and <kbd>listen</kbd> functions in the <kbd>sys</kbd> module perform the necessary I/O to establish and manipulate network connections.<p>
+</a><a name="846070">
+See Also<p>
+</a><a name="846071">
+<a href="mpgs75.htm#844412"><em>dial</em></a> <p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs108.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs110.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

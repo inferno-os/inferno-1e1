@@ -1,0 +1,43 @@
+<../../mkconfig
+<../../$SYSHOST/mkhost
+<../../$OBJDIR/mkfile
+
+TARG=8c
+OFILES=\
+	cgen.$O\
+	enam.$O\
+	list.$O\
+	peep.$O\
+	reg.$O\
+	sgen.$O\
+	swt-$SYSTARG.$O\
+	txt.$O\
+	bits.$O\
+
+HFILES=\
+	gc.h\
+	8.out.h\
+	../cc/cc.h\
+
+LIBFILE=../../$OBJDIR/lib/libcc.$A
+$OFILES: $LIBFILE
+
+# Library cc depends on libbio.a which in turn depends
+# on lib9.a so order is important.
+LIBS=cc bio 9
+LDSYSLIBS=
+
+<../../$SYSTARG/mkone
+
+swt-Irix.$O:	swt-posix.c
+swt-Solaris.$O:	swt-posix.c
+swt-Linux.$O:	swt-posix.c
+
+$LIBFILE:
+	cd ../cc
+	mk $MKFLAGS install
+	mk $MKFLAGS clean
+
+
+package:QV:
+	$TRUE

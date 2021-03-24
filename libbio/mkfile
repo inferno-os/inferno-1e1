@@ -1,0 +1,28 @@
+<../mkconfig
+<../$SYSHOST/mkhost
+<../$OBJDIR/mkfile
+
+LIB=libbio.$A
+OFILES=\
+	bbuffered.$O\
+	bfildes.$O\
+	bflush.$O\
+	bgetrune.$O\
+	bgetc.$O\
+	bgetd.$O\
+	binit.$O\
+	boffset.$O\
+	bprint.$O\
+	bputrune.$O\
+	bputc.$O\
+	brdline.$O\
+	bread.$O\
+	bseek.$O\
+	bwrite.$O\
+
+HFILES=	../include/bio.h
+
+<../$SYSTARG/mksyslib
+
+package:QV:
+	$TRUE

@@ -1,0 +1,102 @@
+<../mkconfig
+<../$SYSHOST/mkhost
+<../$OBJDIR/mkfile
+
+LIB=libinterp.$A
+OFILES=\
+	alt.$O\
+	comp-$OBJTYPE.$O\
+#	comp-arm.$O\
+	conv.$O\
+	dec.$O\
+	draw.$O\
+	gc.$O\
+	geom.$O\
+	heap.$O\
+	ipint.$O\
+	link.$O\
+	load.$O\
+	math.$O\
+	prefab.$O\
+	readmod.$O\
+	runt.$O\
+	sign.$O\
+	stack.$O\
+	tk.$O\
+	validstk.$O\
+	xec.$O\
+	das-$OBJTYPE.$O\
+#	das-arm.$O\
+	keyring.$O\
+	string.$O\
+
+HFILES=\
+	../include/interp.h\
+	../include/isa.h\
+	runt.h\
+	tab.h\
+
+<../$SYSTARG/mksyslib
+
+MODULES=\
+	../module/sys.m\
+	../module/draw.m\
+	../module/prefab.m\
+	../module/math.m\
+	../module/tk.m\
+	../module/keyring.m\
+
+runt.h:D: $MODULES
+	$RM $target
+	limbo -a -I../module ../module/runt.m > $target
+
+sysmod.h:D: $MODULES
+	$RM $target
+	limbo -t Sys -I../module ../module/runt.m > $target
+
+keyring.h:D: $MODULES
+	$RM $target
+	limbo -t Keyring -I../module ../module/runt.m > $target
+
+drawmod.h:D: $MODULES
+	$RM $target
+	limbo -t Draw -I../module ../module/runt.m > $target
+
+prefabmod.h:D: $MODULES
+	$RM $target
+	limbo -t Prefab -I../module ../module/runt.m > $target
+
+tkmod.h:D: $MODULES
+	$RM $target
+	limbo -t Tk -I../module ../module/runt.m > $target
+
+mathmod.h:D: $MODULES
+	$RM $target
+	limbo -t Math -I../module ../module/runt.m > $target
+
+xec.$O:		optab.h  ../include/pool.h
+tk.$O:		../include/tk.h  ../include/pool.h
+draw.$O: 	../include/image.h
+prefab.$O: 	../include/image.h\
+		../include/prefab.h
+
+runt.$O:	sysmod.h
+prefab.$O:	prefabmod.h
+draw.$O:	drawmod.h
+tk.$O:		../include/image.h tkmod.h
+math.$O:	mathmod.h
+keyring.$O:	keyring.h ../keyring/keys.h
+ipint.$O:	keyring.h
+
+optab.h:	../include/isa.h mkoptab
+	$RM $target
+	$SH mkoptab
+
+#	Do not remove optab.h, because the script that builds
+#	it works only on UNIX and Plan 9.
+
+nuke:EV:	nuke-std
+	$RM runt.h sysmod.h drawmod.h prefabmod.h tkmod.h mathmod.h keyring.h
+
+package:QV:
+	$TRUE

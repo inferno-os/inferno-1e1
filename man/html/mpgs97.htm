@@ -1,0 +1,234 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs96.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs98.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="855746">
+<center><h1> ir </h1></center>
+</a><a name="855747">
+ir - infrared remote control<p>
+</a><a name="855748">
+<h2> Synopsis</h2>
+</a><pre><tt>include   "ir.m";
+ir     := load Ir Ir-&gt;PATH;    # for real remotes
+simir  := load Ir Ir-&gt;SIMPATH; # for keyboard simulator
+
+init:      fn(irc: chan of int): int;
+translate: fn(key: int)        : int;
+</tt></pre></p><a name="855755">
+<h2> Description</h2>
+</a><a name="855756">
+Programs running with the <a href="mpgs66.htm#843703"><em>Limbo Prefab Modules</em></a> toolkit are controlled by an infrared remote control device. If such a device is not present, the system may simulate it from the keyboard by loading the module in file Ir-&gt;SIMPATH. The Ir module defines codes for representing the remote control keys (see below). They are typically sent over the Context.cir (see <a href="mpgs37.htm#841856"><em>context</em></a>) channel, which is managed by <em>mux</em>. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="855762">
+init<p>
+</a><td><a name="855764">
+The <kbd>init</kbd> function takes the appropriate actions to initialize the device, and then spawns a process to return the codes on the <em>irc </em>channel. This is done for both the real and simulated devices. <kbd>Init</kbd> is typically invoked once, such as by <em>mux</em>, and the codes are then multiplexed between the applications. Most programs need not call init.<p>
+</a>
+<tr><td><a name="855766">
+translate<p>
+</a><td><a name="855768">
+The <kbd>translate</kbd> function converts the device's raw codes into the constants defined by the module. For example, with the simulated remote control, <kbd>translate('3')</kbd> returns Three. <kbd>Translate</kbd> is only necessary for programs that wish to manage their own simulation of the remote control. <p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="855823">
+<h2> Codes 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="894662">
+<p>
+</a><td><a name="894664">
+<p>
+</a><td><a name="894666">
+<strong>Keyboard</strong> <strong>Equivalent</strong><p>
+</a>
+<tr><td><a name="855771">
+ChanUP, ChanDN<p>
+</a><td><a name="855773">
+The Channel-Up and Channel-Down buttons.<p>
+</a><td><a name="894573">
+<kbd>r</kbd> and c<p>
+</a>
+<tr><td><a name="855775">
+Enter<p>
+</a><td><a name="855777">
+The Enter button.<p>
+</a><td><a name="894575">
+SPACE bar<p>
+</a>
+<tr><td><a name="855779">
+EOF<p>
+</a><td><a name="855781">
+An end of file from the remote device. After sending one, no more codes will be sent on <em>irc</em>.<p>
+</a><td><a name="894577">
+<p>
+</a>
+<tr><td><a name="855783">
+Error<p>
+</a><td><a name="855785">
+An unknown or invalid input from the remote device.<p>
+</a><td><a name="894579">
+<p>
+</a>
+<tr><td><a name="855787">
+FF, Rew<p>
+</a><td><a name="855789">
+The Fast-Forward and Rewind buttons. <p>
+</a><td><a name="894581">
+<kbd>k </kbd>and j<p>
+</a>
+<tr><td><a name="855791">
+Mute<p>
+</a><td><a name="855793">
+The Mute button. <p>
+</a><td><a name="894583">
+none<p>
+</a>
+<tr><td><a name="855795">
+Power<p>
+</a><td><a name="855797">
+The Power button.<p>
+</a><td><a name="894585">
+<kbd>Delete</kbd> key<p>
+</a>
+<tr><td><a name="855799">
+Rcl<p>
+</a><td><a name="855801">
+The Recall button. Typical applications do not see this command. Instead, the mux program intercepts the command and reactivates its menu. <p>
+</a><td><a name="894587">
+x<p>
+</a>
+<tr><td><a name="855804">
+Record<p>
+</a><td><a name="855806">
+The Record button.<p>
+</a><td><a name="894589">
+none<p>
+</a>
+<tr><td><a name="855808">
+Select<p>
+</a><td><a name="855810">
+The Select button.<p>
+</a><td><a name="894591">
+<kbd>Return</kbd> or <kbd>Enter</kbd> key<p>
+</a>
+<tr><td><a name="855812">
+Up, Dn<p>
+</a><td><a name="855814">
+The Up and Down buttons. <p>
+</a><td><a name="894593">
+<kbd>i </kbd>and m<p>
+</a>
+<tr><td><a name="855816">
+VolUP, VolDN<p>
+</a><td><a name="855818">
+The Volume-Up and Volume-Down buttons.<p>
+</a><td><a name="894595">
+<kbd>t</kbd> and v<p>
+</a>
+<tr><td><a name="855820">
+Zero, One, Two, etc.<p>
+</a><td><a name="855822">
+The digit buttons, 0 through 9.<p>
+</a><td><a name="894597">
+corresponding numeral keys<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="855824">
+<h2> Examples</h2>
+</a><a name="855825">
+Application programs using the remote control run under <em>mux</em>, which creates a graphics context for the application. This context includes channels to the mux program and to the Ir device: <kbd>Draw-&gt;Context.ctomux</kbd> and Draw-&gt;Context.cir. The following example establishes communication with <kbd>mux</kbd> and then reads <kbd>Ir</kbd> commands until it sees Enter.<p>
+</a><pre><tt>implement Command;
+ 
+include "sys.m"; 
+include "draw.m"; 
+include "ir.m"; 
+Command: module 
+{
+  init: fn(ref Draw-&gt;Context; list of string);
+};
+init(ctxt: ref Draw-&gt;Context; argv: list of string); 
+{
+  sys:= load Sys Sys-&gt;PATH;  
+  # Tell mux to start sending input.  
+  ctxt.ctomux &lt;-= Draw-&gt;AMstartinput;  
+   for(;;) {   
+       key:= &lt;-ctxt.cir;   
+        sys-&gt;print("command %d\n", key);   
+         if(key == Ir-&gt;Enter)    
+              break;  
+   }  
+# Tell mux this thread is going away.  
+ctxt.ctomux &lt;-= Draw-&gt;AMexit; 
+} 
+</tt></pre></p><a name="855848">
+Programs such as <em>mux</em> that drive the remote control directly must load the appropriate module and initialize it. This example uses the absence of a simulator module to infer that a real remote control is available.<p>
+</a>
+<pre><tt>implement Irtest; 
+include "sys.m"; 
+include "draw.m"; 
+include "ir.m"; 
+Irtest: module 
+{  
+   init: fn(ctxt: ref Draw-&gt;Context, argv: list of string); 
+}; 
+init(nil: ref Draw-&gt;Context, nil: list of string) 
+{   
+    sys:= load Sys Sys-&gt;PATH;   
+    # First try the keyboard Ir simulator.   
+    # If that is not present, use Ir directly.   
+    ir:= load Ir Ir-&gt;SIMPATH;   
+    if(ir == nil)     
+        ir = load Ir Ir-&gt;PATH;   
+    if(ir == nil){     
+        sys-&gt;print("Ir module not loaded: %r\n");     
+        return;   
+    }   
+irc:= chan of int;   
+if(ir-&gt;init(irc) &lt; 0){     
+      sys-&gt;print("Can't initialize Ir device: %r\n");     
+        return;   
+    }   
+      for(;;){     
+              irval:= &lt;-irc;     
+      sys-&gt;print("command %d\n", irval);   
+    } 
+}
+</tt></pre></p><a name="873054">
+<h2> See Also</h2>
+</a><a name="855890">
+<a href="mpgs35.htm#854712"><em>limbo</em></a>, <a href="mpgs36.htm#869014"><em>Limbo Modules</em></a>, and <a href="mpgs36.htm#867451"><em>Limbo Draw Modules</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs96.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs98.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

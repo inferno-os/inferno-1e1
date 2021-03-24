@@ -1,0 +1,60 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs51.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs53.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="853893">
+<center><h1> login </h1></center>
+</a><a name="853894">
+Keyring: login, getauthinfo -<p>
+</a><a name="842968">
+get an Authinfo adt from a certificate authority<p>
+</a><a name="842969">
+<h2> Synopsis</h2>
+</a><pre><tt>include "keyring.m";
+kr:= load Keyring Keyring-&gt;PATH;
+login:       fn(id, password, dest: string):
+                   (string, ref Keyring-&gt;Authinfo);
+getauthinfo: fn(ctxt: ref Draw-&gt;Context, keyname, path: string):
+                        ref Keyring-&gt;Authinfo;
+</tt></pre></p><a name="842976">
+<h2> Description</h2>
+</a><a name="842977">
+<h3> login (i, password, dest) </h3>
+</a><a name="842978">
+The login function is used to get a signed certificate from the certifying authority, CA, using the protocol described in <a href="mpgs98.htm#855907"><em>login</em></a>. The <em>dest</em> parameter is the network address of the CA. The user, <em>id</em>, must have previously received the <em>password</em> from the CA for this to work.<p>
+</a><a name="842979">
+If login fails, the string returned will be an error message. If it succeeds, the string will be the nil value and an Authinfo abstract data type is returned. This adt can be used with the auth function (see <a href="mpgs47.htm#842826"><em>auth</em></a>) to authenticate future connections.<p>
+</a><a name="842980">
+<h3> getauthinfo (ctxt, keyname, path)</h3>
+</a><a name="842981">
+The getauthinfo function is a Tk user interface to login. It will first try to read the file, <em>path</em>, for the Authinfo adt (see the description of the readauthfinfo function on <a href="mpgs47.htm#842826"><em>auth</em></a>). If path is nil, it is set to<kbd> /usr/$user/keyring/keyname</kbd>. If the read succeeds, then that adt is returned.   If it fails a Tk window will be opened to allow the user to enter an id, password, and the network address of the certificate authority to use. The default CA is the $SIGNER listed in the file /services/cs/db.<p>
+</a><a name="842983">
+If requested by the checkbox in the interface, getauthinfo will save the adt in the file, <em>path</em>. This allows the Authinfo to be kept across re-boots. If the box is not checked, getauthinfo will use the system file2chan function (see <a href="mpgs78.htm#854102"><em>file2chan</em></a>) to create a temporary file, <em>path</em>, that will disappear if unmounted or when the system is re-booted.<p>
+</a><a name="842984">
+The login protocol uses TCP port 6673 with the symbolic name inflogin.<p>
+</a><a name="842985">
+<h2> See Also</h2>
+</a><a name="842986">
+<a href="mpgs47.htm#842826"><em>auth</em></a>, and <a href="mpgs78.htm#854102"><em>file2chan</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs51.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs53.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

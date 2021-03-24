@@ -1,0 +1,1911 @@
+#include "lib9.h"
+#include "isa.h"
+#include "interp.h"
+#include <bio.h>
+
+#define PATCH(ptr)		   *ptr |= ((ulong)code-(ulong)ptr) & 0xfffc
+
+#define T(r)	*((void**)(R.r))
+
+#define	XO(o,xo)	(((o)<<26)|((xo)<<1))
+
+#define	OPARRR(o,d,a,b)	((o)|((d)<<21)|((a)<<16)|((b)<<11))
+#define	ARRR(o,d,a,b)		gen((o)|((d)<<21)|((a)<<16)|((b)<<11))
+#define	AIRR(o,d,a,v)		gen((o)|((d)<<21)|((a)<<16)|((v)&0xFFFF))
+#define	IRR(o,v,a,d)	AIRR((o),(d),(a),(v))
+#define	RRR(o,b,a,d)	ARRR((o),(d),(a),(b))
+#define	LRRR(o,a,s,b)		ARRR((o),(s),(a),(b))
+#define	LIRR(o,a,s,v)		AIRR((o),(s),(a),(v))
+#define	Bx(li,aa)		gen((18<<26)|((li)&0x3FFFFFC)|((aa)<<1))
+#define	RLW(op,a,s,sh,mb,me) ((op)|(((s)&31L)<<21)|(((a)&31L)<<16)|(((sh)&31L)<<11)|\
+					(((mb)&31L)<<6)|(((me)&31L)<<1))
+
+#define	SLWI(d,a,n)	gen(slw((d),(a),(n),0))
+#define	LRET()	gen(Oblr)
+#define	CMPH(r)		AIRR(Ocmpi, Rcrf0, (r), (ulong)H);
+
+enum
+{
+	Rzero	= 0,
+
+	Rarg	= 3,
+
+	Ro1	= 8,
+	Ro2	= 9,
+	Ro3	= 10,
+	Ri	= 11,
+	Rj	= 12,
+
+	Rmp	= 13,
+	Rfp	= 14,
+	Rreg	= 15,
+	Rta	= 16,		/* intermediate address for double indirect */
+	Rpic	= 17,		/* address for computed goto, for move to CTR or LR */
+
+	Rcon = 26,	/* constant builder; temporary */
+	/* 27, 28, 29 are potentially external registers (P9/Inferno) */
+	Rlink = 31,	/* holds copies of LR; linker temp */
+
+	Rfret	= 0,
+	Rf1	= 4,
+	Rf2	= 6,
+	Rfcvi	= 27,	/* floating conversion constant (P9/Inferno) */
+	Rfzero = 28,	/* 0.0 (P9/Inferno) */
+	Rfhalf = 29,	/* 0.5 (P9/Inferno) */
+
+	Rlr = 8<<5,	/* SPR(LR) */
+	Rctr = 9<<5,	/* SPR(CTR) */
+
+	Rcrf0 = 0,		/* condition code field 0 */
+
+	Olwz	= 32<<26,
+	Olwzx = XO(31, 23),
+	Olbz	= XO(34, 0),
+	Olbzu = XO(35, 0),
+	Olbzx = XO(31, 87),
+	Olhz	= 40<<26,
+	Olhzx = XO(31, 279),
+	Ostw	= 36<<26,
+	Ostwx = XO(31, 151),
+	Ostb	= XO(38, 0),
+	Ostbu = XO(39, 0),
+	Ostbx = XO(31, 215),
+	Osth	= XO(44,0),
+	Osthx = XO(31, 407),
+
+	Oaddc	= XO(31,10),
+	Oadde	= XO(31, 138),
+	Oaddi	= XO(14, 0),	/* simm */
+	Oaddic_	= XO(13, 0),
+	Oaddis	= XO(15, 0),
+	Oori		= XO(24,0),	/* uimm */
+	Ooris	= XO(25,0),	/* uimm */
+	Odivw	= XO(31, 491),
+	Odivwu	= XO(31, 459),
+	Omulhw	= XO(31, 75),
+	Omulhwu	= XO(31, 11),
+	Omulli	= XO(7, 0),
+	Omullw	= XO(31, 235),
+	Osubf	= XO(31, 40),
+	Osubfc	= XO(31,8),
+	Osubfe	= XO(31,136),
+	Osubfic	= XO(8, 0),
+	Oadd	= XO(31, 266),
+	Oand	= XO(31, 28),
+	Oor		= XO(31, 444),
+	Oxor		= XO(31, 316),
+
+	Ocmpi = XO(11, 0),
+	Ocmp = XO(31, 0),
+	Ocmpl = XO(31, 32),
+	Ocmpli = XO(10,0),
+
+	Orlwinm = XO(21, 0),
+	Oslw	= XO(31, 24),
+	Osraw = XO(31,792),
+	Osrawi =	XO(31,824),
+	Osrw = XO(31,536),
+
+	Cnone	= OPARRR(0,20,0,0),	/* unconditional */
+	Ceq		= OPARRR(0,12,2,0),
+	Cle		= OPARRR(0,4,1,0),
+	Clt		= OPARRR(0,12,0,0),
+	Cdnz	= OPARRR(0,16,0,0),
+	Cgt		= OPARRR(0,12,1,0),
+	Cne		= OPARRR(0,4,2,0),
+	Lk		= 1,
+	Aa		= 2,
+
+	Obeq	= OPARRR(16<<26,12,2,0),
+	Obge	= OPARRR(16<<26,4,0,0),
+	Obgt		= OPARRR(16<<26,12,1,0),
+	Oble		= OPARRR(16<<26,4,1,0),
+	Oblt		= OPARRR(16<<26,12,0,0),
+	Obne	= OPARRR(16<<26,4,2,0),
+
+	Ob		= XO(18, 0),
+	Obc		= XO(16, 0),
+	Obcctr	= XO(19,528),
+	Obcctrl	= Obcctr | Lk,
+	Obctr	= Obcctr | Cnone,
+	Obctrl	= Obctr | Lk,
+	Obclr	= XO(19, 16),
+	Oblr		= Obclr | Cnone,
+	Oblrl		= Oblr | Lk,
+
+	Olea	= 100,		// pseudo op
+
+	Olfd	= XO(50, 0),
+	Ostfd	= XO(54, 0),
+	Ofadd	= XO(63, 21),
+	Ofcmpo	= XO(63, 32),
+	Ofctiwz	= XO(63, 15),
+	Ofsub	= XO(63, 20),
+	Ofmr	= XO(63, 72),
+	Ofmul	= XO(63, 25),
+	Ofdiv	= XO(63, 18),
+	Ofneg	= XO(63, 40),
+
+	SRCOP	= (1<<0),
+	DSTOP	= (1<<1),
+	WRTPC	= (1<<2),	/* update R.PC */
+	TCHECK	= (1<<3),	/* check R.t for continue/ret */
+	NEWPC	= (1<<4),	/* goto R.PC */
+	DBRAN	= (1<<5),	/* dest is branch */
+	THREOP	= (1<<6),
+
+	ANDAND	= 1,
+	OROR,
+	EQAND,
+
+	MacRET	= 0,
+	MacFRP,
+	MacCASE,
+	MacFRAM,
+	MacMOVM,
+	MacCOLR,
+	MacMCAL,
+	MacMFRA,
+	MacCVTFW,
+	MacEND,
+	NMACRO
+};
+
+extern	char	Tmodule[];
+	void	(*comvec)(void);
+extern	long	das(ulong*);
+static	ulong*	code;
+static	ulong*	base;
+static	ulong*	patch;
+static	int	pass;
+static	Module*	mod;
+static	ulong*	tinit;
+static	ulong*	litpool;
+static	int	nlit;
+static	ulong	macro[NMACRO];
+static	void	rdestroy(void);
+static	void	macret(void);
+static	void	macfrp(void);
+static	void	macindx(void);
+static	void	maccase(void);
+static	void	maccvtfw(void);
+static	void	macfram(void);
+static	void	macmovm(void);
+static	void	maccolr(void);
+static	void	macend(void);
+static	void	macmcal(void);
+static	void	macmfra(void);
+
+struct
+{
+	int	o;
+	void	(*f)(void);
+} macinit[] =
+{
+	MacFRP,		macfrp,		/* decrement and free pointer */
+	MacRET,		macret,		/* return instruction */
+	MacCASE,	maccase,	/* case instruction */
+	MacCOLR,	maccolr,	/* increment and color pointer */
+	MacFRAM,	macfram,	/* frame instruction */
+	MacMCAL,	macmcal,	/* mcall bottom half */
+	MacMFRA,	macmfra,	/* punt mframe because t->initialize==0 */
+	MacMOVM,	macmovm,
+	MacCVTFW,	maccvtfw,
+	MacEND,		macend,
+	0
+};
+
+static void
+rdestroy(void)
+{
+	destroy(R.s);
+}
+
+static void
+rmcall(void)
+{
+	Frame *f;
+
+	f = (Frame*)R.FP;
+	if(f == H)
+		error(Tmodule);
+
+	f->mr = nil;
+	((void(*)(Frame*))R.dt)(f);
+	R.SP = (uchar*)f;
+	R.FP = f->fp;
+	if(f->t == nil) {
+		unextend(f);
+		return;
+	}
+	freeptrs(f, f->t);
+	if(currun()->kill)
+		error("");
+}
+
+static void
+rmfram(void)
+{
+	Type *t;
+	Frame *f;
+	uchar *nsp;
+
+	t = (Type*)R.s;
+	if(t == H)
+		error(Tmodule);
+	nsp = R.SP + t->size;
+	if(nsp >= R.TS) {
+		R.s = t;
+		extend();
+		T(d) = R.s;
+		return;
+	}
+	f = (Frame*)R.SP;
+	R.SP = nsp;
+	f->t = t;
+	f->mr = nil;
+	initmem(t, f);
+	T(d) = f;
+}
+
+void
+urk(char *s)
+{
+	print("urk: %s\n", s);
+	exits(0);
+}
+
+static void
+gen(ulong o)
+{
+	*code++ = o;
+}
+
+static void
+br(ulong op, ulong disp)
+{
+	*code++ = op | (disp & 0xfffc);
+}
+
+static void
+mfspr(int d, int s)
+{
+	gen(XO(31,339) | (d<<21) | (s<<11));
+}
+
+static void
+mtspr(int d, int s)
+{
+	gen(XO(31,467) | (s<<21) | (d<<11));
+}
+
+static ulong
+slw(int d, int s, int v, int rshift)
+{
+	int m0, m1;
+
+	if(v < 0 || v > 32)
+		urk("slw v");
+	if(v < 0)
+		v = 0;
+	else if(v > 32)
+		v = 32;
+	if(rshift) {	/* shift right */
+		m0 = v;
+		m1 = 31;
+		v = 32-v;
+	} else {
+		m0 = 0;
+		m1 = 31-v;
+	}
+	return RLW(Orlwinm, d, s, v, m0, m1);
+}
+
+static void
+jr(int reg)
+{
+	mtspr(Rctr, reg);	/* code would be faster if this were loaded well before branch */
+	gen(Obctr);
+}
+
+static void
+jrl(int reg)
+{
+	mtspr(Rctr, reg);
+	gen(Obctrl);
+}
+
+static ulong
+brdisp(ulong *dest)
+{
+	return ((ulong)dest - (ulong)code) & 0x3fffffc;
+}
+
+static void
+jmp(ulong *dest)
+{
+	gen(Ob | brdisp(dest));
+}
+
+static void
+jmpl(ulong *dest)
+{
+	gen(Ob | brdisp(dest) | Lk);
+}
+
+int
+bigc(long c)
+{
+	if(c >= -0x8000 && c <= 0x7FFF)
+		return 0;
+	return 1;
+}
+
+static void
+ldbigc(ulong c, int reg)
+{
+	AIRR(Oaddis, reg,Rzero,c>>16);
+	LIRR(Oori, reg,reg,c);
+}
+
+static void
+ldc(ulong c, int reg)
+{
+	if(!bigc(c))
+		AIRR(Oaddi, reg, Rzero, c);
+	else if(c <= 0xFFFF)
+		LIRR(Oori, reg, Rzero, c);
+	else if((c&0xFFFF) == 0)
+		LIRR(Ooris, reg, Rzero, c>>16);
+	else {
+		AIRR(Oaddis, reg,Rzero,c>>16);
+		LIRR(Oori, reg,reg,c);
+	}
+}
+
+static void
+mem(int inst, ulong disp, int rm, int r)
+{
+	if(bigc(disp)) {
+		ldc(disp, Rcon);
+		if(inst == Olea)
+			inst = Oadd;
+		ARRR(inst, r, Rcon, rm);
+	} else {
+		if(inst == Olea)
+			inst = Oaddi;
+		AIRR(inst, r, rm,disp);
+	}
+}
+
+static void
+opx(int mode, Adr *a, int op, int reg)
+{
+	ulong c;
+	int r, rx, lea;
+
+	lea = 0;
+	if(op == Olea){
+		lea = 1;
+		op = Oaddi;
+	}
+	switch(mode) {
+	case AFP:
+		c = a->ind;
+		if(bigc(c))
+			urk("bigc op1b 1");
+		AIRR(op, reg, Rfp,c);
+		break;
+	case AMP:
+		c = a->ind;
+		if(bigc(c))
+			urk("bigc op1b 2");
+		AIRR(op, reg, Rmp,c);
+		break;
+	case AIMM:
+		if(lea) {
+			if(a->imm != 0) {
+				ldc(a->imm, reg);
+				AIRR(Ostw, reg, Rreg,O(REG,st));
+			} else
+				AIRR(Ostw, Rzero, Rreg,O(REG,st));
+			AIRR(Oaddi, reg, Rreg,O(REG,st));
+		} else
+			ldc(a->imm, reg);
+		return;
+	case AIND|AFP:
+		r = Rfp;
+		goto offset;
+	case AIND|AMP:
+		r = Rmp;
+	offset:
+		c = a->i.s;
+		rx = Ri;
+		if(lea || op == Olwz)
+			rx = reg;
+		AIRR(Olwz, rx, r,a->i.f);
+		if(c != 0 || op != Oaddi)
+			AIRR(op, reg, rx,c);
+		break;
+	}
+}
+
+static void
+opwld(Inst *i, int op, int reg)
+{
+	opx(USRC(i->add), &i->s, op, reg);
+}
+
+static void
+opwst(Inst *i, int op, int reg)
+{
+	opx(UDST(i->add), &i->d, op, reg);
+}
+
+static void
+op2(Inst *i, int op, int reg)
+{
+	int lea;
+
+	lea = 0;
+	if(op == Olea){
+		op = Oaddi;
+		lea = 1;
+	}
+	switch(i->add & ARM) {
+	case AXNON:
+		opwst(i, op, reg);
+		return;
+	case AXIMM:
+		if(lea) {
+			if((short)i->reg != 0) {
+				ldc((short)i->reg, reg);
+				IRR(Ostw, O(REG,t),Rreg, reg);
+			} else
+				IRR(Ostw, O(REG,t),Rreg, Rzero);
+			IRR(Oaddi, O(REG,t),Rreg, reg);
+		} else
+			ldc((short)i->reg, reg);
+		return;
+	case AXINF:
+		IRR(op, i->reg,Rfp, reg);
+		break;
+	case AXINM:
+		IRR(op, i->reg,Rmp, reg);
+		break;
+	}
+}
+
+static void
+op12(Inst *i, int b1flag, int b2flag)
+{
+	int o1, o2;
+
+	o1 = Olwz;
+	if(b1flag)
+		o1 = Olbz;
+	o2 = Olwz;
+	if(b2flag)
+		o2 = Olbz;
+	if((i->add & ARM) == AXIMM) {
+		opwld(i, o1, Ro1);
+		op2(i, o2, Ro2);
+	} else {
+		op2(i, o2, Ro2);
+		opwld(i, o1, Ro1);
+	}
+}
+
+static void
+op13(Inst *i, int o1, int o2)
+{
+	opwld(i, o1, Ro1);
+	opwst(i, o2, Ro1);
+}
+
+static ulong
+branch(Inst *i)
+{
+	ulong rel;
+
+	if(base == 0)
+		return 0;
+	rel = (ulong)(base+patch[(Inst*)i->d.imm - mod->prog + 1]);
+	rel -= (ulong)code;
+	if(rel & 3 || (long)rel <= -(1<<16) || (long)rel >= 1<<16)
+		urk("branch off");
+	return rel & 0xfffc;
+}
+
+static void
+literal(ulong imm, int roff)
+{
+	nlit++;
+
+	ldbigc((ulong)litpool, Ro1);
+	IRR(Ostw, roff, Rreg, Ro1);
+
+	if(pass == 0)
+		return;
+
+	*litpool = imm;
+	litpool++;	
+}
+
+static void
+punt(Inst *i, int m, void (*fn)(void))
+{
+	ulong pc;
+
+	if(m & SRCOP) {
+		opwld(i, Olea, Ro1);
+		IRR(Ostw, O(REG,s),Rreg, Ro1);
+	}
+	if(m & DSTOP) {
+		opwst(i, Olea, Ro3);
+		IRR(Ostw, O(REG,d),Rreg, Ro3);
+	}
+	if(m & WRTPC) {
+		pc = patch[i-mod->prog+1];
+		ldbigc((ulong)(base+pc), Ro1);
+		IRR(Ostw, O(REG,PC),Rreg, Ro1);
+	}
+	if(m & DBRAN) {
+		if(i->op == ISPAWN)
+			pc = patch[(Inst*)i->d.imm-mod->prog];
+		else
+			pc = patch[(Inst*)i->d.imm-mod->prog+1];
+		literal((ulong)(base+pc), O(REG, d));
+	}
+
+	if((i->add&ARM) == AXNON) {
+		if(m & THREOP) {
+			IRR(Olwz, O(REG,d),Rreg, Ro2);
+			IRR(Ostw, O(REG,m),Rreg, Ro2);
+		}
+	} else {
+		op2(i, Olea, Ro2);
+		IRR(Ostw, O(REG,m),Rreg, Ro2);
+	}
+	IRR(Ostw, O(REG,FP),Rreg, Rfp);
+
+	jmpl((ulong*)fn);
+
+	ldc((ulong)&R, Rreg);
+	IRR(Olwz, O(REG,FP),Rreg, Rfp);
+	IRR(Olwz, O(REG,MP),Rreg, Rmp);
+
+	if(m & TCHECK) {
+		IRR(Olwz, O(REG,t),Rreg, Ro1);
+		IRR(Olwz, O(REG,xpc),Rreg, Ro2);
+		IRR(Ocmpi, 0, Ro1, Rcrf0);
+		mtspr(Rctr, Ro2);
+		gen(Obcctr | Cne);
+	}
+
+	if(m & NEWPC) {
+		IRR(Olwz, O(REG,PC),Rreg, Ro1);
+		jr(Ro1);
+	}
+}
+				
+static void
+comgoto(Inst *i)
+{
+	WORD *t, *e;
+
+	opwld(i, Olwz, Ro2);
+	opwst(i, Olea, Ro3);
+	SLWI(Ro2, Ro2, 2);
+	ARRR(Olwzx, Ro1, Ro3,Ro2);
+	jr(Ro1);
+
+	if(pass == 0)
+		return;
+
+	t = (WORD*)(mod->mp+i->d.ind);
+	e = t + t[-1];
+	t[-1] = 0;
+	while(t < e) {
+		t[0] = (ulong)(base + patch[t[0]]);
+		t++;
+	}
+}
+
+static void
+comcase(Inst *i, int w)
+{
+	int l;
+	WORD *t, *e;
+
+	if(w != 0) {
+		opwld(i, Olwz, Ro1);		// v
+		opwst(i, Olea, Ro3);		// table
+		jmp(base+macro[MacCASE]);
+	}
+
+	t = (WORD*)(mod->mp+i->d.ind+4);
+	l = t[-1];
+	if(pass == 0) {
+		if(l > 0)
+			t[-1] = -l;	/* Mark it not done */
+		return;
+	}
+	if(l >= 0)			/* Check pass 2 done */
+		return;
+	t[-1] = -l;			/* Set real count */
+	e = t + t[-1]*3;
+	while(t < e) {
+		t[2] = (ulong)(base + patch[t[2]]);
+		t += 3;
+	}
+	t[0] = (ulong)(base + patch[t[0]]);
+}
+
+static void
+commframe(Inst *i)
+{
+	ulong *cp1, *cp2;
+
+	opwld(i, Olwz, Ri);	// must use Ri for MacFRAM
+	CMPH(Ri);
+	cp1 = code;
+	br(Obeq, 0);
+
+	AIRR(Olwz, Ri, Ri,(ulong)&((Modlink*)0)->links[i->reg].frame);
+	AIRR(Olwz, Ro2, Ri,O(Type,initialize));
+	AIRR(Ocmpi, Rcrf0, Ro2, 0);
+	cp2 = code;
+	br(Obne, 0);
+
+	opwst(i, Olea, Rj);
+
+	PATCH(cp1);
+	ldbigc((ulong)(base+patch[i-mod->prog+1]), Rpic);
+	mtspr(Rlr, Rpic);
+	jmp(base+macro[MacMFRA]);
+
+	PATCH(cp2);
+	jmpl(base+macro[MacFRAM]);
+	opwst(i, Ostw, Ro1);
+}
+
+static void
+commcall(Inst *i)
+{
+	opwld(i, Olwz, Ro1);				// f in Ro1
+	AIRR(Olwz, Ro3, Rreg,O(REG,M));
+	AIRR(Ostw, Rfp, Ro1,O(Frame,fp));			// f->fp = R.FP
+	AIRR(Ostw, Ro3, Ro1,O(Frame,mr));			// f->mr = R.M
+	opwst(i, Olwz, Ro2);
+	AIRR(Olwz, Ri, Ro2,O(Modlink,m));			// ml->m in Ri
+	AIRR(Olwz, Rj, Ro2,(ulong)&((Modlink*)0)->links[i->reg].u.pc);// ml->entry in Rj
+	jmpl(base+macro[MacMCAL]);
+}
+
+static int
+swapbraop(int b)
+{
+	switch(b) {
+	case Obge:
+		return Oble;
+	case Oble:
+		return Obge;
+	case Obgt:
+		return Oblt;
+	case Oblt:
+		return Obgt;
+	}
+	return b;
+}
+
+static void
+cbra(Inst *i, int op)
+{
+	if(UXSRC(i->add) == SRC(AIMM)) {
+		op2(i, Olwz, Ro1);
+		AIRR(Ocmpi, Rcrf0, Ro1, i->s.imm);
+		op = swapbraop(op);
+	} else if((i->add & ARM) == AXIMM) {
+		opwld(i, Olwz, Ro1);
+		AIRR(Ocmpi, Rcrf0, Ro1, i->reg);
+	} else {
+		op12(i, 0, 0);
+		ARRR(Ocmp, Rcrf0, Ro1, Ro2);
+	}
+	br(op, branch(i));
+}
+
+static void
+cbrab(Inst *i, int op)
+{
+	if(UXSRC(i->add) == SRC(AIMM)) {
+		op2(i, Olbz, Ro1);
+		AIRR(Ocmpi, Rcrf0, Ro1, i->s.imm&0xFF);
+		op = swapbraop(op);
+	} else if((i->add & ARM) == AXIMM) {
+		opwld(i, Olbz, Ro1);
+		AIRR(Ocmpi, Rcrf0, Ro1, i->reg&0xFF);	// mask i->reg?
+	} else {
+		op12(i, 1, 1);
+		ARRR(Ocmp, Rcrf0, Ro1, Ro2);
+	}
+	br(op, branch(i));
+}
+
+static void
+cbraf(Inst *i, int op)
+{
+	opwld(i, Olfd, Rf1);
+	op2(i, Olfd, Rf2);
+	ARRR(Ofcmpo, Rcrf0, Rf1, Rf2);
+	br(op, branch(i));
+}
+
+static void
+cbral(Inst *i, int cms, int cls, int mode)
+{
+	ulong *cp;
+
+	cp = nil;
+	opwld(i, Olea, Ri);
+	op2(i, Olea, Rj);
+	IRR(Olwz, 0,Ri, Ro1);
+	IRR(Olwz, 0,Rj, Ro2);
+	ARRR(Ocmp, Rcrf0, Ro1, Ro2);
+	switch(mode) {
+	case ANDAND:
+		cp = code;
+		br(cms, 0);
+		break;
+	case OROR:
+		br(cms, branch(i));
+		break;
+	case EQAND:
+		br(cms, branch(i));
+		cp = code;
+		br(Obne, 0);
+		break;
+	}
+	IRR(Olwz, 4,Ri, Ro1);
+	IRR(Olwz, 4,Rj, Ro2);
+	ARRR(Ocmpl, Rcrf0, Ro1, Ro2);
+	br(cls, branch(i));
+	if(cp)
+		PATCH(cp);
+}
+
+static void
+shrl(Inst *i)
+{
+	int c;
+
+//	if(USRC(i->add) != AIMM) {
+		punt(i, SRCOP|DSTOP|THREOP, optab[i->op]);
+		return;
+//	}
+/*
+	c = i->s.imm;
+	op2(i, Olea, Ro3);
+	IRR(Olwz, 0,Ro3, Ro1);
+	if(c >= 32) {
+		if((i->add&ARM) != AXNON)
+			opwst(i, Olea, Ro3);
+		SRR(Osra, 31, Ro1, Ro2);
+		IRR(Ostw, 0,Ro3, Ro2);
+		if(c >= 64) {
+			IRR(Ostw, 4,Ro3, Ro2);
+			return;
+		}
+		if(c > 32)
+			SRR(Osra, c-32, Ro1, Ro1);
+		IRR(Ostw, 4,Ro3, Ro1);
+		return;
+	}
+	IRR(Olwz, 4,Ro3, Ro2);
+	if((i->add&ARM) != AXNON)
+		opwst(i, Olea, Ro3);
+	if(c != 0) {
+		SRR(Osll, 32-c, Ro1, Ri);
+		SRR(Osra, c, Ro1, Ro1);
+		SRR(Osrl, c, Ro2, Ro2);
+		RRR(Oor, Ri, Ro2, Ro2);
+	}
+	IRR(Ostw, 4,Ro3, Ro2);
+	IRR(Ostw, 0,Ro3, Ro1);
+*/
+}
+
+static void
+shll(Inst *i)
+{
+	int c;
+
+//	if(USRC(i->add) != AIMM) {
+		punt(i, SRCOP|DSTOP|THREOP, optab[i->op]);
+		return;
+//	}
+/*
+	c = i->s.imm;
+	if(c >= 64) {
+		opwst(i, Olea, Ro3);
+		IRR(Ostw, 0,Ro3, Rzero);
+		IRR(Ostw, 4,Ro3, Rzero);
+		return;
+	}
+	op2(i, Olea, Ro3);
+	if(c >= 32) {
+		IRR(Olwz, 4,Ro3, Ro1);
+		if((i->add&ARM) != AXNON)
+			opwst(i, Olea, Ro3);
+		IRR(Ostw, 4,Ro3, Rzero);
+		if(c > 32)
+			SRR(Osll, c-32, Ro1, Ro1);
+		IRR(Ostw, 0,Ro3, Ro1);
+		return;
+	}
+	IRR(Olwz, 4,Ro3, Ro2);
+	IRR(Olwz, 0,Ro3, Ro1);
+	if((i->add&ARM) != AXNON)
+		opwst(i, Olea, Ro3);
+	if(c != 0) {
+		SRR(Osrl, 32-c, Ro2, Ri);
+		SRR(Osll, c, Ro2, Ro2);
+		SRR(Osll, c, Ro1, Ro1);
+		RRR(Oor, Ri, Ro1, Ro1);
+	}
+	IRR(Ostw, 4,Ro3, Ro2);
+	IRR(Ostw, 0,Ro3, Ro1);
+*/
+}
+
+static void
+compdbg(void)
+{
+	print("%s:%d@%.8lux\n", R.M->name, R.t, R.st);
+}
+
+static void
+comp(Inst *i)
+{
+	int o, q, b;
+	ulong *cp, *cp1;
+	char buf[ERRLEN];
+
+	if(0) {
+		Inst xx;
+		xx.add = AXIMM|SRC(AIMM);
+		xx.s.imm = (ulong)code;
+		xx.reg = i-mod->prog;
+		punt(&xx, SRCOP, compdbg);
+	}
+
+	switch(i->op) {
+	default:
+		snprint(buf, sizeof buf, "%s compile, no '%D'", mod->name, i);
+		error(buf);
+		break;
+	case IMCALL:
+		punt(i, SRCOP|DSTOP|TCHECK|WRTPC, optab[i->op]);break;
+		//commcall(i);
+		break;
+	case ISEND:
+	case IRECV:
+	case IALT:
+		punt(i, SRCOP|DSTOP|TCHECK|WRTPC, optab[i->op]);
+		break;
+	case ISPAWN:
+		punt(i, SRCOP|DBRAN, optab[i->op]);
+		break;
+	case IBNEC:
+	case IBEQC:
+	case IBLTC:
+	case IBLEC:
+	case IBGTC:
+	case IBGEC:
+		punt(i, SRCOP|DBRAN|NEWPC|WRTPC, optab[i->op]);
+		break;
+	case ICASEC:
+		comcase(i, 0);
+		punt(i, SRCOP|DSTOP|NEWPC, optab[i->op]);
+		break;
+
+	case IADDC:
+	case IMULL:
+	case IDIVL:
+	case IMODL:
+		punt(i, SRCOP|DSTOP|THREOP, optab[i->op]);
+		break;
+	case IMFRAME:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		//commframe(i);
+		break;
+	case ILOAD:
+	case INEWA:
+	case INEW:
+	case ISLICEA:
+	case ISLICELA:
+	case ICONSB:
+	case ICONSW:
+	case ICONSF:
+	case ICONSM:
+	case ICONSMP:
+	case ICONSP:
+	case IMOVMP:
+	case IHEADMP:
+	case IINDC:
+	case ILENC:
+	case IINSC:
+	case ICVTAC:
+	case ICVTCW:
+	case ICVTWC:
+	case ICVTCL:
+	case ICVTLC:
+	case ICVTFC:
+	case ICVTCF:
+	case ICVTFL:
+	case ICVTLF:
+	case IMSPAWN:
+	case ICVTCA:
+	case ISLICEC:
+	case INEWCM:
+	case INEWCMP:
+	case INBALT:
+		punt(i, SRCOP|DSTOP, optab[i->op]);
+		break;
+	case INEWCB:
+	case INEWCW:
+	case INEWCF:
+	case INEWCP:
+	case INEWCL:
+		punt(i, DSTOP, optab[i->op]);
+		break;
+	case IEXIT:
+		punt(i, 0, optab[i->op]);
+		break;
+	case ICVTWB:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		op13(i, Olwz, Ostb);
+		break;
+	case ICVTBW:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		op13(i, Olbz, Ostw);
+		break;
+	case IMOVB:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		if(USRC(i->add) == AIMM && i->s.imm == 0) {
+			opwst(i, Ostb, Rzero);
+			break;
+		}
+		op13(i, Olbz, Ostb);
+		break;
+	case IMOVW:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		if(USRC(i->add) == AIMM && i->s.imm == 0) {
+			opwst(i, Ostw, Rzero);
+			break;
+		}
+		op13(i, Olwz, Ostw);
+		break;
+	case ICVTLW:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olea, Ro1);
+		AIRR(Olwz, Ro2, Ro1,4);
+		opwst(i, Ostw, Ro2);
+		break;
+	case ICVTWL:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olwz, Ro1);
+		opwst(i, Olea, Ro2);
+		LRRR(Osrawi, Ro3, Ro1, 31);
+		AIRR(Ostw, Ro1, Ro2,4);
+		AIRR(Ostw, Ro3, Ro2,0);
+		break;
+	case IHEADM:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olwz, Ro1);
+		AIRR(Oaddi, Ro1, Ro1,OA(List,data));
+		goto m1;
+	case IMOVM:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olea, Ro1);
+	m1:
+		op2(i, Olwz, Ro2);
+		opwst(i, Olea, Ro3);
+		jmpl(base+macro[MacMOVM]);
+		break;
+	case IRET:
+		//punt(i, NEWPC, optab[i->op]);break;
+		jmp(base+macro[MacRET]);
+		break;
+	case IFRAME:
+		if(1 || UXSRC(i->add) != SRC(AIMM)) {
+			punt(i, SRCOP|DSTOP, optab[i->op]);
+			break;
+		}
+		tinit[i->s.imm] = 1;
+		ldc((ulong)mod->type[i->s.imm], Ri);
+		jmpl(base+macro[MacFRAM]);
+		opwst(i, Ostw, Ro1);
+		break;
+	case ILEA:
+		punt(i, SRCOP|DSTOP|THREOP, optab[i->op]);break;
+		op13(i, Olea, Ostw);
+		break;
+	case IHEADW:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olwz, Ro1);
+		AIRR(Olwz, Ro1, Ro1,OA(List,data));
+		opwst(i, Ostw, Ro1);
+		break;
+	case IHEADF:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olwz, Ro1);
+		AIRR(Olfd, Rf1, Ro1,OA(List,data));
+		opwst(i, Ostfd, Rf1);
+		break;
+	case IHEADB:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olwz, Ro1);
+		AIRR(Olbz, Ro1, Ro1,OA(List,data));
+		opwst(i, Ostb, Ro1);
+		break;
+	case ITAIL:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olwz, Ro1);
+		AIRR(Olwz, Ro1, Ro1,O(List,tail));
+		goto movp;
+	case IMOVP:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olwz, Ro1);
+		goto movp;
+	case IHEADP:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olwz, Ro1);
+		AIRR(Olwz, Ro1, Ro1,OA(List,data));
+	movp:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		CMPH(Ro1);
+		cp = code;
+		br(Obeq, 0);
+		jmpl(base+macro[MacCOLR]);
+		PATCH(cp);
+		opwst(i, Olea, Ro3);
+		AIRR(Olwz, Ri, Ro3,0);
+		AIRR(Ostw, Ro1, Ro3,0);
+		jmpl(base+macro[MacFRP]);
+		break;
+	case ILENA:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olwz, Ri);
+		ldc(0, Ro1);
+		CMPH(Ri);
+		cp = code;
+		br(Obeq, 0);
+		AIRR(Olwz, Ro1, Ri,O(Array,len));
+		PATCH(cp);
+		opwst(i, Ostw, Ro1);
+		break;
+	case ILENL:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olwz, Ro1);
+		ldc(0, Ro3);
+		CMPH(Ro1);
+		cp = code;
+		br(Obeq, 0);
+
+		cp1 = code;
+		AIRR(Olwz, Ro1, Ro1,O(List,tail));
+		AIRR(Oaddi, Ro3, Ro3, 1);
+		CMPH(Ro1);
+		br(Obne, ((ulong)cp1-(ulong)code));
+
+		PATCH(cp);
+		opwst(i, Ostw, Ro3);
+		break;
+	case IMOVL:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olea, Ro1);
+		AIRR(Olwz, Ro2, Ro1,0);
+		AIRR(Olwz, Ro3, Ro1,4);
+		opwst(i, Olea, Ro1);
+		AIRR(Ostw, Ro2, Ro1,0);
+		AIRR(Ostw, Ro3, Ro1,4);
+		break;
+	case IMOVF:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olfd, Rf1);
+		opwst(i, Ostfd, Rf1);
+		break;
+	case ICVTFW:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olfd, Rf1);
+		jmpl(base+macro[MacCVTFW]);
+		opwst(i, Ostw, Ro1);
+		break;
+	case ICVTWF:
+		punt(i, SRCOP|DSTOP, optab[i->op]);
+		break;
+	case INEGF:
+		punt(i, SRCOP|DSTOP, optab[i->op]);break;
+		opwld(i, Olfd, Rf1);
+		ARRR(Ofneg, Rf2, 0, Rf1);
+		opwst(i, Ostfd, Rf2);
+		break;
+	case IXORL:
+	case IORL:
+	case IANDL:
+	case IADDL:
+	case ISUBL:
+		punt(i, SRCOP|DSTOP|THREOP, optab[i->op]);break;
+		opwld(i, Olea, Ro1);
+		op2(i, Olea, Ro3);
+
+		AIRR(Olwz, Rj, Ro1,4);	/* ls */
+		AIRR(Olwz, Ro2, Ro3,4);
+		AIRR(Olwz, Ri, Ro1,0);	/* ms */
+		AIRR(Olwz, Ro1, Ro3,0);
+
+		switch(i->op) {
+		case IXORL:
+			o = Oxor;
+			goto l1;
+		case IORL:
+			o = Oor;
+			goto l1;
+		case IANDL:
+			o = Oand;
+		l1:
+			LRRR(o, Ro1, Ri, Ro1);
+			LRRR(o, Ro2, Rj, Ro2);
+			break;
+		case IADDL:
+			RRR(Oaddc, Ri,Ro1, Ro1);
+			RRR(Oadde, Rj,Ro2, Ro2);
+			break;
+		case ISUBL:
+			RRR(Osubfc, Ro1,Ri, Ro1);
+			RRR(Osubfe, Ro2,Rj, Ro2);
+			break;
+		}
+		if((i->add&ARM) != AXNON)
+			opwst(i, Olea, Ro3);
+		IRR(Ostw, 0,Ro3, Ro1);
+		IRR(Ostw, 4,Ro3, Ro2);
+		break;
+	case ISHLL:
+		shll(i);
+		break;
+	case ISHRL:
+		shrl(i);
+		break;
+	case IADDF:	o = Ofadd; goto f1;
+	case ISUBF:	o = Ofsub; goto f1;
+	case IMULF:	o = Ofmul; goto f1;
+	case IDIVF:	o = Ofdiv; goto f1;
+	f1:
+		punt(i, SRCOP|DSTOP|THREOP, optab[i->op]);break;
+		opwld(i, Olfd, Rf1);
+		op2(i, Olfd, Rf2);
+		ARRR(o, Rf2, Rf2, Rf1);
+		opwst(i, Ostfd, Rf2);
+		break;
+
+	case IBEQF:
+		cbraf(i, Obeq);
+		break;
+	case IBGEF:
+		cbraf(i, Obge);
+	case IBGTF:
+		cbraf(i, Obgt);
+		break;
+	case IBLEF:
+		cbraf(i, Oble);
+		break;
+	case IBLTF:
+		cbraf(i, Oblt);
+		break;
+	case IBNEF:
+		cbraf(i, Obne);
+		break;
+
+	case IBLTB:
+		cbrab(i, Oblt);
+		break;
+	case IBLEB:
+		cbrab(i, Oble);
+		break;
+	case IBGTB:
+		cbrab(i, Obgt);
+		break;
+	case IBGEB:
+		cbrab(i, Obge);
+		break;
+	case IBEQB:
+		cbrab(i, Obeq);
+		break;
+	case IBNEB:
+		cbrab(i, Obne);
+		break;
+
+	case IBLTW:
+		cbra(i, Oblt);
+		break;
+	case IBLEW:
+		cbra(i, Oble);
+		break;
+	case IBGTW:
+		cbra(i, Obgt);
+		break;
+	case IBGEW:
+		cbra(i, Obge);
+		break;
+	case IBEQW:
+		cbra(i, Obeq);
+		break;
+	case IBNEW:
+		cbra(i, Obne);
+		break;
+
+	case IBEQL:
+		cbral(i, Obeq, Obeq, ANDAND);
+		break;
+	case IBNEL:
+		cbral(i, Obne, Obne, OROR);
+		break;
+	case IBLTL:
+		cbral(i, Oblt, Oblt, EQAND);
+		break;
+	case IBLEL:
+		cbral(i, Oblt, Oble, EQAND);
+		break;
+	case IBGTL:
+		cbral(i, Obgt, Obgt, EQAND);
+		break;
+	case IBGEL:
+		cbral(i, Obgt, Obge, EQAND);
+		break;
+
+	case ISUBB:
+	case IADDB:
+	case IANDB:
+	case IORB:
+	case IXORB:
+	case IMODB:
+	case IDIVB:
+	case IMULB:
+		punt(i, SRCOP|DSTOP|THREOP, optab[i->op]);break;
+		b = 1;
+		op12(i, b, b);
+		goto s2;
+	case ISHLB:
+	case ISHRB:
+		punt(i, SRCOP|DSTOP|THREOP, optab[i->op]);break;
+		b = 1;
+		op12(i, 0, b);
+		goto s2;
+	case ISUBW:
+	case IADDW:
+	case IANDW:
+	case IORW:
+	case IXORW:
+	case ISHLW:
+	case ISHRW:
+	case IMODW:
+	case IDIVW:
+	case IMULW:
+		punt(i, SRCOP|DSTOP|THREOP, optab[i->op]);break;
+		b = 0;
+		op12(i, b, b);
+	s2:
+		q = 0;
+		switch(i->op) {
+		case ISUBB:
+		case ISUBW:	o = Osubf; q = Osubfic;
+			// bug: if immediate operand, should use opcode q
+			ARRR(o, Ro3, Ro1, Ro2);	// check operand order
+			break;
+		case IADDB:
+		case IADDW:	o = Oadd; q = Oaddi; goto c1;
+		case IMULB:
+		case IMULW:	o = Omullw; q = Omulli; goto c1;
+		case IDIVB:
+		case IDIVW:	o = Odivw; goto c1;
+		c1:
+			// bug: if immediate operand, should use opcode q
+			ARRR(o, Ro3, Ro2, Ro1);	// check operand order
+			break;
+		case IANDB:
+		case IANDW:	o = Oand; goto c2;
+		case IORB:
+		case IORW:	o = Oor; goto c2;
+		case IXORB:
+		case IXORW:	o = Oxor; goto c2;
+		case ISHLB:
+		case ISHLW:	o = Oslw; goto c2;
+		case ISHRB:
+		case ISHRW:	o = Osraw; goto c2;
+		c2:
+			LRRR(o, Ro3,Ro2,Ro1);	// check operand order
+			break;
+		case IMODB:
+		case IMODW:
+			ARRR(Odivw, Ro3, Ro2, Ro1);
+			ARRR(Omullw, Ro3, Ro3, Ro1);
+			ARRR(Osubf, Ro3, Ro3, Ro2);
+			break;
+		}
+		opwst(i, b? Ostb: Ostw, Ro3);
+		break;
+	case ICALL:
+		punt(i, SRCOP|DBRAN|NEWPC|WRTPC, optab[i->op]); break;
+		opwld(i, Olwz, Ro1);	/* f = T(s) */
+		ldbigc((ulong)(base+patch[i-mod->prog+1]), Ro2);	/* R.pc */
+		AIRR(Ostw, Rfp, Ro1,O(Frame,fp));	/* f->fp = R.fp */
+		AIRR(Ostw, Ro2, Ro1,O(Frame,lr));	/* f->lr = R.pc */
+		AIRR(Oaddi, Rfp, Ro1, 0);	/* R.fp = (uchar*)f */
+		jmp(base+patch[(Inst*)i->d.imm - mod->prog + 1]);
+		break;
+	case IJMP:
+		jmp(base+patch[(Inst*)i->d.imm - mod->prog + 1]);
+		break;
+	case IGOTO:
+		comgoto(i);
+		break;
+	case IINDX:
+	case IINDB:
+	case IINDF:
+	case IINDW:
+	case IINDL:
+		punt(i, SRCOP|DSTOP|THREOP, optab[i->op]);break;
+		opwld(i, Olwz, Ro1);			/* Ro1 = a */
+		opwst(i, Olwz, Ro3);			/* Ro3 = i */
+		// BUG: check a != H
+		// BUG: check !((ulong)i >= a->len)
+		AIRR(Olwz, Ro2, Ro1,O(Array,data));	/* Ro2 = a->data */
+		switch(i->op) {
+		case IINDX:
+			AIRR(Olwz, Ri, Ro1,O(Array,t));			// Ri = a->t
+			AIRR(Olwz, Ro1, Ri,O(Type,size));		// Ro1 = a->t->size
+			ARRR(Omullw, Ro3, Ro3, Ro1);			// Ro3 = i*size
+			break;
+		case IINDL:
+		case IINDF:
+			SLWI(Ro3, Ro3, 3);		/* Ro3 = i*8 */
+			break;
+		case IINDW:
+			SLWI(Ro3, Ro3, 2);		/* Ro3 = i*4 */
+			break;
+		case IINDB:
+			/* no further work */
+			break;
+		}
+		ARRR(Oadd, Ro2, Ro2, Ro3);		/* Ro2 = i*size + data */
+		op2(i, Ostw, Ro2);
+		break;
+	case ICASE:
+		comcase(i, 0);
+		punt(i, SRCOP|DSTOP|NEWPC, optab[i->op]);
+		break;
+	}
+}
+
+static void
+preamble(void)
+{
+	ldc((ulong)&R, Rreg);
+	mfspr(Rlink, Rlr);
+	AIRR(Ostw, Rlink, Rreg,O(REG,xpc));
+	AIRR(Olwz, Ri, Rreg,O(REG,PC));
+	mtspr(Rctr, Ri);
+	AIRR(Olwz, Rfp, Rreg,O(REG,FP));
+	AIRR(Olwz, Rmp, Rreg,O(REG,MP));
+	gen(Obctr);
+}
+
+static void
+macfrp(void)
+{
+	CMPH(Ri);
+	gen(Obclr | Ceq);	// arg == $H? => return
+
+	AIRR(Olwz, Ro2, Ri,O(Heap,ref)-sizeof(Heap));
+	AIRR(Oaddic_, Rj, Ro2, -1);		// ref(arg)-- and test
+	AIRR(Ostw, Rj, Ri,O(Heap,ref)-sizeof(Heap));
+	gen(Obclr | Cne);		// ref(arg) nonzero? => return
+
+	AIRR(Ostw, Ro2, Ri,O(Heap,ref)-sizeof(Heap));	// restore ref count of 1 for destroy
+	mfspr(Rlink, Rlr);
+	AIRR(Ostw, Rlink, Rreg,O(REG,st));
+	AIRR(Ostw, Rfp, Rreg,O(REG,FP));
+	AIRR(Ostw, Ri, Rreg,O(REG,s));
+
+	jmpl((ulong*)rdestroy);				// CALL	destroy
+
+	ldc((ulong)&R, Rreg);
+	AIRR(Olwz, Rlink, Rreg,O(REG,st));
+	mtspr(Rlr, Rlink);
+	AIRR(Olwz, Rfp, Rreg,O(REG,FP));
+	AIRR(Olwz, Rmp, Rreg,O(REG,MP));
+	LRET();
+}
+
+static void
+macret(void)
+{
+	ulong *cp1, *cp2, *cp3, *cp4, *cp5;
+	Inst i;
+
+	AIRR(Olwz, Ro1, Rfp,O(Frame,t));
+	AIRR(Ocmpi, Rcrf0, Ro1, 0);
+	cp1 = code;
+	br(Obeq, 0);		// t(Rfp) == 0
+
+	AIRR(Olwz, Rpic, Ro1,O(Type,destroy));
+	AIRR(Ocmpi, Rcrf0, Rpic, 0);
+	cp2 = code;
+	br(Obeq, 0);		// destroy(t(fp)) == 0
+
+	AIRR(Olwz, Ro2, Rfp,O(Frame,fp));
+	AIRR(Ocmpi, Rcrf0, Ro2, 0);
+	cp3 = code;
+	br(Obeq, 0);		// fp(Rfp) == 0
+
+	AIRR(Olwz, Ro3, Rfp,O(Frame,mr));
+	AIRR(Ocmpi, Rcrf0, Ro3, 0);
+	cp4 = code;
+	br(Obeq, 0);		// mr(Rfp) == 0
+
+	AIRR(Olwz, Ro2, Rreg,O(REG,M));
+	AIRR(Olwz, Ro3, Ro2,O(Module,ref));
+	AIRR(Oaddic_, Ro3, Ro3, -1);	// --ref(arg), set cc
+	cp5 = code;
+	br(Obeq, 0);	// --ref(arg) == 0?
+	AIRR(Ostw, Ro3, Ro2,O(Module,ref));
+
+	AIRR(Olwz, Ro1, Rfp,O(Frame,mr));
+	AIRR(Ostw, Ro1, Rreg,O(REG,M));
+	AIRR(Olwz, Rmp, Ro1,O(Module,mp));
+	AIRR(Ostw, Rmp, Rreg,O(REG,MP));
+
+	PATCH(cp4);
+	AIRR(Ostw, Rfp, Rreg,O(REG,SP));
+	jrl(Rpic);			// call destroy(t(fp))
+	AIRR(Olwz, Ro1, Rfp,O(Frame,lr));
+	AIRR(Olwz, Rfp, Rfp,O(Frame,fp));
+	jr(Ro1);				// goto lr(Rfp)
+
+	PATCH(cp1);
+	PATCH(cp2);
+	PATCH(cp3);
+	PATCH(cp5);
+	i.add = AXNON;
+	punt(&i, NEWPC, optab[IRET]);
+}
+
+static void
+maccase(void)
+{
+	ulong *cp1, *cp2, *cp3, *loop;
+
+/*
+ * Ro1 = value (input arg), t
+ * Ro2 = count, n
+ * Ro3 = table pointer (input arg)
+ * Ri  = n/2, n2
+ * Rj  = pivot element t+n/2*3, l
+ */
+
+	IRR(Olwz, 0,Ro3, Ro2);		// count
+	IRR(Oaddi, 0,Ro3, Rlink);	// initial table pointer
+
+	loop = code;			// loop:
+	AIRR(Ocmpi, Rcrf0, Ro2, 0);
+	cp1 = code;
+	br(Oble, 0);	// n <= 0? goto out
+	LRRR(Osrawi, Ri, Ro2, 1);		// n2 = n>>1
+	SLWI(Rj, Ri, 1);
+	ARRR(Oadd, Rj, Rj, Ri);
+	SLWI(Rj, Rj, 2);
+	ARRR(Oadd, Rj, Rj, Ro3);	// l = t + n2*3;
+	AIRR(Olwz, Rpic, Rj,4);
+	ARRR(Ocmp, Rcrf0, Ro1, Rpic);
+	cp2 = code;
+	br(Oblt, 0);		// v < l[1]? goto low
+
+	IRR(Olwz, 8,Rj, Rpic);
+	ARRR(Ocmp, Rcrf0, Ro1, Rpic);
+	cp3 = code;
+	br(Obge, 0);		// v >= l[2]? goto high
+
+	IRR(Olwz, 12,Rj, Ro3);		// found
+	jr(Ro3);
+
+	PATCH(cp2);	// low:
+	IRR(Oaddi, 0, Ri, Ro2);	// n = n2
+	jmp(loop);
+
+	PATCH(cp3);	// high:
+	IRR(Oaddi, 12, Rj, Ro3);	// t = l+3;
+	IRR(Oaddi, 1, Ri, Rpic);
+	RRR(Osubf, Ro2, Rpic, Ro2);	// n -= n2 + 1
+	jmp(loop);
+
+	PATCH(cp1);	// out:
+	IRR(Olwz, 0,Rlink, Ro2);		// initial n
+	SLWI(Ro3, Ro2, 1);
+	RRR(Oadd, Ro3, Ro2, Ro2);
+	SLWI(Ro2, Ro2, 2);
+	RRR(Oadd, Ro2, Rlink, Rlink);
+	IRR(Olwz, 4,Rlink, Ro3);		// (initial t)[n*3+1]
+	jr(Ro3);
+}
+
+static	void
+macmcal(void)
+{
+	ulong *cp;
+
+	AIRR(Olwz, Ro2, Ri,O(Module,prog));
+	mfspr(Rlink, Rlr);
+	AIRR(Ostw, Rlink, Ro1,O(Frame,lr));	// f->lr = return
+	AIRR(Ocmpi, Rcrf0, Ro2, 0);
+	AIRR(Oaddi, Rfp, Ro1, 0);		// R.FP = f
+	cp = code;
+	br(Obne, 0);		// CMPL ml->m->prog != 0
+
+	AIRR(Ostw, Rlink, Rreg,O(REG,st));
+	AIRR(Ostw, Ro1, Rreg,O(REG,FP));
+	AIRR(Ostw, Rj, Rreg,O(REG,dt));
+	jmpl((ulong*)rmcall);			// CALL	rmcall
+	ldc((ulong)&R, Rreg);
+	AIRR(Olwz, Rlink, Rreg,O(REG,st));
+	mtspr(Rlr, Rlink);
+	AIRR(Olwz, Rfp, Rreg,O(REG,FP));
+	AIRR(Olwz, Rmp, Rreg,O(REG,MP));
+	gen(Oblr);	// RET
+
+	PATCH(cp);
+	AIRR(Olwz, Ro2, Ri,O(Module,ref));
+	AIRR(Ostw, Ri, Rreg,O(REG,M));
+	AIRR(Oaddi, Ro2, Ro2, 1);
+	AIRR(Olwz, Rmp, Ri,O(Module,mp));
+	AIRR(Ostw, Ro2, Ri,O(Module,ref));
+	AIRR(Ostw, Rmp, Rreg,O(REG,MP));
+	jr(Rj);	// GOTO(Rj)
+
+}
+
+static	void
+macmfra(void)
+{
+	mfspr(Rlink, Rlr);
+	AIRR(Ostw, Rlink, Rreg,O(REG,st));
+	AIRR(Ostw, Rfp, Rreg,O(REG,FP));
+	AIRR(Ostw, Ri, Rreg,O(REG,s));
+	AIRR(Ostw, Rj, Rreg,O(REG,d));
+	jmpl((ulong*)rmfram);
+	ldc((ulong)&R, Rreg);
+	AIRR(Olwz, Rlink, Rreg,O(REG,st));
+	mtspr(Rlr, Rlink);
+	AIRR(Olwz, Rfp, Rreg,O(REG,FP));
+	AIRR(Olwz, Rmp, Rreg,O(REG,MP));
+	gen(Oblr);
+}
+
+static void
+macfram(void)
+{
+	ulong *cp;
+
+	/*
+	 * Ri has t
+	 */
+	AIRR(Olwz, Ro2, Ri,O(Type,size));		// MOVW t->size, Ro3
+	AIRR(Olwz, Ro1, Rreg,O(REG,SP));		// MOVW	R.SP, Ro1  (=(Frame*)R.SP)
+	AIRR(Olwz, Ro3, Rreg,O(REG,TS));		// MOVW	R.TS, tmp
+	ARRR(Oadd, Ro2, Ro2, Ro1);		// ADD Ro1, t->size, nsp
+	ARRR(Ocmpl, Rcrf0, Ro2, Ro3);		// CMPU nsp,tmp (nsp >= R.TS?)
+	cp = code;
+	br(Obge, 0);			// BGE expand
+
+	AIRR(Olwz, Rj, Ri,O(Type,initialize));
+	mtspr(Rctr, Rj);
+	AIRR(Ostw, Ro2, Rreg,O(REG,SP));		// R.SP = nsp
+	AIRR(Ostw, Rzero, Ro1,O(Frame,mr));	// Ro1->mr = nil
+	AIRR(Ostw, Ri, Ro1,O(Frame,t));		// Ro1->t = t
+	gen(Obctr);				// become t->init(Ro1), returning Ro1
+
+	PATCH(cp);					// expand:
+	AIRR(Ostw, Ri, Rreg,O(REG,s));		// MOVL	t, R.s
+	mfspr(Rlink, Rlr);
+	AIRR(Ostw, Rlink, Rreg,O(REG,st));	// MOVL	Rlink, R.st
+	AIRR(Ostw, Rfp, Rreg,O(REG,FP));		// MOVL	RFP, R.FP
+	jmpl((ulong*)extend);		// CALL	extend
+	ldc((ulong)&R, Rreg);
+	AIRR(Olwz, Rlink, Rreg,O(REG,st));	// reload registers
+	mtspr(Rlr, Rlink);
+	AIRR(Olwz, Rfp, Rreg,O(REG,FP));
+	AIRR(Olwz, Rmp, Rreg,O(REG,MP));
+	AIRR(Olwz, Ro1, Rreg,O(REG,s));		// return R.s set by extend
+	LRET();	// RET
+}
+
+static void
+macmovm(void)
+{
+	ulong *cp;
+
+	/*
+	 * from = Ro1
+	 * to = Ro3
+	 * count = Ro2
+	 */
+
+	AIRR(Ocmpi, Rcrf0, Ro2, 0);
+	gen(Obclr | Cle);	// return immediately if count<=0
+	AIRR(Oaddi, Ro1, Ro1, -1);	// adjust for update ld/st
+	AIRR(Oaddi, Ro3, Ro3, -1);
+	mtspr(Rctr, Ro2);
+
+	cp = code;			// l0:
+	AIRR(Olbzu, Ri, Ro1,1);
+	AIRR(Ostbu, Ri, Ro3,1);
+	br(Obc | Cdnz, ((ulong)cp-(ulong)code));	// DBNZ l0
+
+	LRET();
+}
+
+static void
+maccolr(void)
+{
+	ldbigc((ulong)&mutator, Ri);
+	AIRR(Olwz, Ri, Ri,0);
+	AIRR(Olwz, Ro3, Ro1,O(Heap,color)-sizeof(Heap));	// h->color
+
+	AIRR(Olwz, Ro2, Ro1,O(Heap,ref)-sizeof(Heap));	// h->ref
+
+	ARRR(Ocmp, Rcrf0, Ri, Ro3);
+	AIRR(Oaddi, Ro2, Ro2, 1);	// h->ref++
+	AIRR(Ostw, Ro2, Ro1,O(Heap,ref)-sizeof(Heap));
+	gen(Obclr | Ceq);	// return if h->color == mutator
+
+	ldc(propagator, Ro3);
+	AIRR(Ostw, Ro3, Ro1,O(Heap,color)-sizeof(Heap));	// h->color = propagator
+	ldc((ulong)&nprop, Ro3);
+	AIRR(Ostw, Ro1, Ro3,0);	// nprop = !0
+	LRET();
+}
+
+static void
+maccvtfw(void)
+{
+	ulong *cp;
+	static double tmp;
+
+	ARRR(Ofcmpo, Rcrf0, Rf1, Rfzero);
+	ARRR(Ofneg, Rf2, 0, Rfhalf);
+	cp = code;
+	br(Oblt, 0);
+	ARRR(Ofmr, Rf2, 0, Rfhalf);
+	PATCH(cp);
+	ARRR(Ofadd, Rf1, Rf1, Rf2);	//x<0? x-.5: x+.5
+	ARRR(Ofctiwz, Rf2, 0, Rf1);
+	ldc((ulong)&tmp, Ro2);	// bug, should be non-volatile temp
+	AIRR(Ostfd, Rf2, Ro2,0);
+	AIRR(Olwz, Ro1, Ro2,4);
+	LRET();
+}
+
+static void
+macend(void)
+{
+}
+
+void
+comd(Type *t)
+{
+	int i, j, m, c;
+
+	mfspr(Rlink, Rlr);
+	AIRR(Ostw, Rlink, Rreg,O(REG,dt));
+	for(i = 0; i < t->np; i++) {
+		c = t->map[i];
+		j = i<<5;
+		for(m = 0x80; m != 0; m >>= 1) {
+			if(c & m) {
+				mem(Olwz, j, Rfp, Ri);
+				jmpl(base+macro[MacFRP]);
+			}
+			j += sizeof(WORD*);
+		}
+	}
+	AIRR(Olwz, Rlink, Rreg,O(REG,dt));
+	mtspr(Rlr, Rlink);
+	gen(Oblr);
+}
+
+void
+comi(Type *t)
+{
+	int i, j, m, c;
+
+	ldc((ulong)H, Ri);
+	for(i = 0; i < t->np; i++) {
+		c = t->map[i];
+		j = i<<5;
+		for(m = 0x80; m != 0; m >>= 1) {
+			if(c & m)
+				mem(Ostw, j, Ro1, Ri);
+			j += sizeof(WORD*);
+		}
+	}
+	LRET();
+}
+
+void
+typecom(Type *t)
+{
+	int n;
+	ulong tmp[4096], *start;
+
+	if(t == nil || t->initialize != 0)
+		return;
+
+	code = tmp;
+	comi(t);
+	n = code - tmp;
+	code = tmp;
+	comd(t);
+	n += code - tmp;
+
+	n *= sizeof(*code);
+	code = mallocz(n, 0);
+	if(code == nil)
+		return;
+
+	start = code;
+	t->initialize = code;
+	comi(t);
+	t->destroy = code;
+	comd(t);
+
+	segflush(start, n);
+
+	if(cflag > 1)
+		print("typ= %.8lux %4d i %.8lux d %.8lux asm=%d\n",
+			t, t->size, t->initialize, t->destroy, n);
+}
+
+int
+compile(Module *m, int size)
+{
+	Link *l;
+	int i, n;
+	ulong *s, tmp[512];
+
+	if(cflag < 1)
+		return 0;
+
+	patch = mallocz(size*sizeof(*patch), 0);
+	tinit = malloc(m->ntype*sizeof(*tinit));
+	base = 0;
+
+	if(!comvec) {
+		i = 10;		/* length of comvec */
+		code = malloc(i*sizeof(*code));
+		s = code;
+		preamble();
+		if(code >= (ulong*)(s + i))
+			urk("preamble");
+		comvec = (void*)s;
+		segflush(s, i*sizeof(*s));
+		if(cflag > 1) {
+			print("comvec\n");
+			while(s < code)
+				s += das(s);
+		}/**/
+	}
+
+	mod = m;
+	n = 0;
+	pass = 0;
+	nlit = 0;
+
+	for(i = 0; i < size; i++) {
+		code = tmp;
+		comp(&m->prog[i]);
+		if(code >= &tmp[nelem(tmp)]) {
+			print("%3d %D\n", i, &m->prog[i]);
+			urk("tmp ovflo");
+		}
+		patch[i] = n;
+		n += code - tmp;
+	}
+
+	for(i=0; macinit[i].f; i++) {
+		code = tmp;
+		(*macinit[i].f)();
+		macro[macinit[i].o] = n;
+		n += code - tmp;
+	}
+
+	base = malloc((n+nlit)*sizeof(*base));
+	if(cflag > 1)
+		print("dis=%5d %5d ppc=%5d asm=%.8lux lit=%d: %s\n",
+			size, size*sizeof(Inst), n, base, nlit, m->name);
+
+	pass++;
+	nlit = 0;
+	litpool = base+n;
+	code = base;
+	n = 0;
+
+	for(i = 0; i < size; i++) {
+		s = code;
+		comp(&m->prog[i]);
+		if(patch[i] != n) {
+			print("%3d %D\n", i, &m->prog[i]);
+			urk("phase error");
+		}
+		n += code - s;
+		if(cflag > 1) {
+			print("%3d %D\n", i, &m->prog[i]);
+			while(s < code)
+				s += das(s);
+		}/**/
+	}
+
+	for(i=0; macinit[i].f; i++) {
+		if(macro[macinit[i].o] != n) {
+			print("macinit %d\n", macinit[i].o);
+			urk("phase error");
+		}
+		s = code;
+		(*macinit[i].f)();
+		n += code - s;
+		if(cflag > 1) {
+			print("macinit %d\n", macinit[i].o);
+			while(s < code)
+				s += das(s);
+		}/**/
+	}
+
+	for(l = m->ext; l; l = l->next) {
+		l->u.pc = (Inst*)(base+patch[l->u.pc-m->prog+1]);
+		typecom(l->frame);
+	}
+	for(i = 0; i < m->ntype; i++) {
+		if(tinit[i] != 0)
+			typecom(m->type[i]);
+	}
+
+	m->entry = (Inst*)(base+patch[mod->entry-mod->prog]);
+	free(patch);
+	free(tinit);
+	free(m->prog);
+	m->prog = (Inst*)base;
+	m->compiled = 1;
+	segflush(base, n*sizeof(*base));
+	return 1;
+}

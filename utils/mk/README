@@ -1,0 +1,27 @@
+Using the delivered mk to rebuild mk.
+
+Mk will compile and run under Solaris and Irix, after you have built
+Inferno you can rebuild mk. Do the following. Check the mkconfig
+file that was modified when you built inferno, its values should be
+correct.  Set the following in your environment
+
+for Solaris:
+	OBJTYPE=sparc export OBJTYPE
+	SYSHOST=Solaris export SYSHOST
+	SYSTARG=Solaris export SYSTARG
+
+for Irix:
+	OBJTYPE=mips export OBJTYPE
+	SYSHOST=Irix export SYSHOST
+	SYSTARG=Irix export SYSTARG
+
+Do the following (assuming you are in the mk directory):
+	cd ../libregexp
+	../$SYSHOST/$OBJTYPE/bin/mk
+	../$SYSHOST/$OBJTYPE/bin/mk nuke
+	cd ../mk
+	../$SYSHOST/$OBJTYPE/bin/mk
+	mv o.out mk
+	./mk nuke
+
+

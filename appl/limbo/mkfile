@@ -1,0 +1,65 @@
+<../../mkconfig
+<../../$SYSHOST/mkhost
+
+OBJ=\
+	limbo.dis\
+
+all:V:	$OBJ
+
+MODULE= \
+	../../module/bufio.m\
+	../../module/draw.m\
+	../../module/keyring.m\
+	../../module/math.m\
+	../../module/string.m\
+	../../module/sys.m\
+	arg.m\
+	disoptab.m\
+	isa.m\
+	limbo.m\
+	opname.m\
+	asm.b\
+	com.b\
+	decls.b\
+	dis.b\
+	ecom.b\
+	gen.b\
+	lex.b\
+	nodes.b\
+	sbl.b\
+	stubs.b\
+	typecheck.b\
+	types.b\
+
+OBJINST=${OBJ:%=../../dis/%}
+OBJPKG=${OBJ:%=$PREFIX_PKG/dis/%}
+
+$OBJ:	$MODULE
+
+install:V: $OBJ
+	$RM $OBJINST
+	$CP $OBJ ../../dis
+
+uninstall:V:
+	$RM $OBJINST
+
+package:V:	$OBJ\
+		$PREFIX_PKG/dis
+	$RM $OBJPKG
+	$CP $OBJ $PREFIX_PKG/dis
+
+%.install:V:	%.dis
+	cp $stem.dis ../../dis
+
+nuke \
+clean:V:
+	rm -f *.dis *.sbl
+
+%.dis:	%.b
+	limbo -I../../module -gw $stem.b
+
+%.s:	%.b
+	limbo -I../../module -wG -S $stem.b
+
+$PREFIX_PKG/dis:
+	$MKDIR $target

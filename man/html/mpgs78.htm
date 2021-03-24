@@ -1,0 +1,170 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs77.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs79.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="854102">
+<center><h1> file2chan </h1></center>
+</a><a name="854103">
+file2chan - create file connected to Limbo channel<p>
+</a><a name="844558">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+Rread: type chan of (array of byte, string);
+Rwrite: type chan of (int,      string);
+FileIO: adt
+{
+    read:  chan of (int, int,      int, Rread);
+    write: chan of (int, array of byte, int, Rwrite);
+};
+file2chan: fn(dir, file: string, flags: int): ref FileIO;
+</tt></pre></p><a name="844569">
+<h2> Description</h2>
+</a><a name="844570">
+The file2chan function provides an interface for creating a Limbo channel and an associated entry (<em>file</em>) in the file name space. A <em>client</em> communicates with the server using open, read and write. The system transforms the client's file operations into tuples that are delivered to the server on the channel associated with <em>file</em>. When the server responds, the client's file operations complete.<p>
+</a><a name="844571">
+Although the interface is couched in <em>file</em> semantics, the goal need not be the creation a server to replicate the duties of existing file systems (e.g., persistent storage of data). The server can be designed to provide new services.<p>
+</a><a name="844572">
+<h3> file2chan (dir, file, flags)</h3>
+</a><a name="844573">
+The <kbd>file2chan</kbd> function returns a <kbd>FileIO</kbd> type holding two channels used by the system to deliver <kbd>Tread</kbd> and <kbd>Twrite</kbd> Styx messages to the server. See <a href="mpgs36.htm#869014"><em>Limbo Modules</em></a>. The arguments are: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="844576">
+dir<p>
+</a><td><a name="844578">
+The existing directory where the <em>file</em> is to be created.<p>
+</a>
+<tr><td><a name="844580">
+file<p>
+</a><td><a name="844582">
+The <em>file</em> created by file2chan. It is held in a directory, containing just that one file, unioned in <em>dir</em>.<p>
+</a>
+<tr><td><a name="844584">
+flags<p>
+</a><td><a name="844586">
+The <em>flags</em> argument specifies how that union is created; see <em><a href="mpgs72.htm#844334"></em><em>bind</em><em></a> </em>for a description of the flags.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="844587">
+<h3> Reads</h3>
+</a><a name="844588">
+When the client invokes the read system call on the file, the server receives a tuple,<kbd> (</kbd><em>offset</em><kbd>, </kbd><em>count</em><kbd>, </kbd><em>fid</em><kbd>, </kbd><em>rc</em><kbd>)</kbd>, on the <kbd>read</kbd> channel of returned ref &#32;FileIO. The server should interpret that as a request as follows: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="844591">
+offset<p>
+</a><td><a name="844593">
+The offset from the beginning of the file.<p>
+</a>
+<tr><td><a name="844595">
+count<p>
+</a><td><a name="844597">
+The size of the data request.<p>
+</a>
+<tr><td><a name="844599">
+fid<p>
+</a><td><a name="844601">
+An unique identifier for managing multiplexed requests on <em>file</em>.<p>
+</a>
+<tr><td><a name="844603">
+rc<p>
+</a><td><a name="844605">
+The channel for delivery of the requested data.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="844606">
+To allow the client to complete its read request successfully, the server should respond by sending into <em>rc</em> a tuple, (<em>data</em>, &#32;nil), where <em>data</em> satisfies the client's request.<p>
+</a><a name="844607">
+To create an unsuccessful read request for the client, the server should response on <em>rc</em> with a tuple, (nil, &#32;<em>errmsg</em>), where <em>errmsg</em> is a string describing the error condition. The <em>errmsg</em> string becomes the system error for the client (See <a href="mpgs82.htm#844711"><em>print</em></a>).<p>
+</a><a name="844608">
+The client blocks in its read system call until the server sends its reply.<p>
+</a><a name="844609">
+<h3> Writes </h3>
+</a><a name="844610">
+When the client does a write system call on the file, the server receives a tuple, <kbd>(</kbd><em>offset</em><kbd>, &#32;</kbd><em>data</em><kbd>, &#32;</kbd><em>fid</em><kbd>, &#32;</kbd><em>wc</em><kbd>),</kbd> on the write channel of the returned ref FileIO. That request should be interpreted as follows: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="844613">
+offset<p>
+</a><td><a name="844615">
+The offset from the beginning of the file where the <em>data</em> should be written.<p>
+</a>
+<tr><td><a name="844617">
+data<p>
+</a><td><a name="844619">
+The data to be written into the file.<p>
+</a>
+<tr><td><a name="844621">
+fid<p>
+</a><td><a name="844623">
+An unique identifier for managing multiplexed requests on <em>file</em>.<p>
+</a>
+<tr><td><a name="844625">
+wc<p>
+</a><td><a name="844627">
+A channel for delivery of a write-response message.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="844628">
+The server should respond with a tuple<kbd> (</kbd><em>count</em><kbd>, &#32;</kbd><em>string</em><kbd>)</kbd> on <em>wc, </em>the<em> </em>channel received in the tuple from the <kbd>write</kbd> channel. To indicate a successful write operation to the client the server's response should be<kbd> (</kbd><em>count</em><kbd>, &#32;nil)</kbd>, where <em>count</em> is the number of bytes (i.e.,<kbd> len</kbd> &#32;<em>data</em>) received from the client.<p>
+</a><a name="844629">
+To make the client's write request fail, the server's response should be<kbd> (0, &#32;</kbd><em>errmsg</em><kbd>)</kbd>, where <em>errmsg</em> describes the problem. The <em>errmsg</em> string becomes the system error for the client (See <a href="mpgs82.htm#844711"><em>print</em></a>).<p>
+</a><a name="844630">
+The client blocks in its write system call until the server sends its reply.<p>
+</a><a name="844631">
+<h3> Closes </h3>
+</a><a name="844632">
+When file is closed for reading (writing), the server will receive a read (write) message with a nil <em>rc</em> (<em>wc</em>). The server can use these events to determine when to stop processing for a given <em>fid</em>.<p>
+</a><a name="844633">
+<h3> Fid's</h3>
+</a><a name="844634">
+The <em>fid</em> received by the server can be used to manage the multiplexing of multiple active clients sharing a single file. See <a href="mpgs36.htm#869014"><em>Limbo Modules</em></a> for details.<p>
+</a><a name="844635">
+<h2> See Also</h2>
+</a><a name="844636">
+<a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a>, <a href="mpgs72.htm#844334"><em>bind</em></a>, <a href="mpgs80.htm#844653"><em>open</em></a>, <a href="mpgs83.htm#844766"><em>read</em></a>, <a href="mpgs82.htm#844711"><em>print</em></a>, and <em><a href="mpgs36.htm#869014"></em><em>Limbo Modules</em><em></a></em><p>
+</a><a name="844637">
+<h2> Caveat</h2>
+</a><a name="844638">
+The <kbd>read</kbd> and <kbd>write</kbd> system calls for the file will not return until the server sends it reply on the appropriate channel; consequently, the process doing the <kbd>read</kbd> or <kbd>write</kbd> should not be the one serving, lest it deadlock.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs77.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs79.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

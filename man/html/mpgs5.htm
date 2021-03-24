@@ -1,0 +1,90 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs4.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs6.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="840389">
+<center><h1> chmod </h1></center>
+</a><a name="840390">
+chmod - change file mode (permissions)<p>
+</a><a name="872335">
+<h2> Synopsis</h2>
+</a><pre><tt>chmod <em>mode</em> <em>file...</em> 
+chmod [augo][+-=][rwx]	<em>file...
+</em></tt></pre></p><a name="840394">
+<h2> Description</h2>
+</a><a name="840395">
+The mode of each named file is changed according to <em>mode,</em> which may be an octal number or a symbolic change to the existing mode. A <em>mode</em> is an octal number constructed from the OR of the following modes. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="840398">
+0400<p>
+</a><td><a name="840400">
+read by owner<p>
+</a>
+<tr><td><a name="840402">
+0200<p>
+</a><td><a name="840404">
+write by owner<p>
+</a>
+<tr><td><a name="840406">
+0100<p>
+</a><td><a name="840408">
+execute (search in directory) by owner<p>
+</a>
+<tr><td><a name="840410">
+0070<p>
+</a><td><a name="840412">
+read, write, execute (search) by group<p>
+</a>
+<tr><td><a name="840414">
+0007<p>
+</a><td><a name="840416">
+read, write, execute (search) by others<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="840417">
+A symbolic <em>mode</em> has the form:<p>
+</a><a name="840418">
+	[who] op permission<p>
+</a><a name="840419">
+The <em>who</em> part is a combination of the letters u (for user's permissions), g (group) and o (other). The letter a stands for ugo. If <em>who</em> is omitted, the default is a.<p>
+</a><a name="840420">
+<em>Op</em> can be + to add <em>permission</em> to the file's mode, - to take away <em>permission</em>, and = to assign <em>permission</em> absolutely (all other bits will be reset).<p>
+</a><a name="840421">
+<em>Permission</em> is any combination of the letters r (read), w (write), and x (execute).<p>
+</a><a name="840422">
+<h2> See Also</h2>
+</a><a name="840423">
+<a href="mpgs15.htm#840996"><em>ls</em></a> and <a href="mpgs87.htm#844841"><em>stat</em></a><p>
+</a><a name="840424">
+<h2> Notes</h2>
+</a><a name="840425">
+See <a href="mpgs87.htm#844841"><em>stat</em></a> for interpretation of permissions on Windows-hosted systems.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs4.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs6.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

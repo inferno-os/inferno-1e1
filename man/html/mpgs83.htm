@@ -1,0 +1,63 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs82.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs84.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844766">
+<center><h1> read</h1></center>
+</a><a name="844767">
+read, write - read or write file<p>
+</a><a name="844768">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+read:   fn(fd: ref FD, buf: array of byte, nbytes: int): int;
+write:  fn(fd: ref FD, buf: array of byte, nbytes: int): int;
+stream: fn(src, dst: ref FD, bufsiz: int):               int;
+</tt></pre></p><a name="844774">
+<h2> Description</h2>
+</a><a name="844775">
+<h3> read (fd, buf, nbytes)</h3>
+</a><a name="844776">
+The read function reads <em>nbytes</em> bytes of data from the current offset in the file associated with <em>fd</em> into array <em>buf</em>.<p>
+</a><a name="844777">
+The file offset is advanced by the number of bytes read so that subsequent reads will obtain the next data from the file.<p>
+</a><a name="844778">
+It is not guaranteed that all <em>nbytes</em> bytes will be read. For example, if the file refers to the console, at most one line will be returned. In any event, the number of bytes read is returned as the functional value of read. A return value of 0 is conventionally interpreted as end of file.<p>
+</a><a name="844779">
+<h3> write (fd, buf, nbytes)</h3>
+</a><a name="844780">
+The <kbd>write</kbd> function writes<em> nbytes</em> bytes of data from array <em>buf</em> to the file associated with <em>fd</em> at the current file offset.<p>
+</a><a name="844781">
+The offset is advanced by the number of bytes written so that subsequent writes will deposit data after the previously written data.<p>
+</a><a name="844782">
+The number of bytes actually written is returned by write. It should be regarded as an error if this is not the same as requested.<p>
+</a><a name="844783">
+<h3> stream (src, dst, bufsiz)</h3>
+</a><a name="844784">
+The <kbd>stream</kbd> function continually reads data from <em>src</em>, using a buffer of<em> bufsiz </em>bytes<em>,</em> and writes the data to <em>dst</em>. It copies data until a read fails (returning zero bytes or an error) or a write fails (returning a count that does not match the request). The <kbd>stream</kbd> function returns the number of bytes actually copied. The implementation may be more efficient than a read / <kbd>write</kbd> loop in the application, but is otherwise equivalent to calling <kbd>read</kbd> and <kbd>write</kbd> directly.<p>
+</a><a name="844785">
+<h2> See Also</h2>
+</a><a name="844786">
+<a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a>, <a href="mpgs77.htm#844541"><em>dup</em></a>, <a href="mpgs80.htm#844653"><em>open</em></a>, and <a href="mpgs94.htm#855571"><em>bufio</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs82.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs84.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

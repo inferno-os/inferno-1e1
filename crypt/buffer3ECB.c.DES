@@ -1,0 +1,46 @@
+#ifdef NOSPOOKS
+#include "lib9.h"
+#include <libcrypt.h>
+
+void
+buffer3ECBEncrypt(uchar *buf, uchar key[3][8], int len)
+{
+	uchar *block;
+	uchar tmp[8];
+	DES3state s;
+	int i;
+
+	setupDES3state(&s, key, 0);
+	for (i=8, block=buf; i<=len; i+=8, block+=8)
+		triple_block_cipher(s.expanded, block, 0);
+	
+	if ((len & 7) != 0) {
+		for (i=0; i<8; i++)
+			tmp[i] = i;
+		triple_block_cipher(s.expanded, tmp, 0);
+		for (i=0; i<(len&7); i++)
+			block[i] ^= tmp[i];
+	}
+}
+
+void
+buffer3ECBDecrypt(uchar *buf, uchar key[3][8], int len)
+{
+	uchar *block;
+	uchar tmp[8];
+	DES3state s;
+	int i;
+
+	setupDES3state(&s, key, 0);
+	for (i=8, block=buf; i<=len; i+=8, block+=8)
+		triple_block_cipher(s.expanded, block, 1);
+	
+	if ((len & 7) != 0) {
+		for (i=0; i<8; i++)
+			tmp[i] = i;
+		triple_block_cipher(s.expanded, tmp, 1);
+		for (i=0; i<(len&7); i++)
+			block[i] ^= tmp[i];
+	}
+}
+#endif NOSPOOKS

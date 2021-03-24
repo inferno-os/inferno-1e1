@@ -1,0 +1,9 @@
+#!/bin/rc
+SYSHOST=Plan9
+SYSTARG=Inferno
+OBJTYPE=arm
+@{cd /usr/inferno/interp
+mk comp-arm.5
+ar uv /usr/inferno/Inferno/arm/lib/libinterp.a}
+rm iebsit
+mk

@@ -1,0 +1,48 @@
+
+dev
+	root		/
+	cons		c
+	mnt		M
+	ns16552		t
+	rtc		r
+	ether		l	netif
+	ip		I
+	mpeg		E
+	tv		V
+	audio		A
+	ssl		D
+	tinyfs		F
+	draw		d
+	srv		s
+	prog		p
+	ata		H
+
+link
+	ether509
+	ether82557		pci
+	ether79c960
+	vgaclgd542x
+	vgamach64ct		pci
+	vgas3
+	vgact65540
+	vgaet4000
+
+misc
+
+port
+	void consdebug(void){}
+
+boot boot #H/hd0
+	il
+	tcp
+
+lib
+	interp
+	tk
+	prefab
+	image
+	memlayer
+	memimage
+	keyring
+	k
+	crypt

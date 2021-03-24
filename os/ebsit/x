@@ -1,0 +1,4 @@
+devroot.$O: rootdata.h rootfs.h
+
+rootdata.h: mkroot ../init/$INIT.dis $cputype.data2c ../init/$IR.dis
+	mkroot $INIT > rootdata.h

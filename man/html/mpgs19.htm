@@ -1,0 +1,72 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs18.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs20.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="841214">
+<center><h1> netstat </h1></center>
+</a><a name="841215">
+netstat - rename/move files<p>
+</a><a name="841216">
+<h2> Synopsis</h2>
+</a><pre><tt>bind '#I' /net
+netstat
+</tt></pre></p><a name="841219">
+<h2> Description</h2>
+</a><a name="841220">
+The netstat command prints information about TCP and UDP network connections. The information is obtained from the <kbd>status</kbd> file of each entry under the corresponding network directories, <kbd>/dev/net/tcp</kbd> and <kbd>/dev/net/udp</kbd>. The <em>clone</em> files are omitted from this report.<p>
+</a><a name="841234">
+<h2> Files 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="841223">
+<p>
+</a><td><a name="841225">
+<kbd>/net/tcp/*</kbd><p>
+</a>
+<tr><td><a name="841227">
+<p>
+</a><td><a name="841229">
+<kbd>/net/udp/*</kbd><p>
+</a>
+<tr><td><a name="841231">
+<p>
+</a><td><a name="841233">
+<kbd>/prog/</kbd><em>pid</em><kbd>/status</kbd><p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="841235">
+<h2> Caveat</h2>
+</a><a name="841236">
+This command requires a populated <kbd>/net</kbd> directory; therefore, there must be a prior binding of the system's <kbd>#I </kbd>driver to that directory.<p>
+</a><a name="841237">
+<h2> See Also</h2>
+</a><a name="841238">
+<a href="mpgs109.htm#846002"><em>ip</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs18.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs20.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

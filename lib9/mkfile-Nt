@@ -1,0 +1,20 @@
+OFILES_C=\
+	create.$O\
+	dirstat-$(SYSTARG).$O\
+	dirwstat.$O\
+	doprint.$O\
+	errstr-Nt.$O\
+	exits.$O\
+	getfields.$O\
+	getuser-$(SYSTARG).$O\
+	icossin.$O\
+	icossin2.$O\
+	print.$O\
+	rune.$O\
+	runestrlen.$O\
+	seek.$O\
+	strdup.$O\
+	strtoll.$O\
+	utflen.$O\
+	utfrrune.$O\
+	utfrune.$O\

@@ -1,0 +1,127 @@
+<../mkconfig
+<../$SYSHOST/mkhost
+<../$OBJDIR/mkfile
+
+TARG=emu
+
+OFILES=\
+	audio.$O\
+	audio-$SYSTARG.$O\
+	alloc.$O\
+	asm-$SYSTARG-$OBJTYPE.$O\
+	chan.$O\
+	dev.$O\
+	devcmd.$O\
+	devcon.$O\
+	devdraw.$O\
+	devfs-$SYSTARG.$O\
+	devip.$O\
+	devmnt.$O\
+	devprog.$O\
+	devroot.$O\
+	devsrv.$O\
+	devssl.$O\
+	devtab-$SYSTARG.$O\
+	dial.$O\
+	dis.$O\
+	discall.$O\
+	error.$O\
+	errstr.$O\
+	exportfs.$O\
+	inferno.$O\
+	ipif-$SYSTARG.$O\
+	lock.$O\
+	main.$O\
+	memones.$O\
+	ns.$O\
+	os-$SYSTARG.$O\
+	proc.$O\
+	qio.$O\
+	srv.$O\
+	styx.$O\
+	sysfile.$O\
+	svp.$O\
+	win-$SYSTARG.$O\
+
+LIBS=\
+	interp\
+	prefab\
+	math\
+	tk\
+	keyring\
+	image\
+	memlayer\
+	memimage\
+	crypt\
+	9\
+
+HFILES=\
+	../$OBJDIR/include/lib9.h\
+	../$OBJDIR/include/os.h\
+	../include/styx.h\
+	../include/interp.h\
+	../include/image.h\
+	../include/version.h\
+	dat.h\
+	fns.h\
+
+
+<../$SYSTARG/mkone
+
+CFLAGS= -DEMU -I../interp $CFLAGS
+
+devprog.$O \
+devsrv.$O \
+inferno.$O:	../interp/runt.h
+
+main.$O \
+os-Nt.$O:	../include/version.h
+
+devdraw.$O:	../include/image.h\
+		../include/memimage.h\
+		../include/memlayer.h
+
+
+audio.$O: 		audio.h svp.h audio.c 
+
+audio-$SYSTARG.$O: 	audio.h svp.h audio-tbls.c audio-$SYSTARG.c audio-$SYSTARG.h
+
+svp.$O:			svp.h
+
+ipif-$SYSTARG.$O \
+devip.$O:		ip.h $HFILES
+
+ipif-Hp.$O:		ipif-posix.c
+ipif-Irix.$O:		ipif-posix.c
+ipif-Solaris.$O:	ipif-posix.c
+ipif-Linux.$O:		ipif-posix.c
+
+win-Hp.$O:		win-x11.c
+win-Irix.$O:		win-x11.c
+win-Solaris.$O:		win-x11.c
+win-Linux.$O:		win-x11.c
+
+devfs-Hp.$O:		devfs-posix.c devfs-Hp.h
+devfs-Irix.$O:		devfs-posix.c
+devfs-Solaris.$O:	devfs-posix.c
+devfs-Linux.$O:		devfs-posix.c
+
+devtab-Hp.$O:		devtab-posix.c
+devtab-Irix.$O:		devtab-posix.c
+devtab-Solaris.$O:	devtab-posix.c
+devtab-Linux.$O:	devtab-posix.c
+devtab-Nt.$O:		devtab-posix.c
+
+srv.$O:			srv.h srvm.h
+
+
+srv.h srvm.h:D:		../module/srvrunt.b ../module/srv.m
+			$RM $alltarget
+			limbo -a -I../module ../module/srvrunt.b >srv.h
+			limbo -t Srv -I../module ../module/srvrunt.b >srvm.h
+
+nuke:			nuke-std
+			$RM srv.h srvm.h
+
+package:QV:		package-std
+			$TRUE

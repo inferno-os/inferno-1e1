@@ -1,0 +1,252 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs70.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs72.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="860158">
+<center><h1> </h1></center>
+</a><a name="872019">
+Limbo System Modules<p>
+</a><a name="872020">
+The Limbo system modules are as follows:<p>
+</a><a name="872165">
+<h2> System Modules 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="872029">
+<a href="mpgs72.htm#844334"><em>bind</em></a> <p>
+</a><a name="872030">
+   mount,<p>
+</a><a name="872031">
+   unmount<p>
+</a><td><a name="872033">
+change file name space<p>
+</a>
+<tr><td><a name="872038">
+<a href="mpgs73.htm#844368"><em>byte2char</em></a><p>
+</a><a name="872039">
+   char2byte<p>
+</a><td><a name="872041">
+convert between bytes and characters<p>
+</a><a name="872042">
+ <p>
+</a>
+<tr><td><a name="872047">
+<a href="mpgs74.htm#844399"><em>chdir</em></a> <p>
+</a><td><a name="872049">
+change working directory<p>
+</a>
+<tr><td><a name="872054">
+<a href="mpgs75.htm#844412"><em>dial</em></a> <p>
+</a><a name="872055">
+   announce,<p>
+</a><a name="872056">
+   export, listen<p>
+</a><td><a name="872058">
+make network connections    <p>
+</a>
+<tr><td><a name="872063">
+<a href="mpgs76.htm#844528"><em>dirread</em></a> <p>
+</a><td><a name="872065">
+read directory<p>
+</a>
+<tr><td><a name="872070">
+<a href="mpgs77.htm#844541"><em>dup</em></a> <p>
+</a><td><a name="872072">
+duplicate an open file descriptor<p>
+</a>
+<tr><td><a name="872077">
+<a href="mpgs78.htm#854102"><em>file2chan</em></a> <p>
+</a><td><a name="872079">
+create file connected to Limbo channel<p>
+</a>
+<tr><td><a name="872084">
+<a href="mpgs79.htm#844640"><em>millisec</em></a> <p>
+</a><td><a name="872086">
+millisecond timer<p>
+</a>
+<tr><td><a name="872091">
+<a href="mpgs80.htm#844653"><em>open</em></a><p>
+</a><a name="872092">
+   create <p>
+</a><td><a name="872094">
+open/create a file for reading or writing<p>
+</a>
+<tr><td><a name="872099">
+<a href="mpgs81.htm#844675"><em>pctl</em></a> <p>
+</a><td><a name="872101">
+process control<p>
+</a>
+<tr><td><a name="872106">
+<a href="mpgs82.htm#844711"><em>print</em></a> <p>
+</a><td><a name="872108">
+print formatted output<p>
+</a>
+<tr><td><a name="872110">
+   fprint, sprint <p>
+</a><td><a name="872112">
+<p>
+</a>
+<tr><td><a name="872117">
+<a href="mpgs83.htm#844766"><em>read</em></a> <p>
+</a><a name="872118">
+   write <p>
+</a><td><a name="872120">
+read or write file<p>
+</a>
+<tr><td><a name="872125">
+<a href="mpgs84.htm#844787"><em>remove</em></a> <p>
+</a><td><a name="872127">
+remove a file<p>
+</a>
+<tr><td><a name="872132">
+<a href="mpgs85.htm#844801"><em>seek</em></a> <p>
+</a><td><a name="872134">
+change file offset<p>
+</a>
+<tr><td><a name="872139">
+<a href="mpgs86.htm#844830"><em>sleep</em></a> <p>
+</a><td><a name="872141">
+delay execution<p>
+</a>
+<tr><td><a name="872146">
+<a href="mpgs87.htm#844841"><em>stat</em></a> <p>
+</a><a name="872147">
+   fstat, fwstat,<p>
+</a><a name="872148">
+   stat, wstat<p>
+</a><td><a name="872150">
+get and put file status<p>
+</a>
+<tr><td><a name="872155">
+<a href="mpgs88.htm#844934"><em>tokenize</em></a> <p>
+</a><td><a name="872157">
+split string into words<p>
+</a>
+<tr><td><a name="872162">
+<a href="mpgs89.htm#844949"><em>utfbytes</em></a> <p>
+</a><td><a name="872164">
+compute the Unicode length of a UTF byte sequence<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="872021">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+</tt></pre></p><a name="844288">
+<h2> Description</h2>
+</a><a name="844289">
+<h3> File Name Space</h3>
+</a><a name="844290">
+Files are collected into a hierarchical organization called a <em>file</em> <em>tree</em> starting in a <em>directory</em> called the <em>root.</em> <em>Filenames</em>, also called <em>paths</em>, consist of a number of / -separated <em>"path</em> elements with the slashes corresponding to directories. A path element must contain only printable characters (those outside ASCII and Latin-1 control space). A path element cannot contain a space, slash, or #. The path element <kbd>".."</kbd> refers to the parent directory of the directory containing that element.<p>
+</a><a name="844291">
+When a process presents a file name to Inferno, it is <em>evaluated</em> by the following algorithm. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="844294">
+1.<p>
+</a><td><a name="844296">
+Start with a directory that depends on the first character of the path: <p>
+</a><a name="844297">
+<kbd>/</kbd> means the root of the main hierarchy, <p>
+</a><a name="844298">
+<kbd>#</kbd> means the separate root of a kernel device's file tree (see Section 3), <p>
+</a><a name="844299">
+and anything else means the process's current working directory.<p>
+</a>
+<tr><td><a name="844301">
+2.<p>
+</a><td><a name="844303">
+For each path element, look up the element in the directory, advance to that directory, do a possible translation (see below).<p>
+</a>
+<tr><td><a name="844305">
+3.<p>
+</a><td><a name="844307">
+Repeat. The last step may yield a directory or regular file.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="844308">
+The collection of files reachable from the root is called the <em>name space</em> of a process.<p>
+</a><a name="844309">
+A program can use bind or mount (see <em><a href="mpgs72.htm#844334"></em><em>bind</em><em></a></em>) to say that whenever a certain (specified) file is reached during an evaluation, that evaluation continues instead from some other (specified) file. These same calls create <em>union directories</em>, which are concatenations of ordinary directories that are searched sequentially until the desired element is found.<p>
+</a><a name="844310">
+The result of evaluating <kbd>".."</kbd> in a union directory is undefined.<p>
+</a><a name="844311">
+Using bind and mount to do name space adjustment affects only the current name space group (see below, and <a href="mpgs81.htm#844675"><em>pctl</em></a>).<p>
+</a><a name="844312">
+Certain conventions about the layout of the name space must be preserved. <p>
+</a><a name="844313">
+<h3> File I/O</h3>
+</a><a name="844314">
+Files are opened for input or output by open or create (see <a href="mpgs80.htm#844653"><em>open</em></a>). These calls return a reference to an object of type FD (file descriptor) that identifies the file to subsequent I/O calls, notably read and write (see <a href="mpgs83.htm#844766"><em>read</em></a>). The FD contains an integer file descriptor, but the FD type is passed to Limbo I/O routines. When the last reference to an FD disappears, the file is descriptor is released by the garbage collector.<p>
+</a><a name="844315">
+Integer file descriptor values range from 0 to <em>n</em> where the upper bound depends on the underlying operating system. The system allocates the numbers by selecting the lowest unused descriptor. They may be reassigned using dup (see <a href="mpgs77.htm#844541"><em>dup</em></a>). Integer file descriptor values are indices into a kernel-resident <em>file descriptor table</em>, which is inherited from the parent when a process is created by a Limbo spawn operation. A set of processes, called a <em>file descriptor group</em>, shares that table, so files opened by one process may be read and written by other processes in the group. (See <a href="mpgs81.htm#844675"><em>pctl</em></a>).<p>
+</a><a name="844316">
+By convention, file descriptor 0 is the standard input, 1 is the standard output, and 2 is the standard error output. The operating system is unaware of these conventions. It is possible to close file 0, or even to replace it by a file open only for writing, but programs written according to the normal convention will be confused by such chicanery.<p>
+</a><a name="844317">
+Files are normally read or written in sequential order. The I/O position in the file is called the <em>file</em> <em>offset</em> and may be set arbitrarily using the seek system call (see <a href="mpgs85.htm#844801"><em>seek</em></a>).<p>
+</a><a name="844318">
+Directories may be opened and read much like regular files (see <a href="mpgs76.htm#844528"><em>dirread</em></a>). They contain an integral number of records, called <em>directory</em> <em>entries</em>. Each entry is a machine-independent representation of the information about an existing file in the directory, including the name, ownership, permission, access dates, and so on.<p>
+</a><a name="844319">
+The entry corresponding to an arbitrary file can be retrieved by stat or fstat (see <a href="mpgs87.htm#844841"><em>stat</em></a>); wstat and fwstat write back entries, thus changing the properties of a file.<p>
+</a><a name="844320">
+New files are made with create and deleted with remove (see <a href="mpgs80.htm#844653"><em>open</em></a> and <a href="mpgs84.htm#844787"><em>remove</em></a>).<p>
+</a><a name="844321">
+Directories are manipulated by create, remove, wstat, and fwstat; they may not directly be written.<p>
+</a><a name="844322">
+Inferno provides no guarantee of consistency should several processes access a file concurrently. Guaranteed synchronous writes are not available.<p>
+</a><a name="844323">
+Atomicity is guaranteed for I/O with byte counts smaller than the Styx message size; see <a href="mpgs83.htm#844766"><em>read</em></a>.<p>
+</a><a name="844324">
+<h3> Process execution and control</h3>
+</a><a name="844325">
+A Limbo <em>process</em>, also called a <em>thread</em>, is the basic unit of computation for Limbo application programming in the Inferno system.<p>
+</a><a name="844326">
+A newly spawned thread shares the same <em>address</em> <em>space</em> as that of its creator thread. That is, the set of global variables that is in scope to one is in scope to the other. A change made by one can be detected by the other. Since they are scheduled independently, they should synchronize their actions to share this data meaningfully.<p>
+</a><a name="844327">
+The newly created thread also shares the same set of open file descriptors and the current working directory.<p>
+</a><a name="844328">
+Processes are also organized into <em>process</em> <em>groups</em> that typically represent the set of threads of a single application and can be terminated by a single kill request; see <a href="mpgs110.htm#846072"><em>prog</em></a>.<p>
+</a><a name="844329">
+It is possible for a thread to acquire a new, independent name space and set of file descriptors. See <em><a href="mpgs81.htm#844675"></em><em>pctl</em><em></a></em>.<p>
+</a><a name="844330">
+<h3> User/Group Identity</h3>
+</a><a name="844331">
+Inferno maintains user identifier (<kbd>uid</kbd>) and group identifier (<kbd>gid</kbd>) strings for each process. These values are also attributes of files and directories. See <a href="mpgs87.htm#844841"><em>stat</em></a> and <a href="mpgs122.htm#848227"><em>stat</em></a>. A comparison of process and file identities take place when a process attempts to open or create a file.<p>
+</a><a name="844332">
+When a pathname crosses from one server to another the process identities are mapped by each server receiving a file request.<p>
+</a><a name="844333">
+The uid and gid strings are assigned to the thread that is created when a user logs into Inferno and cannot be changed.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs70.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs72.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

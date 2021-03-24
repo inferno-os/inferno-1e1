@@ -1,0 +1,136 @@
+#include "../port/portfns.h"
+
+void	DEBUG(void);
+
+int	cistrcmp(char*, char*);
+void	cleancache(void);
+void	clock(Ureg*);
+void	clockinit(void);
+void	clrfptrap(void);
+ulong	confeval(char*);
+void	confprint(void);
+void	confread(void);
+void	confset(char*);
+int	conschar(void);
+void	consoff(void);
+int	consputc(int);
+void	dcflush(void*, ulong);
+void	delay(int);
+int	dmadone(int);
+void	dmaend(int);
+void	dmainit(void);
+long	dmasetup(int, void*, long, int);
+void	dtlbmiss(void);
+void	dumpregs(Ureg*);
+void	eieio(void);
+void	evenaddr(void*);
+void	faultpower(Ureg*);
+void	firmware(int);
+void	flushpage(ulong);
+void	fptrap(Ureg*);
+ulong	getcallerpc(void*);
+char*	getconf(char*);
+ulong	getdar(void);
+ulong	getdec(void);
+ulong	getdmiss(void);
+ulong	getdsisr(void);
+ulong	getfpscr(void);
+ulong	gethid0(void);
+ulong	getmsr(void);
+void	getnveaddr(void*);
+int	getnvram(ulong, void *, int);
+ulong	getpvr(void);
+ulong	getsegreg(int);
+ulong	getstatus(void);
+ulong	gettbl(void);
+ulong	gettbu(void);
+void	gotopc(ulong);
+void	icdirty(void *, ulong);
+void	icflush(void *, ulong);
+int	inb(int);
+ulong	inl(int);
+ushort	ins(int);
+void	insb(int, void*, int);
+void	insl(int, void*, int);
+void	inss(int, void*, int);
+void	intr(Ureg*);
+void	intrvec(void);
+void	ioinit(void);
+int	isaconfig(char*, int, ISAConf*);
+void	itlbmiss(void);
+void	kbdinit(void);
+int	kprint(char*, ...);
+void	kproftimer(ulong);
+void	launch(int);
+void	links(void);
+void	launchinit(void);
+ulong legetl(uchar*);
+ulong legets(uchar*);
+void	lesetl(uchar*, ulong);
+void	lesets(uchar*, ushort);
+void	lightbits(int, int);
+void	microdelay(int);
+void	mmuinit(void);
+void	newstart(void);
+int	newtlbpid(Proc*);
+void	online(void);
+void	outb(int, int);
+void	outl(int, ulong);
+void	outs(int, ushort);
+void	outsb(int, void*, int);
+void	outsl(int, void*, int);
+void	outss(int, void*, int);
+void	pcicfgr(int, int, int, int, void*, int);
+void	pcicfgw(int, int, int, int, void*, int);
+int	pcimatch(int, int, PCIcfg*);
+void*	pcimemmap(int, int, int, int, ulong*);
+Block*	prepend(Block*, int);
+ulong	prid(void);
+void	printinit(void);
+#define	procrestore(p)
+void	procsave(Proc*);
+void	purgetlb(int);
+void	putdec(ulong);
+void	puthid0(ulong);
+void	putmsr(ulong);
+int	putnvram(ulong, void*, int);
+void	putsdr1(ulong);
+void	putsegreg(int, ulong);
+void	puttbl(ulong);
+void	puttbu(ulong);
+ulong	rdcount(void);
+int	readlog(ulong, char*, ulong);
+long	rtctime(void);
+void	fpinit(void);
+void	fpoff(void);
+void	fprestore(FPU*);
+void	fpsave(FPU*);
+void	newstart(void);
+void	screeninit(void);
+void	screenputs(char*, int);
+void	sethvec(int, void (*)(void));
+void	setled(int);
+void	setvec(int, void (*)(Ureg*, void*), void*);
+void	setvector(int, void (*)(Ureg*, void*), void*);
+void	swabl(void*, void*, int);
+void	swabs(void*, void*, int);
+void	syslog(char*, int);
+void	sysloginit(void);
+int	tas(ulong*);
+void	tlbia(void);
+void	tlbie(ulong);
+void	touser(void*);
+void	trapinit(void);
+void	trapvec(void);
+void	uartclock(void);
+void	wbflush(void);
+
+#define	waserror()	(up->nerrlab++, setlabel(&up->errlab[up->nerrlab-1]))
+#define KADDR(a)	((void*)((ulong)(a)|KSEG0))
+#define PADDR(a)	((ulong)(a)&~KSEGM)
+#define DMASEG(a)	(PADDR(a)|MEM2PCI)
+
+void	ns16552install(void);
+void	ns16552special(int, int, Queue**, Queue**, int (*)(Queue*, int));
+
+void	uartflush(void);	/* for debugging */

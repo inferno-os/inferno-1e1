@@ -1,0 +1,54 @@
+# Shell script to create files for Nt kernel build that are normally
+# created at build time on Unix.  This script must be executed
+# before an Nt kernel build and it must be executed from the kernel
+# build directory, eg, os/pc.  The 'conf' parameter is kernel-specific,
+# eg, 'pc'.
+
+if [ $# -ne 1 ]
+then
+	echo "usage: $0 conf"
+	exit 99
+fi
+if [ "$SYSTARG" == "" ]
+then
+	echo "SYSTARG environment variable not set"
+	exit 98
+fi
+if [ "$OBJTYPE" == "" ]
+then
+	echo "OBJTYPE environment variable not set"
+	exit 98
+fi
+if [ "$O" != "" ]
+then
+	# Environment variabl O must not be set.
+	unset O
+fi
+CONF=$1
+# NOTE: SYSTARG and OBJTYPE should have been set in the environment.
+export OBJDIR=$SYSTARG/$OBJTYPE		# For liblist
+# Create DEVCONF and DEVPORT variables in file devlist.
+echo "DEVCONF=\\" > devlist
+ls `../port/mkdevlist.sh $CONF | sed 's/\./\.c/'` | sed 's/\.c/\.8\\/' >> devlist
+echo "\nDEVPORT=\\" >> devlist
+cd ../port
+ls `./mkdevlist.sh ../$CONF/$CONF | sed 's/\./\.c/'` | sed 's/\.c/\.8\\/' >> ../$CONF/devlist
+cd ../$CONF
+# Create LINK variable in file linklist.
+echo "LINK=\\" > linklist
+../port/mklinklist.sh $CONF | sed 's/\./\.8\\/' >> linklist
+# Create MISC variable in file misclist.
+echo "MISC=\\" > misclist
+../port/mkmisclist.sh $CONF | sed 's/root\./root\.8\\/' >> misclist
+# Create IP variable in file iplist.
+echo "IP=\\" > iplist
+cd ../ip
+ls *.c | sed 's/\.c/\.8\\/' >> ../$CONF/iplist
+cd ../$CONF
+# Create LIBS variable in file liblist.
+echo "LIBS=\\" > liblist
+../port/mkliblist.sh $CONF | sed 's/\.a/\.a8\\/' >> liblist
+
+../port/mkdevc.sh $CONF > $CONF.c	# Create $CONF.c
+../port/mkdevh.sh $CONF > devtab.h	# Create devtab.h
+../port/mkerrstr.sh $CONF > errstr.h	# Create errstr.h

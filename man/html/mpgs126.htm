@@ -1,0 +1,75 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs125.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs127.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="853309">
+<center><h1> db</h1></center>
+</a><a name="853312">
+db - connection service database<p>
+</a><a name="849563">
+<h2> Synopsis</h2>
+</a><a name="849564">
+<kbd>/services/cs/db</kbd><p>
+</a><a name="849565">
+<h2> Description</h2>
+</a><a name="849566">
+The connection service database file is read by the connection server daemon, <kbd>cs</kbd>, when it receives a request with a machine name of the form <kbd>$</kbd><em>service.</em><p>
+</a><a name="849567">
+The file consists of a two column list (separated by tabs and/or blanks) of the form<p>
+</a><a name="849568">
+<kbd>	$</kbd><em>service</em><kbd>		</kbd><em>hostname</em><p>
+</a><a name="849569">
+Once the hostname for a given service is identified, the connection server converts the hostname into an internet address.<p>
+</a><a name="849570">
+Blank lines and comments (lines beginning with <kbd>#</kbd>) are ignored.<p>
+</a><a name="849571">
+A running connection server daemon notes the modification time of the database file before each use. If the file has changed, the daemon uses the latest definitions.<p>
+</a><a name="849572">
+<h2> Example</h2>
+</a><pre><tt>$MPEG			infernocpu
+$SIGNER			dante
+$FilesERVER			dante
+$MAILSERVER			dante
+</tt></pre></p><a name="849586">
+<h2> See Also 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="849579">
+<a href="mpgs8.htm#840464"><em>cs</em></a><p>
+</a><td><a name="849581">
+Starting the connection server daemon<p>
+</a>
+<tr><td><a name="849583">
+<a href="mpgs132.htm#849741"><em>cs</em></a><p>
+</a><td><a name="849585">
+Description of connection server daemon<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs125.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs127.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

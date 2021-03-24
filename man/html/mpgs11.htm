@@ -1,0 +1,100 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs10.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs12.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="840558">
+<center><h1> du </h1></center>
+</a><a name="840559">
+du - disk usage<p>
+</a><a name="840560">
+<h2> Synopsis</h2>
+</a><pre><tt>du [-sant] [<em>file...</em>]
+</tt></pre></p><a name="840562">
+<h2> Description</h2>
+</a><a name="840563">
+The <kbd>du</kbd> command outputs to standard output the total size of files specified as arguments. Output sums are rounded up to the nearest 1K unit (1024 bytes).<p>
+</a><a name="840564">
+Directories are recursively tallied. If no filenames are provided, the command operates on the current directory.<p>
+</a><a name="840582">
+<h2> Options 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="840567">
+<em>-s</em> (default)<p>
+</a><td><a name="840569">
+Output the usage information tallied for each directory.<p>
+</a>
+<tr><td><a name="840571">
+-a<p>
+</a><td><a name="840573">
+Output usage information for each file, not just the directories.<p>
+</a>
+<tr><td><a name="840575">
+-n<p>
+</a><td><a name="840577">
+Output just the filenames, no other information. Warning messages are generated for 'unsafe' filenames (i.e., names containing shell special characters or characters that might confuse certain tools). The unsafe characters are:<p>
+</a><pre><tt> " ' \Q $ # ; &amp; | ^ &lt; &gt; ( ) \
+</tt></pre></p>
+<tr><td><a name="840579">
+-t<p>
+</a><td><a name="840581">
+When used with the <kbd>-n</kbd> option, outputs the filename, modification time (seconds since the epoch), size (in bytes), and checksum. This option has no effect in the absence of the <kbd>-n </kbd>option.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="840583">
+<h2> Notes</h2>
+</a><a name="840584">
+Options <kbd>-s</kbd>, <kbd>-a</kbd>, and <kbd>-n</kbd> are mutually exclusive.<p>
+</a><a name="840585">
+<h2> Caveat</h2>
+</a><a name="840586">
+The checksum value shown by the <kbd>-t</kbd> option is always 0.<p>
+</a><a name="840596">
+<h2> See Also 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="840589">
+<a href="mpgs26.htm#841311"><em>sh</em></a> <p>
+</a><td><a name="840591">
+Description of special characters<p>
+</a>
+<tr><td><a name="840593">
+<a href="mpgs87.htm#844841"><em>stat</em></a> <p>
+</a><td><a name="840595">
+obtaining file sizes<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs10.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs12.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

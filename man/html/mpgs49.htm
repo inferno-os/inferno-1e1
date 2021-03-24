@@ -1,0 +1,60 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs48.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs50.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="842887">
+<center><h1> gensk </h1></center>
+</a><a name="842888">
+Keyring: genSK, genSKfromPK, sktopk, dhparams - generate keys<p>
+</a><a name="842889">
+<h2> Synopsis</h2>
+</a><pre><tt>include "keyring.m";
+kr:= load Keyring Keyring-&gt;PATH;
+genSK:       fn(algname, owner: string, length: int): ref SK; 
+genSKfromPK: fn(pk: ref PK, owner: string)          : ref SK;
+sktopk:      fn(sk: ref SK)                         : ref PK;
+dhparams:    fn(nbits: int)             : (ref IPint, ref IPint);
+</tt></pre></p><a name="842896">
+<h2> Description</h2>
+</a><a name="842897">
+<h3> genSK (algname, owner, length) </h3>
+</a><a name="842898">
+Although we call it a private key, the <kbd>SK</kbd> adt contains both the private and public parts of a public key. The genSK function generates this key pair. The algname parameter is the name of the algorithm to use; in the current implementation, only <kbd>"elgamal" </kbd>is possible. The <em>owner</em> parameter is the user name to be associated with the key. The <em>length</em> parameter specifies the length of the key modulus in bits. The nil value is returned if an unknown algorithm has been specified.<p>
+</a><a name="842899">
+<h3> genSKfromPK (pk, owner)</h3>
+</a><a name="842900">
+The genSKfromPK function generates a private key that has the same system parameters as the public key, <em>pk</em>. The function is used to generate new keys that are of the same complexity as old keys.<p>
+</a><a name="842901">
+<h3> sktopk (sk)</h3>
+</a><a name="842902">
+The sktopk function extracts the public part of private key.<p>
+</a><a name="842903">
+<h3> dhparams (nbits)</h3>
+</a><a name="842904">
+The dhparams function creates Diffie-Hellman parameters. The second IPint returned is an <em>nbits</em> long prime number that serves as the modulus. The first IPint is a primitive root in the integer field defined by that modulus.<p>
+</a><a name="842905">
+<h2> See Also</h2>
+</a><a name="876612">
+B. Schneier, <em>Applied Cryptography</em>, 1996, J. Wiley &amp; Sons, Inc.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs48.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs50.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

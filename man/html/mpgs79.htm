@@ -1,0 +1,47 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs78.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs80.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844640">
+<center><h1> millisec </h1></center>
+</a><a name="844641">
+millisec - millisecond timer<p>
+</a><a name="844642">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+millisec: fn(): int;
+</tt></pre></p><a name="844646">
+<h2> Description</h2>
+</a><a name="844647">
+<h3> millisec ( )</h3>
+</a><a name="844648">
+The millisec returns the value of an internal system clock, in milliseconds.<p>
+</a><a name="844649">
+The actual resolution of the clock is a property of the underlying system and may be coarser than a millisecond. The epoch is arbitrary, so millisec is useful for measuring durations but not absolute time. If the system operates continuously, the millisecond counter overflows every couple of months; a reboot resets the epoch.<p>
+</a><a name="844650">
+<h2> See Also</h2>
+</a><a name="844651">
+<em><a href="mpgs71.htm#872019"></em><em>Limbo System Modules</em><em></a> </em>and <a href="mpgs86.htm#844830"><em>sleep</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs78.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs80.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+SYSHOST=Plan9
+
+#	shell commands
+
+SH=	rc
+CP=	cp
+ECHO=	echo
+FALSE=	~ 0 1
+MKDIR=	mkdir
+RM=	rm -f
+RMDIR=	rm -f
+TRUE=	echo -n

@@ -1,0 +1,82 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs72.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs74.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844368">
+<center><h1> byte2char </h1></center>
+</a><a name="844370">
+byte2char, char2byte - convert between bytes and characters<p>
+</a><a name="859066">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+byte2char: fn(buf: array of byte, n: int): (int, int, int);
+char2byte: fn(c: int, buf: array of byte, n: int): int;
+</tt></pre></p><a name="844375">
+<h2> Description</h2>
+</a><a name="844376">
+<h3> byte2char (buf, n)</h3>
+</a><a name="844377">
+The byte2char function converts a byte sequence to one Unicode character. The <em>buf</em> argument gives an array of bytes holding the sequence and <em>n</em> gives the number of bytes in the array. The returned tuple, (<em>c</em>, <em>len</em>, <em>status</em>), specifies the result of the translation: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="844380">
+c<p>
+</a><td><a name="844382">
+<em>The</em> resulting Unicode character.<p>
+</a>
+<tr><td><a name="844388">
+len<p>
+</a><td><a name="844390">
+The number of bytes consumed by the translation.<p>
+</a>
+<tr><td><a name="893966">
+status<p>
+</a><td><a name="893977">
+Non-zero if the bytes are a valid UTF sequence and zero otherwise.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="844391">
+If the input sequence is not long enough to determine its validity, <kbd>byte2char </kbd>consumes zero bytes. If the input sequence is otherwise invalid, <kbd>byte2char</kbd> consumes one input byte and generates an error character (16r80, Sys-&gt;UTFerror), which prints (in most fonts) as a boxed question mark.<p>
+</a><a name="844392">
+<h3> char2byte (c, buf, n)</h3>
+</a><a name="844393">
+The <kbd>char2byte</kbd> performs the inverse of byte2char. It translates a Unicode character, <em>c</em>, to a UTF byte sequence. The results are placed in <em>buf</em>, which should have at least <em>n</em> bytes available. The longest UTF sequence for a single Unicode character is <kbd>Sys-&gt;UTFmax </kbd>(3) bytes.<p>
+</a><a name="844394">
+If the translation succeeds, <kbd>char2byte</kbd> returns the number of bytes placed in the buffer. If <em>n</em> bytes are too few to hold the result, <kbd>char2byte</kbd> returns zero and leaves the array unchanged.<p>
+</a><a name="844395">
+<h2> See Also</h2>
+</a><a name="844396">
+<a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a>, <a href="mpgs89.htm#844949"><em>utfbytes</em></a>, and <a href="mpgs130.htm#849689"><em>utf</em></a><p>
+</a><a name="844397">
+<h2> Notes</h2>
+</a><a name="844398">
+If the array bounds are invalid or insufficient to hold results, a run-time error occurs.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs72.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs74.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

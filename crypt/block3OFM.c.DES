@@ -1,0 +1,38 @@
+#ifdef NOSPOOKS
+#include "lib9.h"
+#include <libcrypt.h>
+
+void
+b3OFMEncrypt(uchar in[8], uchar icv[8], uchar int_key[3][128], int count)
+{
+	uchar c;
+	int j, chunk;
+	
+	while (count > 0) {
+		triple_block_cipher(int_key, icv, 0);
+		chunk = (count >= 8? 8: count);
+		for (j=0; j < chunk; j++) {
+			c = in[j];
+			c ^= icv[j];
+			in[j] = c;
+		}
+		count -= 8;
+	}
+}
+
+
+void
+block3OFMEncrypt(uchar block[8], uchar icv[8], uchar key[3][8], int len, DES3state *s)
+{
+	if (s->setup != 0xdeadbeef)
+		setupDES3state(s, key, icv);
+	b3OFMEncrypt(block, s->ivec, s->expanded, len);
+	
+}
+
+void
+block3OFMDecrypt(uchar block[8], uchar icv[8], uchar key[3][8], int len, DES3state *s)
+{
+	block3OFMEncrypt(block, icv, key, len, s);
+}
+#endif NOSPOOKS

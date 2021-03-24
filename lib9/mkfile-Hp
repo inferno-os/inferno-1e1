@@ -1,0 +1,20 @@
+OFILES=\
+	create.$O\
+	dirstat-posix.$O\
+	dirwstat.$O\
+	doprint.$O\
+	errstr-posix.$O\
+	exits.$O\
+	getfields.$O\
+	getuser-posix.$O\
+        icossin.$O\
+        icossin2.$O\
+	print.$O\
+	rune.$O\
+	runestrlen.$O\
+	seek.$O\
+	strdup.$O\
+	strtoll.$O\
+	utflen.$O\
+	utfrrune.$O\
+	utfrune.$O\

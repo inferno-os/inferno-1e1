@@ -1,0 +1,100 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs91.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs93.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844999">
+<center><h1> tklib </h1></center>
+</a><a name="845000">
+tklib: tkquote, is_err, tkcmds, dialog, getstring, notice,<p>
+</a><a name="845001">
+mktabs, tabsctl -<p>
+</a><a name="845002">
+Tk user interface functions<p>
+</a><a name="845003">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";
+include "tk.m";
+include "tklib.m";
+tklib:=  load Tklib Tklib-&gt;PATH;
+init:      fn(ctxt: ref Draw-&gt;Context);
+tkquote:   fn(s: string): string;
+is_err:    fn(e: string): int;
+tkcmds:    fn(top: ref Tk-&gt;Toplevel, cmds: array of string);
+dialog:    fn(p:  ref Tk-&gt;Toplevel, msg: string, dflt: int,
+    labs: list of string): int;
+getstring: fn(p: ref Tk-&gt;Toplevel, s:  string): string;
+notice:    fn(p: ref Tk-&gt;Toplevel, msg: string);
+mktabs:    fn(p: ref Tk-&gt;Toplevel, book: string,
+    tabs: array of (string, string), dflt: int): chan of string;
+tabsctl:   fn(p: ref Tk-&gt;Toplevel, book: string,
+     tabs: array of (string, string), curid: int, newid: string): int;
+</tt></pre></p><a name="845020">
+<h2> Description</h2>
+</a><a name="845021">
+The Tklib module builds on the Tk module to provide some common user interface functions.<p>
+</a><a name="845022">
+<h3> init (ctxt)</h3>
+</a><a name="845023">
+The <kbd>init</kbd> function must be called before using any of these functions, with a <em>ctxt</em> argument holding the screen on which to draw.<p>
+</a><a name="845024">
+<h3> tkquote (s)</h3>
+</a><a name="845025">
+The <kbd>tkquote</kbd> function returns a string that is the same as its arguments, but enclosed in curly braces and with internal curly braces escaped. The tkquote function can be used to make an arbitrary string, <em>s</em>, into a <em>word</em> suitable as an argument to a Tk function.<p>
+</a><a name="845026">
+<h3> is_err (e)</h3>
+</a><a name="845027">
+The <kbd>is_err </kbd>function can be called with a return value from tkcmd. It returns 1 if the string, <em>e</em>, represents an error (begins with an exclamation mark).<p>
+</a><a name="845028">
+<h3> tkcmds (top, cmds) </h3>
+</a><a name="845029">
+The tkcmds function executes <kbd>tkcmd</kbd> on all strings in the argument array, <em>cmds</em>, using <em>top</em> for the first argument of Tkcmd. It does not check for error returns.<p>
+</a><a name="845030">
+<h3> dialog (p, msg, dflt, labs)</h3>
+</a><a name="845031">
+The <kbd>dialog</kbd> function pops up a dialog box near the corner of the parent top level widget, <em>p</em>. It displays the given <em>msg</em> and a number of buttons, labeled with the strings in <em>labs</em>. The dialog box waits for the user to push a button, and then returns the index of the button pushed (the first element of labs <em>is</em> index 0). If the user types a newline, the <em>dflt</em> value is returned. The button with the <em>dflt</em> index is specially outlined in the dialog box.<p>
+</a><a name="845032">
+<h3> getstring (p, s)</h3>
+</a><a name="845033">
+The <kbd>getstring</kbd> function pops up a dialog box near the corner of the parent top level widget, <em>p</em>. The box contains the <em>msg</em> and an entry widget. It waits for the user to type a string and a newline, and then returns the typed string without the newline.<p>
+</a><a name="845034">
+<h3> notice (p, msg)</h3>
+</a><a name="845035">
+The <kbd>notice</kbd> function pops up a dialog box near the corner of the parent top level widget, <em>p</em>. It displays the given <em>msg</em> and an OK button. It waits for the user to push OK and then returns.<p>
+</a><a name="845036">
+<h3> mktabs (p, book, tabs, dflt)</h3>
+</a><a name="845037">
+The <kbd>mktabs</kbd> function creates a tabbed notebook pseudo widget, <em>book</em>, for insertion into widget <em>p</em>. Once created, book <em>can</em> be packed like any other Tk widget. The notebook will initially display the page indexed by <em>dflt</em>.<p>
+</a><a name="845038">
+Information for specific tab pages is contained in the <em>tabs</em> array. <em>For</em> each page, <em>tabs</em> contains the name displayed in the tab and a Tk widget name. Whenever a page is selected, it's widget is packed in <em>book</em> and displayed.<p>
+</a><a name="845039">
+The <kbd>mktabs</kbd> functions returns a Tk event channel. Messages received on this channel should be passed as the <em>newid</em> argument to tabsctl.<p>
+</a><a name="845040">
+<h3> tabsctl (p, book, tabs, curid, newid)</h3>
+</a><a name="845041">
+The <kbd>tabsctl</kbd> function controls a tabbed notebook. The <em>curid</em> parameter is the index of the page currently selected in the notebook. The <em>newid</em> parameter is a string containing the index of the new page to be displayed; this is usually the information received by the channel returned from mktabs. The index of the newly selected page is returned. <p>
+</a><a name="845042">
+<h2> See Also</h2>
+</a><a name="845043">
+<a href="mpgs91.htm#859355"><em>tk</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs91.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs93.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

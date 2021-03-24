@@ -1,0 +1,95 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs57.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs59.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="843147">
+<center><h1> pipe </h1></center>
+</a><a name="843148">
+pipe: fds, files - get read/write file pair for a pipe<p>
+</a><a name="843149">
+<h2> Synopsis</h2>
+</a><pre><tt>include "lib.m";
+pipe:= load Pipe Pipe-&gt;PATH;
+fds:    fn(): (ref Sys-&gt;FD, ref Sys-&gt;FD);
+files:  fn(): (string, string);
+</tt></pre></p><a name="843164">
+<h2> Description 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="843156">
+fds ( )<p>
+</a><td><a name="843158">
+The fds opens a pair of files. One file is the read end of a simulation of a pipe for thread-to-thread communication and the other is the write end. The returns a tuple with the read and write file descriptors, respectively.<p>
+</a><a name="843159">
+In case the pipe cannot be created, fds returns (nil, nil).<p>
+</a>
+<tr><td><a name="843161">
+files ( )<p>
+</a><td><a name="843163">
+The <kbd>files</kbd> function returns a pair of file names to be opened. The first name is for the read end of a pipe and the second name is for the write end of a pipe.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="843165">
+In case the pipe cannot be created, files returns ("", "").<p>
+</a><a name="843166">
+<h2> Notes</h2>
+</a><a name="843167">
+The pipes are implemented via by creating channels and associated files (uniquely named) in the /chan directory.<p>
+</a><a name="843168">
+<h2> Files</h2>
+</a><a name="843169">
+<kbd>/chan</kbd><p>
+</a><a name="864248">
+<h2> See Also 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="864269">
+<a href="mpgs78.htm#854102"><em>file2chan</em></a><p>
+</a><td><a name="864271">
+Creating file/channel associations<p>
+</a>
+<tr><td><a name="864273">
+<a href="mpgs80.htm#844653"><em>open</em></a><p>
+</a><td><a name="864275">
+Converting file name to ref FD<p>
+</a>
+<tr><td><a name="864836">
+<a href="mpgs83.htm#844766"><em>read</em></a><p>
+</a><td><a name="864279">
+Accessing a file via ref FD<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs57.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs59.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

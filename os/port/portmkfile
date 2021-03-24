@@ -1,0 +1,52 @@
+PFILES=`{builtin cd ../port;echo *.c | sed 's/ /|/g; s/\.c//g'}
+
+^($PFILES)\.$O:R:	'../port/\1.c'
+	$CC $CFLAGS -I. ../port/$stem1.c
+
+%.$O:	%.s
+	$AS $stem.s
+
+%.$O:	%.c
+	$CC $CFLAGS $stem.c
+
+installall:V:
+	for(i in $CONFLIST)
+		mk 'CONF='$i install
+
+all:V:
+	for(i in $CONFLIST)
+		mk 'CONF='$i
+
+clean:V:
+	rm -f *.[$OS] *.root.s devtab.h cfs.h fs.h conf.h *.out
+	for(i in $CONFLIST)
+		rm -f $i.c 9$i b$i
+
+%.$O:	u.h mem.h dat.h fns.h ../port/error.h ../port/lib.h ../port/portdat.h ../port/portfns.h devtab.h
+
+$CONF.c: ../port/mkdevc $CONF
+	rc ../port/mkdevc $CONF > $CONF.c
+
+devtab.h:	../port/mkdevh $CONFLIST
+	rc ../port/mkdevh $CONFLIST > devtab.h
+
+errstr.h:	../port/mkerrstr ../port/error.h
+	rc ../port/mkerrstr > errstr.h
+
+/usr/inferno/os/init/init.obj:V:
+	builtin cd /usr/inferno/os/init
+	mk
+
+dev.$O:		devtab.h
+devmnt.$O:	/sys/include/fcall.h
+proc.$O:	errstr.h
+devroot.$O:	errstr.h
+trap.$O:	/$objtype/include/ureg.h
+devproc.$O:	/$objtype/include/ureg.h
+devns16552.$O:	ns16552.h
+
+testlat:	testlat.c latin1.c
+	vc testlat.c latin1.c
+	vl testlat.v latin1.v
+	v.out > /lib/keyboard
+	rm testlat.v latin1.v v.out

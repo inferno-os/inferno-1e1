@@ -1,0 +1,111 @@
+%.$O:	%.s
+	$AS $stem.s
+
+%.$O:	%.c
+	$CC $CFLAGS $stem.c
+
+%.$O:	../port/%.c
+	$CC $CFLAGS ../port/$stem.c
+
+SCRIPTS=\
+	../port/mkdevc.sh\
+	../port/mkdevh.sh\
+	../port/mkdevlist.sh\
+	../port/mkerrstr.sh\
+	../port/mkextract.sh\
+	../port/mkliblist.sh\
+	../port/mklinklist.sh\
+	../port/mkmisclist.sh\
+	../port/mkstreamlist.sh\
+
+$SCRIPTS:V:
+	for f in $SCRIPTS
+	do
+		test -x $f && continue
+		chmod +x $f
+	done
+
+installall:V:
+	for i in $CONFLIST
+	do
+		mk CONF=$i install
+	done
+
+all:V:
+	for i in $CONFLIST
+	do
+		mk CONF=$i
+	done
+
+package:V:	all\
+		$PREFIX_PKG/$OBJDIR/bin
+	for i in $CONFLIST
+	do
+		$RM $PREFIX_PKG/$OBJDIR/bin/tv$i
+		$CP b$i $PREFIX_PKG/$OBJDIR/bin/tv$i
+	done
+
+clean:V:
+	$RM *.[$OS] *.root.c devtab.h errstr.h *.out
+	for i in $CONFLIST
+	do
+		$RM $i.c 9$i b$i
+	done
+	cd ../init; mk clean
+
+nuke:V: clean
+	$RM data2c daten size
+
+%.$O:\
+	u.h \
+	../port/lib.h \
+	mem.h \
+	dat.h \
+	fns.h \
+	io.h \
+	../port/error.h \
+	../port/portdat.h \
+	../port/portfns.h \
+	devtab.h \
+
+$CONF.c: ../port/mkdevc.sh $CONF
+	../port/mkdevc.sh $CONF > $target
+
+devtab.h:	../port/mkdevc.sh $CONFLIST
+	../port/mkdevh.sh $CONFLIST > $target
+
+errstr.h:	../port/mkerrstr.sh ../port/error.h
+	../port/mkerrstr.sh > $target
+
+../init/init.obj:V:
+	cd ../init
+	mk
+
+dev.$O:		devtab.h
+proc.$O:	errstr.h
+devroot.$O:	errstr.h
+trap.$O:	../../$OBJDIR/include/ureg.h
+devproc.$O:	../../$OBJDIR/include/ureg.h
+segment.$O:	segment.h
+devmouse.$O:	screen.h
+devns16552.$O:	ns16552.h
+
+testlat:	testlat.c latin1.c
+	cc -c testlat.c latin1.c
+	ld testlat.o latin1.o
+	a.out > /lib/keyboard
+	$RM testlat.o latin1.o a.out
+
+# Force data2c, daten, size to build every time in case
+# SYSHOST is different from last time.
+data2c:V:
+	cc -o data2c ../port/data2c.c
+
+daten:V:
+	cc -o daten ../port/daten.c
+
+size:V:
+	cc -o size ../port/size.c
+
+$PREFIX_PKG/$OBJDIR/bin :
+	$MKDIR $target

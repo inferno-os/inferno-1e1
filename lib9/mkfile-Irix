@@ -1,0 +1,23 @@
+OFILES=\
+	create.$O\
+	dirstat-$SYSTARG.$O\
+	dirwstat.$O\
+	doprint.$O\
+	errstr-Irix.$O\
+	exits.$O\
+	getfields.$O\
+	getuser-$SYSTARG.$O\
+	icossin.$O\
+	icossin2.$O\
+	print.$O\
+	rune.$O\
+	runestrlen.$O\
+	seek.$O\
+	strdup.$O\
+	strtoll.$O\
+	utflen.$O\
+	utfrrune.$O\
+	utfrune.$O\
+
+errstr-Irix.$O:	errstr-Irix.c\
+		errstr-posix.c

@@ -1,0 +1,6 @@
+#!/bin/rc
+r=/usr/inferno
+
+$cputype.data2c lucent_ $r/icons/lucent.bit
+$cputype.data2c phone_ $r/icons/phone.bit
+$cputype.data2c osinit_ ../init/$1.dis

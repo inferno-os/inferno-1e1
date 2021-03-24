@@ -1,0 +1,46 @@
+<../../mkconfig
+<../../$SYSHOST/mkhost
+<../../$OBJDIR/mkfile
+
+TARG=mk
+LIBS=\
+	regexp\
+	bio\
+	9\
+
+OFILES=\
+	arc.$O\
+	bufblock.$O\
+	dir.$O\
+	graph.$O\
+	job.$O\
+	lex.$O\
+	main.$O\
+	match.$O\
+	mk.$O\
+	os-$SYSHOST.$O\
+	parse.$O\
+	recipe.$O\
+	rule.$O\
+	run.$O\
+	shprint.$O\
+	symtab.$O\
+	t_ar.$O\
+	t_driver.$O\
+	t_file.$O\
+	var.$O\
+	varsub.$O\
+	word.$O\
+
+HFILES=\
+	ar.h\
+	fns.h\
+	mk.h\
+
+<../../$SYSTARG/mkone
+
+CFLAGS=	-I. $CFLAGS
+LDFLAGS=	$LDFLAGS
+
+package:QV:
+	$TRUE

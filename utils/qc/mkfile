@@ -1,0 +1,40 @@
+<../../mkconfig
+<../../$SYSHOST/mkhost
+<../../$OBJDIR/mkfile
+
+TARG=qc
+OFILES=\
+	cgen.$O\
+	reg.$O\
+	txt.$O\
+	peep.$O\
+	swt.$O\
+	sgen.$O\
+	list.$O\
+	enam.$O\
+	mul.$O\
+	bits.$O\
+
+HFILES=\
+	gc.h\
+	q.out.h\
+	../cc/cc.h\
+
+LIBFILE=../../$OBJDIR/lib/libcc.$A
+$OFILES: $LIBFILE
+
+# Library cc depends on libbio.a which in turn depends
+# on lib9.a so order is important.
+LIBS=cc bio 9
+LDSYSLIBS=
+
+BIN=/$objtype/bin
+<../../$SYSTARG/mkone
+
+$LIBFILE:
+	cd ../cc
+	mk $MKFLAGS install
+	mk $MKFLAGS clean
+
+package:QV:
+	$TRUE

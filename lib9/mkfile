@@ -1,0 +1,18 @@
+<../mkconfig
+<../$SYSHOST/mkhost
+<../$OBJDIR/mkfile
+
+LIB=lib9.$A
+
+<mkfile-$SYSTARG
+
+HFILES=	../include/lib9.h
+
+<../$SYSTARG/mksyslib
+
+clean:V:	clean-std
+
+nuke:V:		nuke-std
+
+package:QV:
+	$TRUE

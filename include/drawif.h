@@ -1,0 +1,11 @@
+extern Font*		checkfont(Draw_Font*);
+extern Image*		checkimage(Draw_Image*);
+extern Screen*		checkscreen(Draw_Screen*);
+extern void		freedrawdisplay(Heap*);
+extern void		freedrawfont(Heap*);
+extern void		freedrawimage(Heap*);
+extern void		freedrawscreen(Heap*);
+extern Font*		lookupfont(Draw_Font*);
+extern Image*		lookupimage(Draw_Image*);
+extern Screen*		lookupscreen(Draw_Screen*);
+extern Draw_Image*	mkdrawimage(Image*, Draw_Screen*, Draw_Display*, void*);

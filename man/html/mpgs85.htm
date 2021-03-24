@@ -1,0 +1,79 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs84.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs86.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844801">
+<center><h1> seek </h1></center>
+</a><a name="844802">
+seek - change file offset<p>
+</a><a name="844803">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+seek: fn(fd: ref FD, off, start: int): int;
+</tt></pre></p><a name="844807">
+<h2> Description</h2>
+</a><a name="844808">
+<h3> seek (fd, off, start) </h3>
+</a><a name="844809">
+The seek function sets the offset for the file associated with <em>fd</em> to <em>off</em> as qualified by the <em>start</em> argument. Negative values for <em>off</em> are allowed.<p>
+</a><a name="844823">
+The <em>start</em> argument can have the following values: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="844812">
+SEEKSTART<p>
+</a><td><a name="844814">
+The offset is set to <em>off</em> bytes from the start of the file.<p>
+</a>
+<tr><td><a name="844816">
+SEEKRELA<p>
+</a><td><a name="844818">
+The offset is set to its current value plus <em>off</em> bytes.<p>
+</a>
+<tr><td><a name="844820">
+SEEKEND<p>
+</a><td><a name="844822">
+The offset is set to the size of the file plus <em>off</em> bytes.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="844824">
+The new file offset value is returned.<p>
+</a><a name="844825">
+The seek function does not validate the offset being set. Subsequent read or write calls to an invalid offset will fail.<p>
+</a><a name="844826">
+Seeking in a directory is not allowed.<p>
+</a><a name="844827">
+The current offset for a file is shared among processes of the same file descriptor group. See <a href="mpgs81.htm#844675"><em>pctl</em></a>.<p>
+</a><a name="844828">
+<h2> See Also</h2>
+</a><a name="844829">
+<a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a>, <a href="mpgs80.htm#844653"><em>open</em></a>, <a href="mpgs81.htm#844675"><em>pctl</em></a>, <a href="mpgs83.htm#844766"><em>read</em></a>, and <a href="mpgs94.htm#855571"><em>bufio</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs84.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs86.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs56.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs58.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="843126">
+<center><h1> newns </h1></center>
+</a><a name="843127">
+newns - build a new name space from a description file<p>
+</a><a name="843128">
+<h2> Synopsis</h2>
+</a><pre><tt>include "lib.m";
+ns:=   load Newns Newns-&gt;PATH;
+newns: fn(user: string, nsfile: string): string;
+</tt></pre></p><a name="843132">
+<h2> Description</h2>
+</a><a name="866860">
+The Newns module reads file <em>nsfile</em> and builds a new name space based on the commands it contains. If <em>nsfile</em> is nil or empty, then newns attempts to read the file "namespace" in the current directory.<p>
+</a><a name="843134">
+The name space description file contains one or more lines each of which specifies one name space operation. The operations and their arguments are:<p>
+</a><a name="843135">
+<h3> bind [-abrci] old new </h3>
+</a><a name="843136">
+Use <em>new</em> as an alias for file or directory <em>old</em>. Options a, b, c, and r translate to flag values Sys-&gt;MAFTER, Sys-&gt;MBEFORE, Sys-&gt;MCREATE, and Sys-&gt;MREPL, respectively, of <a href="mpgs72.htm#844334"><em>bind</em></a>. Option i means to ignore errors.<p>
+</a><a name="843137">
+<h3> cd directory </h3>
+</a><a name="857274">
+Change working directory to <em>directory</em>. <p>
+</a><a name="866834">
+<h3> fork</h3>
+</a><a name="866849">
+Split the name space before modification. This is equivalent to passing a value of <kbd>Sys-&gt;FORKNS</kbd> to the <kbd>pctl</kbd> system call. See <a href="mpgs81.htm#844675"><em>pctl</em></a>.<p>
+</a><a name="866853">
+<h3> nodev</h3>
+</a><a name="866855">
+Disallow device attaches. This is equivalent to passing a value of <kbd>Sys-&gt;NODEVS</kbd> to the <kbd>pctl</kbd> system call. See <a href="mpgs81.htm#844675"><em>pctl</em></a><kbd>.</kbd><p>
+</a><a name="866859">
+<h3> mount [-abrci] [net!] machine to [spec]</h3>
+</a><a name="843142">
+Mount the file tree of machine <em>upon</em> directory <em>to</em>. Options a, b, c, i, and r are the same as for bind. The tokens to and<em> </em><em>spec</em> translate to old and<em> </em><em>aname</em> of mount as described under <a href="mpgs72.htm#844334"><em>bind</em></a>.<p>
+</a><a name="843143">
+<h2> See Also</h2>
+</a><a name="843144">
+<a href="mpgs20.htm#841239"><em>nsbuild</em></a>, <a href="mpgs72.htm#844334"><em>bind</em></a>, <a href="mpgs74.htm#844399"><em>chdir</em></a>, and <a href="mpgs81.htm#844675"><em>pctl</em></a><p>
+</a><a name="843145">
+<h2> Notes</h2>
+</a><a name="843146">
+The <em>user</em> string is ignored.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs56.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs58.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<../../mkconfig
+<../../$SYSHOST/mkhost
+<../../$OBJDIR/mkfile
+
+TARG=2l
+OFILES=\
+	asm.$O\
+	obj.$O\
+	optab.$O\
+	pass.$O\
+	span.$O\
+	list.$O\
+	enam.$O\
+	cputime.$O\
+
+HFILES=\
+	l.h\
+	../2c/2.out.h\
+
+# ar.h is located in ../mk directory.
+CFLAGS= $CFLAGS -I../mk
+
+LIBS=bio 9
+LDSYSLIBS=
+
+BIN=/$objtype/bin
+<../../$SYSTARG/mkone
+
+enam.$O:	../2c/enam.c
+	$CC $CFLAGS ../2c/enam.c
+
+package:QV:
+	$TRUE

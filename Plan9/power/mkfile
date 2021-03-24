@@ -1,0 +1,27 @@
+#SYSTARG=Inferno
+OBJTYPE=power
+CPUS=power
+
+A=		a
+O=		q
+OS=		v85oq
+
+AR=		ar
+ARFLAGS=	cvru
+
+AS=		qa
+ASFLAGS=
+
+CC=		qc
+CFLAGS=\
+		-w\
+		-I$ROOT_DEVEL/$SYSTARG/$OBJTYPE/include\
+		-I$ROOT_DEVEL/include\
+		-I$ROOT_DEVEL/os/ibox\
+
+LD=		ql
+LDFLAGS=
+LDSYSLIBS=
+
+YACC=		yacc
+YFLAGS=		-d

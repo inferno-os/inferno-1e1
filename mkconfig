@@ -1,0 +1,12 @@
+# ROOT_DEVEL	The standard development root, holding the "official"
+#		copy of the source
+#
+# ROOT_PROD	The default root of the product.
+#
+# PREFIX_PKG	A staging area for collecting package files.
+#		This is not intended to be used for execution.
+
+ROOT_DEVEL=	/usr/inferno
+ROOT_PROD=	/usr/inferno
+OBJDIR=		$SYSTARG/$OBJTYPE
+PREFIX_PKG=	$ROOT_DEVEL/package

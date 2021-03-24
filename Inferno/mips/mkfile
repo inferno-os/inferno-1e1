@@ -1,0 +1,26 @@
+SYSTARG=Inferno
+OBJTYPE=mips
+CPUS=mips 386
+
+A=		av
+O=		v
+OS=		v85ok
+
+AR=		ar
+ARFLAGS=	cvru
+
+AS=		va
+ASFLAGS=
+
+CC=		vc
+CFLAGS=\
+		-w\
+		-I$ROOT_DEVEL/$SYSTARG/$OBJTYPE/include\
+		-I$ROOT_DEVEL/include\
+
+LD=		vl
+LDFLAGS=
+LDSYSLIBS=
+
+YACC=		yacc
+YFLAGS=		-d

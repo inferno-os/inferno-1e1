@@ -1,0 +1,86 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs7.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs9.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="840464">
+<center><h1> cs</h1></center>
+</a><a name="840465">
+cs - start connection server daemon<p>
+</a><a name="840466">
+<h2> Synopsis</h2>
+</a><a name="840467">
+<kbd>lib/cs</kbd><p>
+</a><a name="840468">
+<h2> Description</h2>
+</a><a name="860963">
+The <kbd>cs</kbd> command creates a file named <kbd>cs</kbd> in the<kbd> /net </kbd>directory then spawns a daemon process also named <kbd>cs</kbd>. Command <kbd>cs</kbd> then terminates while daemon <kbd>cs</kbd> continues execution, monitoring read and write requests to the <kbd>/net/cs</kbd> file. Once the daemon process is running, application programs can write host names to <kbd>/net/cs</kbd> and read that same file to obtain the corresponding internet address. The requests can also symbolically name a service (e.g. <kbd>$MAILSERVER</kbd>) that the daemon resolves by reference to the <kbd>/services/cs/db</kbd> file.<p>
+</a><a name="840471">
+The daemon process persists until explicitly terminated. The interface file, <kbd>/net/cs</kbd>, persists until unmounted from <kbd>/net</kbd>.<p>
+</a><a name="840472">
+<h2> Options</h2>
+</a><a name="840473">
+The <kbd>cs</kbd> command has no options or arguments.<p>
+</a><a name="840483">
+<h2> Files 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="840476">
+/net/cs<p>
+</a><td><a name="840478">
+Application interface to connection server daemon<p>
+</a>
+<tr><td><a name="840480">
+<kbd>/services/cs/db</kbd><p>
+</a><td><a name="840482">
+Connection server service database<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="840493">
+<h2> See Also 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="860272">
+<em><a href="mpgs126.htm#853309"></em><em>db</em><em></a></em><p>
+</a><td><a name="840488">
+Format of connection server database file<p>
+</a>
+<tr><td><a name="840490">
+<em><a href="mpgs132.htm#849741"></em><em>cs</em><em></a></em><p>
+</a><td><a name="840492">
+Description of connection server daemon<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs7.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs9.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs132.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a>
+<hr><br>
+ 
+<a name="849848">
+<center><h1> httpd </h1></center>
+</a><a name="849849">
+httpd, echo, stats - HTTP server<p>
+</a><a name="849850">
+<h2> Synopsis</h2>
+</a><pre><tt>httpd [ -c <em>cachesize</em> ] [ -D ]
+echo  <em>meth</em> <em>vers</em> <em>uri</em> <em>search</em> 
+stats <em>meth</em> <em>vers</em> <em>uri</em> <em>search
+</em></tt></pre></p><a name="849854">
+<h2> Description</h2>
+</a><a name="849855">
+<h3> httpd</h3>
+</a><a name="849856">
+The httpd program is an HTTP daemon, serving version 1.0 of the HTTP protocol. It is usually executed in response to an incoming call on TCP port 80, the HTTP port.<p>
+</a><a name="849858">
+The httpd program supports only the GET and HEAD methods of the HTTP protocol. The Content-type (default application/octet-stream) and Content-encoding (default binary) of a file are determined by looking for suffixes of the file name in /http/logs/http.suff.<p>
+</a><a name="849859">
+If the requested URI begins with /magic/, the httpd program loads the module associated with the remaining part of the URI.<p>
+</a><a name="849869">
+<h4> Options 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="849862">
+<kbd>-c </kbd><em>cachesize</em><kbd> </kbd><p>
+</a><td><a name="849864">
+The -c flag is used to set the size of the daemon's cache. The default is a five megabyte cache.<p>
+</a>
+<tr><td><a name="849866">
+<kbd>-D</kbd><p>
+</a><td><a name="849868">
+If the -D flag is set, debugging information is written to the file /httpd/httpd.debug. By default, there is no debugging.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h4>
+</a><a name="849870">
+<h3> echo</h3>
+</a><a name="849871">
+The <kbd>echo</kbd> program is a trivial server that just returns the method, URI, any search, and the headers sent by the client.<p>
+</a><a name="849872">
+<h3> stats </h3>
+</a><a name="849873">
+The stats program is an example that queries the cache and returns information to the user about pages stored in the cache.<p>
+</a><a name="849891">
+<h2> Files 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="849876">
+<kbd>/services/httpd/logs/httpd.debug</kbd><p>
+</a><td><a name="849878">
+Logfile for debugging information.<p>
+</a>
+<tr><td><a name="849880">
+<kbd>/services/httpd/logs/httpd.log</kbd><p>
+</a><td><a name="849882">
+<kbd>httpd</kbd> logfile.<p>
+</a>
+<tr><td><a name="849884">
+<kbd>/services/httpd/logs/httpd.rewrite</kbd><p>
+</a><td><a name="849886">
+File to redirect specific URI requests.<p>
+</a>
+<tr><td><a name="849888">
+<kbd>/services/httpd/logs/httpd.suff</kbd><p>
+</a><td><a name="849890">
+File of recognizable suffixes and their content type.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="847957">
+<a href="manpgch.htm#845643"></a><a href="manpgch.htm#845700"></a><a href="manpgch.htm#845820"></a><a href="manpgch.htm#845906"></a><a href="manpgch.htm#846002"></a><a href="manpgch.htm#846072"></a><a href="manpgch.htm#846275"></a><a href="manpgch.htm#846288"></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs132.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a>
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

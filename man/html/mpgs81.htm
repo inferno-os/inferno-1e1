@@ -1,0 +1,87 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs80.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs82.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844675">
+<center><h1> pctl </h1></center>
+</a><a name="844676">
+pctl - process control<p>
+</a><a name="844677">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+pctl: fn(flags: int, movefd: list of ref FD): int;
+</tt></pre></p><a name="844681">
+<h2> Description</h2>
+</a><a name="844682">
+A newly spawned Limbo process (also known as a thread) shares with its parent process a number of resources and properties, such as file name space, open file descriptors, current working directory, and so on. The pctl function controls this sharing, allowing a process to gain a copy of a resource rather than to share it, to start with a null resource, and so on.<p>
+</a><a name="844683">
+The set of processes sharing a property are called a group; for example the set of processes sharing a name space are called a name space group. Each process is a member of a <em>process</em> <em>group</em>, typically the set of threads functioning as a single program. All the members of a process group may be terminated at once using the "killgrp" control message in the <em>prog</em> device.<p>
+</a><a name="844684">
+A call to pctl affects the calling process and, indirectly according to <em>flags</em>, any other processes sharing properties with it. The <em>flags</em> to pctl are: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="844687">
+NEWFD<p>
+</a><td><a name="844689">
+Place the process in a new file descriptor group. By default, no files will be open for I/O after this pctl. However, any file descriptor passed in the <em>movefd</em> parameter will be preserved across the call.<p>
+</a>
+<tr><td><a name="844691">
+FORKFD<p>
+</a><td><a name="844693">
+Place the process in a new file descriptor group containing a copy of the current set of file descriptors. After this call, changes the process makes to its set of open file descriptors will not be visible to other processes.<p>
+</a>
+<tr><td><a name="844695">
+NEWNS<p>
+</a><td><a name="844697">
+Place the process in a new file name space group containing only a root directory,<kbd> /</kbd>, made from an attach to <em>root</em>. The current directory is unaffected by this call. No files other than<kbd> / </kbd>will be accessible by name after this pctl; <kbd>bind</kbd> and <kbd>mount</kbd> calls will be necessary to build a new name space.<p>
+</a>
+<tr><td><a name="844699">
+FORKNS<p>
+</a><td><a name="844701">
+Place the process in a new file name space group containing a copy of the current name space. After this call, changes the process makes to its name space, including <kbd>chdir</kbd> calls, will not affect other processes.<p>
+</a>
+<tr><td><a name="844703">
+NEWPGRP<p>
+</a><td><a name="844705">
+Establish a new process group with a group id equal to that of the pid of the calling process. <p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="844706">
+The return value of pctl is the numerical process id of the calling process, which can be used for example to access its <em>prog</em> files.<p>
+</a><a name="844707">
+<h2> Note</h2>
+</a><a name="844708">
+Programs run synchronously from the shell share its file name space, so programs like bind and mount and cd can affect the shell's environment. Programs that need a private space should call this system call with the FORKNS option.<p>
+</a><a name="844709">
+<h2> See Also</h2>
+</a><a name="844710">
+<em><a href="mpgs71.htm#872019"></em><em>Limbo System Modules</em><em></a> </em>and <a href="mpgs26.htm#841311"><em>sh</em></a> <p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs80.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs82.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

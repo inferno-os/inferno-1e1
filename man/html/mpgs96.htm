@@ -1,0 +1,91 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs95.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs97.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="855693">
+<center><h1>  imagefile </h1></center>
+</a><a name="855694">
+imagefile - processing external image file formats<p>
+</a><a name="855695">
+<h2> Synopsis</h2>
+</a><pre><tt>include "imagefile.m";
+gifreader := load RImagefile RImagefile-&gt;READGIFPATH;
+jpgreader := load RImagefile RImagefile-&gt;READJPGPATH;
+imageremap:= load Imageremap Imageremap-&gt;PATH;
+Rawimage: adt
+{
+  r        : Draw-&gt;Rect;
+  cmap     : array of byte;
+  nchans   : int;
+  chans    : array of array of byte;
+  chandesc : int;
+  init     : fn(bufio: Bufio);
+  read     : fn(fd: ref Bufio-&gt;Iobuf) : (ref Rawimage, string);
+};
+remap      : fn(i: ref RImagefile-&gt;Rawimage,
+                d: ref Draw-&gt;Display,
+                  errdiff: int)          : (ref Draw-&gt;Image, string);
+</tt></pre></p><a name="855713">
+<h2> Description</h2>
+</a><a name="855714">
+The Rawimage adt of module RImagefile defines an internal representation and routines for reading images such as GIF and JPEG files. To read a set of files of a given format, load the appropriate module, pass its init function an instance of a Bufio module, and pass read an Bufio-&gt;Iobuf for each file. The read function returns a tuple: a ref Rawimage that holds the image and an error string. If the Rawimage is nil, the error string will report the reason. Files (particularly GIF files) are often incorrectly encoded but yield usable pictures, so even if a Rawimage is returned, the error string may still report problems.<p>
+</a><a name="855715">
+The Rawimage is always defined as one or more bytes per pixel, with nchans channels of data stored in the array chans. The chandesc field, described below, specifies the contents of chans. The rectangle r describes the shape of the picture.<p>
+</a><a name="855719">
+The Rawimage type can be converted to a regular Image (see <a href="mpgs41.htm#842167"><em>image</em></a>) by calling module Imageremap 's function remap. The remap function is passed the Rawimage, a Display on which to create the image, and a flag that specifies whether to apply Floyd-Steinberg error diffusion code to the result, for smoother rendering of colors at the cost of some noise in the image.<p>
+</a><a name="865320">
+How to remap is defined by the RImagefile itself: the field chandesc specifies the type of the various chans of data:<p>
+</a><a name="865324">
+The file readers set chandesc as appropriate for the format of the file.  
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="865329">
+CRGB<p>
+</a><td><a name="865331">
+3-color RGB image with no color map;<p>
+</a>
+<tr><td><a name="865333">
+CY<p>
+</a><td><a name="865335">
+monotone (luminance-only, grey-scale) image with no color map;<p>
+</a>
+<tr><td><a name="865337">
+CRGB1<p>
+</a><td><a name="865339">
+single-channel image with RGB color map in cmap.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+ <p>
+</a><a name="855721">
+These functions are split into separate modules to give applications control over the memory they need to process images.<p>
+</a><a name="855722">
+<h2> Notes</h2>
+</a><a name="855723">
+The JPEG reader handles only the Baseline sequential format as defined by the JFIF 1.02 file exchange format. Functions to write these formats are unimplemented.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs95.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs97.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

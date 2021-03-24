@@ -1,0 +1,91 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs39.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs41.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="842125">
+<center><h1> font </h1></center>
+</a><a name="842126">
+Font - character images for Unicode text<p>
+</a><a name="842127">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";
+draw:= load Draw Draw-&gt;PATH;
+Font: adt
+{
+  name:   string;
+  height: int;
+  ascent: int;
+  open:   fn(d: ref Display, name: string)      : ref Font;
+  build:  fn(d: ref Display, name, desc: string): ref Font;
+  width:  fn(f: self ref Font, str: string)     : int;
+};
+</tt></pre></p><a name="842139">
+<h2> Description</h2>
+</a><a name="842140">
+The Font type defines the appearance of characters drawn with the Image.text primitive (see <a href="mpgs41.htm#842167"><em>image</em></a>). Fonts are usually read from files and are selected based on their size, their style, the portion of Unicode space they represent, and so on.<p>
+</a><a name="842141">
+Fonts are built from a series of subfonts that define contiguous portions of the Unicode character space, such as the ASCII or the Greek alphabet. Font files are textual descriptions of the allocation of characters in the various regions of the Unicode space; see <a href="mpgs127.htm#849587"><em>font</em></a> for the format. Subfonts are not visible from Limbo.<p>
+</a><a name="842142">
+A default font, named *default*, is always available.<p>
+</a><a name="842164">
+The type incorporates: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="842145">
+ascent, height<p>
+</a><td><a name="842147">
+These define the vertical sizes of the font, in pixels. The <kbd>ascent</kbd> is the distance from the font baseline to the top of a line of text; <kbd>height</kbd> gives the interline spacing, that is, the distance from one baseline to the next.<p>
+</a>
+<tr><td><a name="842149">
+name<p>
+</a><td><a name="842151">
+This field identifies the font, either the name of the file from which the font was read, or <kbd>*default*</kbd> for the default font.<p>
+</a>
+<tr><td><a name="842153">
+open (<em>d, file</em>)<p>
+</a><td><a name="842155">
+The open function creates a <kbd>Font</kbd> for <kbd>Display</kbd> <em>d </em>by reading the contents of the named <em>file</em>. Fonts are cached, so an open request may return a pointer to an existing <kbd>Font</kbd> without rereading the file. The name <kbd>*default*</kbd> always describes a defined font. Fonts are created for an instance of a <kbd>Display</kbd> object, even though the creation functions are in type Font.<p>
+</a>
+<tr><td><a name="842157">
+build (<em>d</em>, <em>name</em>, <em>desc</em>)<p>
+</a><td><a name="842159">
+The <kbd>build</kbd> function creates a <kbd>Font</kbd> object by reading the description from the string <kbd>desc</kbd> rather than a file. The <em>name</em> parameter specifies the name of the font to be created.<p>
+</a>
+<tr><td><a name="842161">
+<em>dst</em>.width (<em>str</em>)<p>
+</a><td><a name="842163">
+The <kbd>width</kbd> method returns the width in pixels that <em>str</em> would occupy if drawn by <kbd>Image.text</kbd> in the specified font.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="842165">
+<h2> See Also</h2>
+</a><a name="842166">
+<a href="mpgs127.htm#849587"><em>font</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs39.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs41.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

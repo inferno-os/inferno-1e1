@@ -1,0 +1,125 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs1.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs3.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="848892">
+<center><h1> bind </h1></center>
+</a><a name="840307">
+bind, mount, unmount - change name space<p>
+</a><a name="883027">
+<h2> Synopsis</h2>
+</a><pre><tt>bind  		[<em>option...</em> ] <em>new</em> <em>old
+</em>mount  		[<em>option...</em> ] <em>addr</em> <em>old
+</em>unmount 		[<em>new</em> ] <em>old
+</em></tt></pre></p><a name="840312">
+<h2> Description</h2>
+</a><a name="840313">
+The bind and mount commands modify the file name space of the current process and other processes in the same name space group (see <a href="mpgs81.htm#844675"><em>pctl</em></a>). For both calls, <em>old</em> is the name of an existing file or directory in the current name space where the modification is to be made.<p>
+</a><a name="840314">
+For bind, <em>new</em> is the name of an existing file or directory in the current name space. After a successful bind, the file name <em>old</em> is an alias for the object originally named by <em>new</em>; if the modification doesn't hide it, <em>new</em> will also still refer to its original file. The evaluation of <em>new</em> (see <a href="mpgs26.htm#841334"><em>File Name Expansion</em></a> in <a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a>) happens at the time of the bind, not when the binding is later used.<p>
+</a><a name="840315">
+Both <em>old</em> and <em>new</em> must be of the same type: either both directories or both files.<p>
+</a><a name="872312">
+The <em>new</em> argument to <em>bind</em> can also be a two character sequence (<em>#c</em>) representing a <em>kernel device driver</em> (see <a href="mpgs93.htm#855324"><em>Limbo Modules - Miscellaneous</em></a>). For example, the following command binds the console driver to <em>/dev</em>.<p>
+</a><pre><tt>	bind '#c' /<em>dev</em> 
+</tt></pre></p><a name="872317">
+For mount, <em>addr</em> is a network address for the server machine. This argument should conform to the conventions described in <a href="mpgs75.htm#844412"><em>dial</em></a>.<p>
+</a><a name="840319">
+The effects of bind and mount can be undone with the unmount command. If two arguments are given to unmount, the effect is to undo a bind or mount with the same arguments. If only one argument is given, everything bound to or mounted upon <em>old</em> is unmounted.<p>
+</a><a name="840357">
+<h2> Options 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="840322">
+-r<p>
+</a><td><a name="840324">
+(the default option for both <em>bind</em> and <em>mount</em>)<p>
+</a>
+<tr><td><a name="840326">
+<p>
+</a><td><a name="840328">
+Replace the <em>old</em> file by the new file. <em>Henceforth,</em> an evaluation of pathname <em>old</em> will be translated to the new file. If they are directories (for mount, this condition is true by definition), <em>old</em> becomes a <em>"union</em> directory" consisting of one directory (the <em>new</em> directory).<p>
+</a>
+<tr><td><a name="840330">
+-b <p>
+</a><td><a name="840332">
+(both files must be directories.)<p>
+</a>
+<tr><td><a name="840334">
+<p>
+</a><td><a name="840336">
+Add the <em>new</em> directory to the beginning of the union directory represented by the <em>old</em> directory.<p>
+</a>
+<tr><td><a name="840338">
+-a<p>
+</a><td><a name="840340">
+(both files must be directories.)<p>
+</a>
+<tr><td><a name="840342">
+<p>
+</a><td><a name="840344">
+Add the <em>new</em> directory to the end of the union directory represented by the <em>old</em> file.<p>
+</a>
+<tr><td><a name="840346">
+-c<p>
+</a><td><a name="840348">
+This can be used in addition to any of the above to permit creation in a union directory. When a new file is created in a union directory, it is placed in the first element of the union that permits creation.<p>
+</a>
+<tr><td><a name="840350">
+-A<p>
+</a><td><a name="840352">
+(for <kbd>mount</kbd> only)<p>
+</a>
+<tr><td><a name="840354">
+<p>
+</a><td><a name="840356">
+Do not authenticate the connection to the server before proceeding with mount. Authentication occurs by default. <p>
+</a>
+<tr><td><a name="855246">
+-C <em>alg</em><p>
+</a><td><a name="855248">
+(for <kbd>mount</kbd> only)<p>
+</a>
+<tr><td><a name="855242">
+<p>
+</a><td><a name="855244">
+Specify the algorithm, <em>alg</em>, used in authentication. See <a href="mpgs112.htm#846288"><em>ssl</em></a> for the supported algorithms. The default value is<kbd> "none".</kbd><p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="840359">
+<h2> Caveat</h2>
+</a><a name="840360">
+The single quotes are required around the two character sequence representing a kernel device driver since <em>#</em> is a special character (start-of-comment) to the Inferno shell. The single quotes are needed only when using the shell, not when programming in the Limbo language.<p>
+</a><pre><tt>	sys-&gt;bind("#c", "/dev/", flags);
+</tt></pre></p><a name="860017">
+<h2> See Also</h2>
+</a><a name="860036">
+<a href="mpgs26.htm#841311"><em>sh</em></a>, <a href="mpgs47.htm#842826"><em>auth</em></a>, <a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a>, <a href="mpgs72.htm#844334"><em>bind</em></a>, <a href="mpgs75.htm#844412"><em>dial</em></a>, and <a href="mpgs93.htm#855324"><em>Limbo Modules - Miscellaneous</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs1.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs3.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

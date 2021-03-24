@@ -1,0 +1,189 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs131.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs133.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="849741">
+<center><h1> cs</h1></center>
+</a><a name="849742">
+cs - connection server daemon<p>
+</a><a name="849743">
+<h2> Synopsis</h2>
+</a><a name="849744">
+<kbd>cs</kbd><p>
+</a><a name="849745">
+<h2> Description</h2>
+</a><a name="849746">
+The connection server daemon, <kbd>cs</kbd>, is started by the <kbd>cs</kbd> command. The daemon monitors requests for interpretation of host names written by application programs to <kbd>/net/cs</kbd>, the interface file. After writing the request, the application reads that same file to obtain the response from the <kbd>cs</kbd> daemon.<p>
+</a><a name="860227">
+The current implementation uses the hosting system's facilities for name-to-address and other conversions.<p>
+</a><a name="860228">
+<h3> Request Format</h3>
+</a><a name="849748">
+Requests must be strings in the form:<p>
+</a><pre><tt>	<em>net</em>!<em>machine</em>!<em>service
+</em></tt></pre></p><a name="849806">
+Each component of the request is required. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="849752">
+net<p>
+</a><td colspan=2 rowspan=1><a name="860198">
+The <em>net</em> component defines the network to be used (e.g., <kbd>"tcp"</kbd>, <kbd>"udp"</kbd>).<p>
+</a><a name="860203">
+ The special value<kbd> "net"</kbd> can be supplied to request the most expedient network. Currently, <kbd>"net"</kbd> is synonymous with <kbd>"tcp"</kbd>. <p>
+</a>
+<tr><td><a name="849758">
+machine<p>
+</a><td colspan=2 rowspan=1><a name="849760">
+The machine component can be any of the following<p>
+</a>
+<tr><td><a name="849764">
+<p>
+</a><td><a name="849766">
+numeric internet address<p>
+</a><td><a name="849768">
+Used verbatim.<p>
+</a>
+<tr><td><a name="849770">
+<p>
+</a><td><a name="849772">
+<em>hostname</em><p>
+</a><td><a name="849774">
+Converted to network address.<p>
+</a>
+<tr><td><a name="849776">
+<p>
+</a><td><a name="849778">
+symbolic server name of the form <kbd>$</kbd><em>server</em><p>
+</a><td><a name="849780">
+Converted to hostname by reference to the connection server database file<kbd> /services/cs/db</kbd>. <p>
+</a><a name="849781">
+The hostname returned is then converted to an network address. <p>
+</a>
+<tr><td><a name="849783">
+<p>
+</a><td><a name="849785">
+*<p>
+</a><td><a name="849787">
+No machine name is converted. Other conversions (e.g., <kbd>"net" </kbd>and named services) are still done.<p>
+</a>
+<tr><td><a name="849789">
+<em>service</em><p>
+</a><td colspan=2 rowspan=1><a name="849791">
+A service name or port number. <p>
+</a>
+<tr><td><a name="849795">
+<p>
+</a><td><a name="849797">
+numeric port value<p>
+</a><td><a name="849799">
+Used verbatim.<p>
+</a>
+<tr><td><a name="849801">
+<p>
+</a><td><a name="849803">
+Service name<p>
+</a><td><a name="849805">
+Converted to a port number.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="849807">
+<h3> Response Format</h3>
+</a><a name="849808">
+The application can obtain the converted address by reading the <kbd>/net/cs</kbd> interface file. The response will consist of two fields of the form:<p>
+</a><pre><tt>	/net/<em>net</em>/clone			<em>ipaddr</em>!<em>portno
+</em></tt></pre></p><a name="849810">
+The first field is the name of the file to open to reserve a connection on Inferno's IP device. The second field can be used to construct a<kbd> "connect"</kbd> message for the <kbd>ctl</kbd> file returned by the open of <kbd>clone</kbd>.<p>
+</a><a name="849811">
+<h2> Note</h2>
+</a><a name="849812">
+The service name to port number conversion is controlled by a <em>&lt;services</em>&gt; file. The location of that file is platform dependent: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="849815">
+<kbd>/etc/services</kbd><p>
+</a><td><a name="849817">
+Unix-hosted systems.<p>
+</a>
+<tr><td><a name="849819">
+<kbd>Windows\services</kbd><p>
+</a><td><a name="849821">
+Windows-hosted systems<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="849823">
+<h2> Caveats</h2>
+</a><a name="849824">
+Applications that use a single file descriptor for both reading and writing should take care to reset the file offset to 0 between writing the request and reading the response. Otherwise, a truncated response will be read. Applications using buffered I/O should flush after resetting the offset.<p>
+</a><a name="849825">
+Sometimes a hostname will resolve into several network addresses. The connection server provides all. Each read of<kbd> /net/cs</kbd> delivers one. The connection server caches this information until read; consequently, the application is obliged to read <kbd>/net/cs </kbd>in a loop until the end-of-file condition is reached. That means that all available addresses have been obtained and the daemon's cache (for this request) is empty.<p>
+</a><a name="849847">
+<h2> See Also 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="849828">
+<a href="mpgs8.htm#840464"><em>cs</em></a><p>
+</a><td><a name="867397">
+Starting the connection server daemon.<p>
+</a>
+<tr><td><a name="849832">
+<a href="mpgs85.htm#844801"><em>seek</em></a><p>
+</a><td><a name="849834">
+Managing file offset.<p>
+</a>
+<tr><td><a name="849836">
+<a href="mpgs102.htm#856162"><em>srv</em></a><p>
+</a><td><a name="849838">
+Interface to host's functions for name-to-address and service-to-portnumber conversions<p>
+</a>
+<tr><td><a name="849840">
+<a href="mpgs109.htm#846002"><em>ip</em></a><p>
+</a><td><a name="867395">
+See description of <kbd>clone</kbd> file, <kbd>ctl</kbd> file, and <kbd>"connect &#32;</kbd><em>iaddr</em><kbd>"</kbd> message for the IP device.<p>
+</a>
+<tr><td><a name="849844">
+<a href="mpgs125.htm#853308"><em>Format Specifications</em></a><p>
+</a><td><a name="849846">
+Description of connection server data base.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs131.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs133.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+TEXT	umult(SB), $-4
+
+	MOVW	4(FP), R4
+	MULHWU	R4, R3, R5
+	MULLW	R4, R3
+	RETURN

@@ -1,0 +1,72 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs126.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs128.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="849587">
+<center><h1> font</h1></center>
+</a><a name="849588">
+font, subfont - external format for character fonts and subfonts<p>
+</a><a name="895949">
+<h2> Description</h2>
+</a><a name="895951">
+Fonts are constructed as a list defining a range of Unicode characters and a subfont containing the character images for that range. Subfonts are not directly accessible from Limbo.<p>
+</a><a name="849591">
+<h3> Font Format </h3>
+</a><a name="849592">
+External fonts are described by a plain text file that can be read using the Font.open function. The Font.build function reads the same format from a string rather than a file. (See <a href="mpgs40.htm#842125"><em>font</em></a>).<p>
+</a><a name="849593">
+The format is a header followed by any number of subfont range specifications. The header contains two numbers: the <em>height</em> and the <em>ascent</em>, both in pixels. The <em>height</em> is the inter-line spacing and the <em>ascent</em> is the distance from the top of the line to the baseline. These numbers should be chosen to consistently display all the subfonts of the font.<p>
+</a><a name="849594">
+A subfont range specification contains two or three numbers and a file name. Each field must be followed by some white space. Each numeric field may be C language format decimal, octal, or hexadecimal.<p>
+</a><ul><a name="849595">
+<li>The numbers are the inclusive range of characters covered by the subfont with an optional starting position within the subfont.<p>
+</a><a name="849596">
+<li>The file name specifies an external file holding the subfont data. The minimum number of a covered range is mapped to the specified starting position (default zero) of the corresponding subfont. If the subfont file name does not begin with a slash, it is taken relative to the directory containing the font file. <p>
+</a></ul><a name="849597">
+<h3> Subfont Format </h3>
+</a><a name="849598">
+External subfonts are represented in a more rigid format. The components must appear in the following order:<p>
+</a><a name="867367">
+<h4> An image containing character images</h4>
+</a><a name="867368">
+The image has the format for external image files described in <a href="mpgs128.htm#849610"><em>image</em></a>.<p>
+</a><a name="867369">
+<h4> A subfont header</h4>
+</a><a name="849602">
+The subfont header has 3 decimal strings: n, height, and ascent. Each number is right-justified and blank padded in 11 characters, followed by a blank.<p>
+</a><a name="895972">
+<h4> Character information </h4>
+</a><a name="895973">
+The character info consists of n+1 entries, each 6-bytes and giving values called x (2 bytes, low order byte first), top, bottom, left, and width for the successive characters from left to right (in increasing Unicode order) in the subfont.<p>
+</a><a name="849605">
+The rectangle holding the character is (x, top, xn, bottom), where xn is the x field of the next character.<p>
+</a><a name="849606">
+When the character is to be drawn in an image at point p, the rectangle is placed at (p.x+left, p.y) and the next character to be drawn is placed at (p.x+width, p.y).<p>
+</a><a name="849607">
+The x field of the last entry is used to calculate the image width of the previous character; the other fields in the last entry are irrelevant.<p>
+</a><a name="849608">
+<h2> Note</h2>
+</a><a name="895974">
+There is convention of using the character with value zero (NUL) to represent characters of zero width. This means that fonts should have, as their zero-th character, a character with non-zero width. See the description of the Image.text function in <a href="mpgs41.htm#842167"><em>image</em></a><em>.</em><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs126.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs128.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

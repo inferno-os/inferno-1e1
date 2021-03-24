@@ -1,0 +1,3 @@
+video iso11172 mpeg1,sif
+audio musicam,II 96000
+files /usr/inferno/mpeg/mpegserver/disney1.mpg@tcp!$MPEG!6667

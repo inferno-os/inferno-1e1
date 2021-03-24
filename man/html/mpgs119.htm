@@ -1,0 +1,133 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs118.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs120.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="848130">
+<center><h1> open </h1></center>
+</a><a name="848131">
+open, create - prepare a fid for I/O on an existing or new file<p>
+</a><a name="848132">
+<h2> Synopsis</h2>
+</a><pre><tt>Topen   <em>tag</em> [2]  <em>fid</em> [2]  <em>mode</em> [1]
+Ropen   <em>tag</em> [2] <em> fid</em> [2]  <em>qid</em> [8]
+Tcreate <em>tag</em> [2]  <em>fid</em> [2]  <em>name</em> [28] <em>perm</em> [4] <em>mode</em> [1]
+Rcreate <em>tag</em> [2]  <em>fid</em> [2]  <em>qid</em> [8]
+</tt></pre></p><a name="848137">
+<h2> Description</h2>
+</a><a name="848138">
+<h3> The open Transaction </h3>
+</a><a name="848139">
+The open request asks the file server to check permissions and prepare a fid for I/O with subsequent read and write messages.<p>
+</a><a name="848140">
+The <em>mode</em> field expresses the type of I/O requested and is checked against the permissions for the file. Additional options can also be requested. The allowed values are shown below. If other bits are set in <em>mode</em> they will be ignored. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="848143">
+OREAD <p>
+</a><td><a name="848145">
+Read access.<p>
+</a>
+<tr><td><a name="848147">
+OWRITE <p>
+</a><td><a name="848149">
+Write access.<p>
+</a>
+<tr><td><a name="848151">
+ORDWR <p>
+</a><td><a name="848153">
+Read and write access.<p>
+</a>
+<tr><td><a name="848155">
+OEXEC <p>
+</a><td><a name="848157">
+Execute access.<p>
+</a>
+<tr><td><a name="848159">
+OTRUNC (16r10)<p>
+</a><td><a name="848161">
+The file is to be truncated when opened. This option requires write permission on the file.<p>
+</a>
+<tr><td><a name="848163">
+ORCLOSE (16r40)<p>
+</a><td><a name="848165">
+The file is to be removed when the fid is clunked. This option requires write permission in the file's directory.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="848166">
+It is illegal to write a directory, truncate it, or attempt to remove it on close.<p>
+</a><a name="848167">
+All these permissions are checked at the time of the open request; any subsequent changes to the permissions of files do not affect the ability to read, write, or remove an open file.<p>
+</a><a name="848168">
+It is an error if the fid is already the product of a successful open or create message.<p>
+</a><a name="848169">
+<h3> The create Transaction</h3>
+</a><a name="848170">
+The create request asks the file server to create a new file with the <em>name</em> supplied, in the directory (<em>dir</em>) represented by <em>fid</em>. This request and requires write permission in the directory. The owner of the file is the implied user id of the request and the group of the file is the same as <em>dir</em>.<p>
+</a><a name="848171">
+The permissions of the newly created file depend on the permissions of the enclosing directory (<kbd>dir.perm</kbd>) and the <em>perm</em> value of the request.<p>
+</a><a name="848172">
+For non-directories, the formula is<p>
+</a><pre><tt>	(perm&amp;(~8r777|8r111)) | (dir.perm&amp;perm&amp;8r666) 
+</tt></pre></p><a name="848174">
+For directories, the formula is<p>
+</a><pre><tt>	(perm&amp;~8r777) | (dir.perm&amp;perm&amp;8r777)
+</tt></pre></p><a name="848176">
+This means, for example, that if the create allows read permission to others, but the containing directory does not, then the created file will not allow others to read the file.<p>
+</a><a name="848177">
+Finally, the newly created file is opened according to <em>mode</em>, and <em>fid</em> will represent the newly opened file. The <em>mode</em> is not checked against the permissions in <em>perm</em>.<p>
+</a><a name="848179">
+The <em>qid</em> for the new file is returned with the create reply message.<p>
+</a><a name="848180">
+Directories are created by setting the CHDIR bit (<kbd>16r80000000</kbd>) in the <em>perm</em>.<p>
+</a><a name="848181">
+The names<kbd> "." </kbd>and <kbd>".." </kbd>are special. It is illegal to create files with these names.<p>
+</a><a name="848182">
+It is an error if the fid is already the product of a successful open or create message.<p>
+</a><a name="848183">
+An attempt to create a file in a directory where the given <em>name</em> already exists will be rejected. The create system call (see <a href="mpgs80.htm#844653"><em>open</em></a>) uses open with truncation.<p>
+</a><a name="848184">
+The algorithm used by the create system call is:<p>
+</a><a name="848185">
+Walk to the directory to contain the file. If that fails, return an error.<p>
+</a><a name="848186">
+walk to the specified file. If the walk succeeds, send a request to open (with the truncate option) the file and return the result, successful or not.<p>
+</a><a name="848187">
+If the walk fails, send a create message. If that fails, it may be because the file was created by another process after the previous walk failed, so (once) try the walk and open (with the truncate option) again.<p>
+</a><a name="848188">
+For the behavior of create on a union directory, see <a href="mpgs72.htm#844334"><em>bind</em></a>.<p>
+</a><a name="848189">
+<h2> Entry Points</h2>
+</a><a name="848190">
+The open and <kbd>create</kbd> calls both generate open messages; only create generates a create message.<p>
+</a><a name="848191">
+<h2> See Also</h2>
+</a><a name="848192">
+<a href="mpgs72.htm#844334"><em>bind</em></a>, <a href="mpgs80.htm#844653"><em>open</em></a>, and <a href="mpgs122.htm#848227"><em>stat</em></a> <p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs118.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs120.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

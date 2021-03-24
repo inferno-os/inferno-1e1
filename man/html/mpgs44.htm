@@ -1,0 +1,123 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs43.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs45.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="842431">
+<center><h1> rectangle </h1></center>
+</a><a name="842432">
+Rectangle - rectangular portion of the plane<p>
+</a><a name="842433">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";
+draw:= load Draw Draw-&gt;PATH;
+Rect: adt
+{
+ min:      Point;
+ max:      Point;
+ canon:    fn(r: self Rect)          : Rect;
+ dx:       fn(r: self Rect)          : int;
+ dy:       fn(r: self Rect)          : int;
+ eq:       fn(r: self Rect, s: Rect) : int;
+ Xrect:    fn(r: self Rect, s: Rect) : int;
+ inrect:   fn(r: self Rect, s: Rect) : int;
+ clip:     fn(r: self Rect, s: Rect) : (Rect, int);
+ contains: fn(r: self Rect, p: Point): int;
+ addpt:    fn(r: self Rect, p: Point): Rect;
+ subpt:    fn(r: self Rect, p: Point): Rect;
+ inset:    fn(r: self Rect; n: int)  : Rect;
+};
+</tt></pre></p><a name="842452">
+<h2> Description</h2>
+</a><a name="842502">
+The type Rect defines a rectangular portion of the integer grid. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="842455">
+<em>min</em>, <em>max</em><p>
+</a><td><a name="842457">
+ These members define the upper left (min) and lower right (max) points for the rectangle. The rectangle contains the pixels <kbd>min.x &#32;&lt;= &#32;x &#32;&lt; &#32;max.x</kbd> and <kbd>min.y &#32;&lt;= &#32;y &#32;&lt;max.y</kbd>. In general, <kbd>Rect</kbd> coordinates should be in canonical form: <kbd>min.x &#32;&lt;= &#32;max.x</kbd>   and min.y &#32;<kbd>&lt;= &#32;max.y</kbd> Some functions give undefined results if the input rectangles are not canonical.<p>
+</a>
+<tr><td><a name="842459">
+<em>r</em>.canon ( )<p>
+</a><td><a name="842461">
+Returns a canonical rectangle by sorting the coordinates of <em>r</em>.<p>
+</a>
+<tr><td><a name="842463">
+<em>r</em>.dx ( )<p>
+</a><td><a name="842465">
+Returns the horizontal dimension of <em>r</em>.<p>
+</a>
+<tr><td><a name="842467">
+<em>r</em>.dy ( )<p>
+</a><td><a name="842469">
+Returns the vertical dimension of <em>r</em>.<p>
+</a>
+<tr><td><a name="842471">
+<em>r</em>.eq (<em>s</em>)<p>
+</a><td><a name="842473">
+Returns non-zero if the rectangles <em>r</em> and <em>s</em> have the same coordinates and zero otherwise.<p>
+</a>
+<tr><td><a name="842475">
+<em>r</em>.Xrect (<em>s</em>)<p>
+</a><td><a name="842477">
+Returns non-zero if the rectangles<em> r</em> and <em>s</em> intersect and zero otherwise. <em>Intersection</em> means the rectangles share at least one pixel; zero-sized rectangles do not intersect.<p>
+</a>
+<tr><td><a name="842479">
+<em>r</em>.inrect (<em>s</em>)<p>
+</a><td><a name="842481">
+Returns non-zero if <em>r</em> is completely inside <em>s</em> and zero otherwise. Rectangles with equal coordinates are considered to be inside each other. Zero-sized rectangles contain no rectangles.<p>
+</a>
+<tr><td><a name="842483">
+<em>r</em>.clip (<em>s</em>)<p>
+</a><td><a name="842485">
+Computes the intersection between <em>r</em> and <em>s</em>. If the input rectangles intersect, <kbd>clip</kbd> returns the resulting rectangle and a non-zero integer value. If the rectangles do not intersect, <kbd>clip</kbd> returns <em>r</em> and a zero value.<p>
+</a>
+<tr><td><a name="842487">
+<em>r</em>.contains (<em>p</em>)<p>
+</a><td><a name="842489">
+Returns non-zero if the rectangle<em> r</em> contains the pixel with the coordinates of p <em>and</em> zero otherwise. Zero-sized rectangles contain no points.<p>
+</a>
+<tr><td><a name="842491">
+<em>r</em>.addpt (<em>p</em>)<p>
+</a><td><a name="842493">
+Returns the rectangle <kbd>(</kbd><kbd>r</kbd><kbd>.min.add(</kbd><kbd>p</kbd><kbd>), &#32;</kbd><kbd>r</kbd><kbd>.max.add(</kbd><kbd>p</kbd><kbd>))</kbd>.<p>
+</a>
+<tr><td><a name="842495">
+<em>r</em>.subpt (<em>p</em>)<p>
+</a><td><a name="842497">
+Returns the rectangle<kbd> (</kbd><em>r</em><kbd>.min.sub(p), &#32;</kbd><em>r</em><kbd>.max.sub(p))</kbd>.<p>
+</a>
+<tr><td><a name="842499">
+<em>r</em>.inset (<em>n</em>)<p>
+</a><td><a name="842501">
+Returns the rectangle <kbd>(</kbd><kbd>r.</kbd><kbd>min.add</kbd><kbd>((n,n)), &#32;r.</kbd><kbd>max.sub</kbd><kbd>((n,n</kbd><kbd>))</kbd>. The result will not be in canonical form if the inset amount is too large for the rectangle.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs43.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs45.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

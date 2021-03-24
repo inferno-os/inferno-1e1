@@ -1,0 +1,48 @@
+<../../mkconfig
+<../../$SYSHOST/mkhost
+<../../$OBJDIR/mkfile
+
+TARG=iar	# inferno archiver
+# Files obj.c, 8obj.c, and stubs.c are what is needed
+# from the libmach library, which cannot be built until
+# an archiver exists.
+# There is an architecture-specific file ?obj.c for each
+# architecture (?=2, 5, 6, 8, 9, k, v, x).  Currently,
+# only the ARM (5) and 386 (8) architecutres are supported
+# while stub files are provided for the remaining architectures.
+#
+OFILES=\
+	ar-$SYSTARG.$O\
+	obj.$O\
+	2obj.$O\
+	5obj.$O\
+	6obj.$O\
+	8obj.$O\
+	9obj.$O\
+	kobj.$O\
+	qobj.$O\
+	vobj.$O\
+	xobj.$O\
+
+HFILES=\
+	a.out.h\
+	bio.h\
+	mach.h\
+	obj.h\
+	lcldefs.h\
+
+# ar.h is located in ../mk directory.
+CFLAGS= $CFLAGS -I../mk
+
+# Library libbio.a depends on lib9.a so order matters.
+LIBS=bio 9
+LDSYSLIBS=
+
+<../../$SYSTARG/mkone
+
+ar-Irix.$O:	ar-posix.c
+ar-Solaris.$O:	ar-posix.c
+ar-Linux.$O:	ar-posix.c
+
+package:QV:
+	$TRUE

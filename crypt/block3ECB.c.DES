@@ -1,0 +1,20 @@
+#ifdef NOSPOOKS
+#include "lib9.h"
+#include <libcrypt.h>
+
+void
+block3ECBEncrypt(uchar block[8], uchar key[3][8], DES3state *s)
+{
+	if (s->setup != 0xdeadbeef)
+		setupDES3state(s, key, 0);
+	triple_block_cipher(s->expanded, block, 0);
+}
+
+void
+block3ECBDecrypt(uchar block[8], uchar key[3][8], DES3state *s)
+{
+	if (s->setup != 0xdeadbeef)
+		setupDES3state(s, key, 0);
+	triple_block_cipher(s->expanded, block, 1);
+}
+#endif NOSPOOKS

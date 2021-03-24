@@ -1,0 +1,239 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs25.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs27.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="841311">
+<center><h1> sh </h1></center>
+</a><a name="841312">
+sh - command line interface to the Inferno system<p>
+</a><a name="841313">
+<h2> Synopsis</h2>
+</a><pre><tt>sh [<em>file</em>]
+</tt></pre></p><a name="841315">
+<h2> Description</h2>
+</a><a name="841316">
+The <kbd>sh</kbd> program provides a user level interface (a shell) to the Inferno system. It reads input lines, identifies a <em>command</em> and arguments for that command, and arranges for execution of the corresponding Inferno module.<p>
+</a><a name="841317">
+If a file is named as a command line argument, that file is the source of input; otherwise, standard input is read.<p>
+</a><a name="841318">
+There are features that allow input/output redirection, creating pipelines, and performing tasks in background.<p>
+</a><a name="841319">
+<h3> Starting the Shell</h3>
+</a><a name="841320">
+In desktop-oriented configurations, the shell is started as part of system initialization. The shell can also be started from an existing shell (e.g., to process a script file), or from another program (e.g., the window manager has a button for creating new shells).<p>
+</a><a name="841321">
+<h3> Command Line Syntax</h3>
+</a><a name="841322">
+Each line consists of one or more <em>command pipelines</em> each separated by either an ampersand (<kbd>&amp;</kbd>) (which indicates that the pipeline should be run in background) or a semi-colon (<kbd>;</kbd>). The semi-colon need not be provided for the last command pipeline on a line.<p>
+</a><a name="841323">
+Command pipelines are not allowed to span lines.<p>
+</a><a name="841324">
+Each <em>command pipeline</em> consists of one or more <em>commands</em> separated by a vertical bar (<kbd>|</kbd>) character. The standard output of one command is made the standard input of the next command to the right. <p>
+</a><a name="841325">
+Re-direction of input/output to pipes takes precedence over re-direction from/to files.<p>
+</a><a name="841326">
+In the limit case, a command pipeline consists of a single command with no pipes.<p>
+</a><a name="841327">
+A <em>command</em> consists of one or more <em>fields</em>. The first (leftmost) field is the <em>command field. </em>It is used to determined the executable file to be loaded and run; see below. The remaining fields are parsed and become <em>command line arguments</em> that are passed to the module's <kbd>init</kbd> function as a list of strings.<p>
+</a><a name="841328">
+<h3> Finding the Module</h3>
+</a><a name="841329">
+The <em>command field</em> is converted to the pathname of the Dis file of some module. That field can be either an absolute pathname, starting from <kbd>/</kbd>, or a relative pathname from the current directory. <p>
+</a><a name="841330">
+As a convenience, the user need not specify the <kbd>.dis</kbd> suffix to the filename. If missing, it will be added by the shell.<p>
+</a><a name="841331">
+If the load fails there is, in general, a second attempt to load the module by resolving the pathname relative to the <kbd>/dis</kbd> directory (the general system repository of Dis files).<p>
+</a><a name="841332">
+There are two exceptions to this second attempt. The second load attempt is not performed if the command field provides an absolute pathname or a relative pathname starting with dot-slash (<kbd>./</kbd>). Such explicit naming is taken to mean that the user will accept no substitutions.<p>
+</a><a name="841333">
+The shell requires that the Dis file implement a module with an interface equivalent to the <kbd>Command</kbd> module as specified in <kbd>/module/sh.m</kbd>. Otherwise, the named file will not load.<p>
+</a><a name="841334">
+<h3> File Name Expansion</h3>
+</a><a name="841335">
+Command line arguments (including the command field itself) are expanded by the shell according to the regular expression rules described in <a href="mpgs56.htm#843102"><em>filepat</em></a>.<p>
+</a><a name="841336">
+This expansion is not applied to the filenames used for input/output redirection.<p>
+</a><a name="841337">
+<h3> Comments</h3>
+</a><a name="841338">
+Any input following a <kbd>#</kbd> on a line is discarded.<p>
+</a><a name="841339">
+<h3> Quoting</h3>
+</a><a name="841340">
+The shell special characters can be stripped of their special meaning and treated as literals by enclosing them in single quotes.<p>
+</a><a name="876972">
+Inside a quoted string, the special meaning of the single quote can be removed by immediately following it with another single quote. Command lines with un-terminated quoted strings are rejected and cause an error message.<p>
+</a><a name="883476">
+<h4> Examples:</h4>
+</a><pre><tt>pcsrb.mh.lucent.com$ echo ''''
+'
+pcsrb.mh.lucent.com$ echo 'don''t'
+don't
+pcsrb.mh.lucent.com$ echo 'hello' 'world
+sh: unmatched quote
+pcsrb.mh.lucent.com$ echo 'a'b
+ab
+pcsrb.mh.lucent.com$ echo a'b'
+ab
+pcsrb.mh.lucent.com$
+</tt></pre></p><a name="841383">
+<h3> Shell Special Characters 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="841344">
+<kbd>' '</kbd><p>
+</a><td><a name="841346">
+Blank: <em>whitespace</em>, except in a quoted string.<p>
+</a>
+<tr><td><a name="841348">
+<kbd>\t</kbd><p>
+</a><td><a name="841350">
+Tab: <em>whitespace</em>, except in a quoted string.<p>
+</a>
+<tr><td><a name="841352">
+<kbd>\n</kbd><p>
+</a><td><a name="841354">
+Newline: command line terminator.<p>
+</a>
+<tr><td><a name="841356">
+#<p>
+</a><td><a name="841358">
+Start of comment<p>
+</a>
+<tr><td><a name="841360">
+' (single quote)<p>
+</a><td><a name="841362">
+Start of/end of quoted string. <p>
+</a>
+<tr><td><a name="841364">
+| (vertical bar)<p>
+</a><td><a name="841366">
+Interface between commands in a command pipeline.<p>
+</a>
+<tr><td><a name="841368">
+&amp;<p>
+</a><td><a name="841370">
+Terminator for command pipelines to be run in background.<p>
+</a>
+<tr><td><a name="841372">
+;<p>
+</a><td><a name="841374">
+Terminator for command pipelines to be run synchronously by the shell.<p>
+</a>
+<tr><td><a name="841376">
+&gt;<p>
+</a><td><a name="841378">
+Output re-direction for a command.<p>
+</a>
+<tr><td><a name="841380">
+&lt;<p>
+</a><td><a name="841382">
+Input re-direction for a command.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="841384">
+<h3> Prompt</h3>
+</a><a name="841385">
+The shell uses a user prompt consisting of the system name as provided by <kbd>/dev/sysname </kbd>suffixed by <kbd>"$"</kbd><p>
+</a><a name="841386">
+<h3> Input/Output Re-directions</h3>
+</a><a name="841387">
+By default, standard input is the console keyboard and standard output the console display. Each command can arrange for standard input to be taken from a file and for standard output to be written to a file.<p>
+</a><a name="841388">
+Attempts to redirect standard input to a non-existing file will fail. Redirecting standard output to an non-existing file will cause the creation of that file. The destination file already exists, it will be overwritten. Any previous contents are lost.<p>
+</a><a name="841389">
+In cases of competing re-direction mechanisms (re-direct to a file and to a pipe), the pipe has precedence.<p>
+</a><a name="841390">
+<h3> Background Tasks</h3>
+</a><a name="841391">
+In general, the shell will wait for the termination of a <em>command pipeline</em> (including the limit case of a single command) before continuing execution (e.g., prompting the user for the next command). However, if the command pipeline is terminated by an ampersand (<kbd>&amp;</kbd>) character, the wait stage is skipped and the shell continues execution immediately while the command pipeline executes as a background task.<p>
+</a><a name="841392">
+<h3> Name Space Concerns</h3>
+</a><a name="864172">
+When started, the shell creates an independent file name space that is a copy of the file name space of the shell's creator.<p>
+</a><a name="841395">
+Command pipelines that are started synchronously by the shell are executed by threads that share the shell's name space. If those commands modify the file name space (and they have not mimicked the shell in creating their own independent name space), those modifications will be perceived by the shell when it continues execution. See <a href="mpgs2.htm#848892"><em>bind</em></a> and <a href="mpgs81.htm#844675"><em>pctl</em></a>.<p>
+</a><a name="841396">
+Command pipelines that are started asynchronously by the shell (background tasks) are implicitly given an independent, duplicate file name space.<p>
+</a><a name="841397">
+<h2> Files</h2>
+</a><a name="841398">
+/prog/<em>n</em>/wait<p>
+</a><a name="841432">
+<h2> See Also 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="841401">
+<a href="mpgs2.htm#848892"><em>bind</em></a><p>
+</a><td><a name="841403">
+Modifying the file name space.<p>
+</a>
+<tr><td><a name="841409">
+<a href="mpgs56.htm#843102"><em>filepat</em></a><p>
+</a><td><a name="841411">
+Details of pattern expansion of file names. <p>
+</a>
+<tr><td><a name="841413">
+<a href="mpgs58.htm#843147"><em>pipe</em></a><p>
+</a><td><a name="841415">
+Details of pipe facilities.<p>
+</a>
+<tr><td><a name="841417">
+<a href="mpgs26.htm#841311"><em>sh</em></a><p>
+</a><td><a name="841419">
+Description of the interface for 'command' modules.<p>
+</a>
+<tr><td><a name="841421">
+<a href="mpgs81.htm#844675"><em>pctl</em></a><p>
+</a><td><a name="841423">
+See Notes on name space management.<p>
+</a>
+<tr><td><a name="841425">
+<a href="mpgs106.htm#845700"><em>cons</em></a><p>
+</a><td><a name="841427">
+Details of <kbd>/dev/sysname</kbd> used in the shell prompt.<p>
+</a>
+<tr><td><a name="841429">
+<a href="mpgs110.htm#846072"><em>prog</em></a><p>
+</a><td><a name="841431">
+Details of the <kbd>/prog/</kbd><em>n</em><kbd>/wait</kbd> interface.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="841433">
+<h2> Notes</h2>
+</a><a name="876959">
+This is a deliberately rudimentary shell designed for debugging applications. It is <em>not</em> intended to serve as a general-purpose programmable shell.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs25.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs27.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs104.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs106.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="861127">
+<center><h1> </h1></center>
+</a><a name="859375">
+Inferno Devices<p>
+</a><a name="859412">
+The Inferno devices are as follows: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="859379">
+<a href="mpgs106.htm#845700"><em>cons</em></a><p>
+</a><td><a name="859381">
+console device<p>
+</a>
+<tr><td><a name="859384">
+<a href="mpgs107.htm#845820"><em>cmd</em></a><p>
+</a><td><a name="859386">
+interface to host operating system commands<p>
+</a>
+<tr><td><a name="859389">
+<a href="mpgs108.htm#876580"><em>draw</em></a><p>
+</a><td><a name="859391">
+graphics device<p>
+</a>
+<tr><td><a name="859394">
+<a href="mpgs109.htm#846002"><em>ip</em></a><p>
+</a><td><a name="859396">
+TCP, UDP network protocols over IP<p>
+</a>
+<tr><td><a name="859399">
+<a href="mpgs110.htm#846072"><em>prog</em></a><p>
+</a><td><a name="859401">
+interface to running programs<p>
+</a>
+<tr><td><a name="859404">
+<a href="mpgs111.htm#895851"><em>root</em></a><p>
+</a><td><a name="859406">
+the root file system<p>
+</a>
+<tr><td><a name="859409">
+<a href="mpgs112.htm#846288"><em>ssl</em></a><p>
+</a><td><a name="859411">
+secure sockets layer device<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+ <p>
+</a><a name="859413">
+<h2> Description</h2>
+</a><a name="859414">
+<h3> Pathname Resolution</h3>
+</a><a name="859415">
+An Inferno <em>device</em> implements a file tree for client processes. A file name beginning with a pound sign, such as <kbd>#c</kbd>, names the root of a file tree implemented by a particular <em>kernel</em> device driver identified by the character after the pound sign. Such names are usually bound to conventional locations in the name space. For example, after<p>
+</a><pre><tt>	sys-&gt;bind<kbd>("#c", "/dev"</kbd>, sys-&gt;MREPL)
+</tt></pre></p><a name="859417">
+an <kbd>ls</kbd> of <kbd>/dev</kbd> will list the files provided by the console device.<p>
+</a><a name="859418">
+A kernel device driver is a <em>server</em> in the sense of the Inferno File Protocol, Styx (see <a href="mpgs113.htm#848518"><em>Inferno File Protocol, Styx</em></a>), but with the messages implemented by local rather than remote procedure calls. Also, several of the messages (<em>Nop</em>, <em>Flush</em>, and <em>Error</em>) have no subroutine equivalents.<p>
+</a><a name="859422">
+When a system call is passed a file name beginning with <kbd>#</kbd> it looks at the next character, and if that is a valid <em>device</em> <em>character</em> it performs an 'attach' operation on the corresponding device to get a connection representing the root of that device's file tree. See <a href="mpgs114.htm#848067"><em>attach</em></a>. If there are any characters after the device character but before the next <kbd>/ </kbd>or end of string, those characters are passed as parameter <em>aname</em> to the attach.<p>
+</a><a name="859426">
+Each kernel device has a conventional place at which to be bound to the name space. The synopsis sections of the following pages includes a shell <em>bind</em> command to put the device in the conventional place. Most of these binds are done automatically by the system when it initializes.<p>
+</a><a name="859468">
+<h3> Kernel Device Drivers 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="859429">
+/<p>
+</a><td><a name="859431">
+The root of the Inferno file system<p>
+</a>
+<tr><td><a name="859433">
+s<p>
+</a><td><a name="859435">
+Host Services<p>
+</a>
+<tr><td><a name="859437">
+U<p>
+</a><td><a name="859439">
+Host File System<p>
+</a>
+<tr><td><a name="859441">
+M<p>
+</a><td><a name="859443">
+Mount<p>
+</a>
+<tr><td><a name="859445">
+c<p>
+</a><td><a name="859447">
+Console<p>
+</a>
+<tr><td><a name="859449">
+D<p>
+</a><td><a name="859451">
+Secure Sockets Layer<p>
+</a>
+<tr><td><a name="859453">
+d<p>
+</a><td><a name="859455">
+Draw Interface<p>
+</a>
+<tr><td><a name="859457">
+C<p>
+</a><td><a name="859459">
+Command Services<p>
+</a>
+<tr><td><a name="859461">
+p<p>
+</a><td><a name="859463">
+Process File System<p>
+</a>
+<tr><td><a name="859465">
+I<p>
+</a><td><a name="859467">
+Internet Interface<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="859469">
+<h3> Convention for Numeric Data</h3>
+</a><a name="859470">
+Unless otherwise noted, numeric data returned from status files, etc. is returned in the following standard 12-character decimal format: right-adjusted numerals with leading blanks to fill the field to 11 characters, followed by a blank. There is no trailing newline.<p>
+</a><a name="859472">
+See Also<p>
+</a><a name="859479">
+<em><a href="mpgs36.htm#869014"></em><em>Limbo Modules</em><em></a> </em>and <a href="mpgs113.htm#848518"><em>Inferno File Protocol, Styx</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs104.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs106.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

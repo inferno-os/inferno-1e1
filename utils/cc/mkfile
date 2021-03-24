@@ -1,0 +1,63 @@
+<../../mkconfig
+<../../$SYSHOST/mkhost
+<../../$OBJDIR/mkfile
+
+LIB=libcc.$A
+OFILES=\
+        y.tab.$O\
+	lex-$SYSTARG.$O\
+	mac.$O\
+	mem.$O\
+        mpatof.$O\
+        dcl.$O\
+        acid.$O\
+        com.$O\
+	scon.$O\
+        sub.$O\
+        com64.$O\
+        compat.$O\
+        qsort.$O\
+ 
+HFILES=cc.h\
+        y.tab.h\
+ 
+#YFILES=cc.y\
+
+<../../$SYSTARG/mksyslib
+
+#y.tab.h y.tab.c:	$YFILES
+#	$YACC $YFLAGS $YFILES
+
+mac.$O: macbody
+	$CC $CFLAGS mac.c
+
+lex-Irix.$O:	lex-posix.c
+lex-Solaris.$O:	lex-posix.c
+lex-Linux.$O:	lex-posix.c
+
+clean \
+nuke:EV:
+#	$RM y.tab.?			# do not remove yacc-generated files
+	$RM core y.debug y.output
+	$RM $OFILES $O.out
+	$RM *.[$OS] [$OS].out
+ 
+everything:V:
+        # mk the current compilers
+        for DIR in cc 5c 8c
+	do
+                cd ../$DIR
+                mk $MKFLAGS nuke
+                mk $MKFLAGS install
+        done
+        # mk all the others with those
+        for DIR in cc 5c 8c
+	do
+                cd ../$DIR
+                mk $MKFLAGS nuke
+                mk $MKFLAGS installall
+                mk $MKFLAGS clean
+        done
+
+package:QV:
+	$TRUE

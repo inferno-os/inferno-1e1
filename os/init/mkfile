@@ -1,0 +1,22 @@
+<../../mkconfig
+<../../$SYSHOST/mkhost
+
+OBJ=\
+	init.dis\
+
+all:V:	$OBJ
+
+clean:V:
+	$RM *.dis *.sbl
+
+%.dis:	%.b
+	limbo -I../../module -gw $stem.b
+
+%.s:	%.b
+	limbo -I../../module -w -G -S $stem.b
+
+ir%.dis: ../../appl/lib/ir%.b
+	limbo -I../../module -gw $prereq
+
+ir%.s: ../../appl/lib/ir%.b
+	limbo -I../../module -w -G -S $prereq

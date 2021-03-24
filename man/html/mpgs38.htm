@@ -1,0 +1,137 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs37.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs39.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="841959">
+<center><h1> display </h1></center>
+</a><a name="841960">
+Display - connection to draw device<p>
+</a><a name="841961">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";
+draw:= load Draw Draw-&gt;PATH;
+Display: adt
+{
+ image:       ref Image;
+ ones:        ref Image;
+ zeros:       ref Image;
+ allocate:    fn(dev: string)                               :ref Display;
+ startrefresh:fn(d: self ref Display);
+ publicscreen:fn(d: self ref Display, id: int)              :ref Screen;
+ newimage:    fn(d: self ref Display,
+                 r: Rect, ldepth, repl, color: int)         :ref Image;
+ color:       fn(d: self ref Display,   color: int)         :ref Image;
+ rgb:         fn(d: self ref Display, red, green, blue: int):ref Image;
+ open:       fn(d: self ref Display, name: string)         :ref Image;
+ readimage: fn(d: self ref Display, fd: ref Sys-&gt;FD)      :ref Image;
+ writeimage:fn(d: self ref Display, fd: ref Sys-&gt;FD, i:ref Image)
+                                                                  :int;
+ rgb2cmap:    fn(d: self ref Display, red, green, blue: int)      :int;
+ cmap2rgb:    fn(d: self ref Display, color: int)     :(int, int, int);
+};
+</tt></pre></p><a name="841982">
+<h2> Description</h2>
+</a><a name="892307">
+ The Display type represents a connection to a <em>draw</em> device. This device is the representation of a physical display, such as a CRT, and its associated memory. It contains the storage for all images, objects must be allocated through Display member functions. Graphics operations that use multiple Image objects may not mix images from different Display<kbd>s</kbd>. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="853748">
+image<p>
+</a><td><a name="853750">
+The visible contents of the display. Draw on image to change the display.<p>
+</a>
+<tr><td><a name="853752">
+ones, zeros<p>
+</a><td><a name="853754">
+Replicated images of a single pixel, either all ones (true) or all zeros (false). Useful as masks for basic graphical operations.<p>
+</a>
+<tr><td><a name="853756">
+allocate (<em>dev</em>)<p>
+</a><td><a name="853758">
+Attach to a new display, represented by the <em>draw </em>device mounted in the specified dev directory. If <em>dev</em> is the empty string, <kbd>/dev</kbd> is used. The return value is <kbd>nil </kbd>if the allocation fails.<p>
+</a>
+<tr><td><a name="853760">
+<em>d</em>.startrefresh ( )<p>
+</a><td><a name="853762">
+Receive and process window refresh events from the device. After allocating a Display object, the application should spawn a thread to call startrefresh. <p>
+</a>
+<tr><td><a name="853764">
+<em>d</em>.publicscreen (<em>id</em>)<p>
+</a><td><a name="853766">
+Create a locally addressable pointer to a public Screen. See <a href="mpgs45.htm#842503"><em>screen</em></a>.<p>
+</a>
+<tr><td><a name="853771">
+<em>d</em>.newimage<p>
+</a><a name="853772">
+(<em>clipr</em>, <em>ldepth</em>, <em>repl</em>, <em>color</em>)<p>
+</a><td><a name="853774">
+ Allocate an off-screen Image. The arguments supply the values for that are used to paint the image when created.<p>
+</a>
+<tr><td><a name="853776">
+<em>d</em>.color (<em>color</em>)<p>
+</a><td><a name="853778">
+ Create a single-pixel, replicated off-screen image of the specified <em>color</em>. The Draw module defines constants for several common colors: Black, Blue, Green, Red, White, and Yellow.<p>
+</a>
+<tr><td><a name="853780">
+<em>d</em>.rgb<p>
+</a><a name="853781">
+(<em>red</em>, <em>green</em>, <em>blue</em>)<p>
+</a><td><a name="853783">
+Use the values (from 0 [no color] through 255 [saturated]) of red, green, and blue to find the closest matching color map entry, and creates a single-pixel replicated image of that color. Equivalent to <em>d</em>.color(<em>d</em>.rgb2cmap(<em>red</em>, <em>green</em>, <em>blue</em>)). <p>
+</a>
+<tr><td><a name="853785">
+<em>d</em>.open (<em>file</em>)<p>
+</a><td><a name="853787">
+ Read an image description from <em>file</em> and return an <kbd>Image</kbd> holding the picture. This function will implicitly handle either <em>compressed</em> or <em>uncompressed</em> formats. See <a href="mpgs128.htm#849610"><em>image</em></a><em> </em>for further details.<p>
+</a>
+<tr><td><a name="853792">
+<em>d</em>.readimage (<em>fd</em>)<p>
+</a><td><a name="853794">
+ Analogous to open, except the image is obtained from an open file descriptor, <em>fd</em>, rather than a named file. <p>
+</a>
+<tr><td><a name="853796">
+<em>d</em>.writeimage (<em>fd</em>, <em>i</em>)<p>
+</a><td><a name="853798">
+Complement of readimage: Write an image file representing image <em>i </em>to the open file descriptor, <em>fd</em>. This image is always written in a <em>compressed</em> format. See <a href="mpgs128.htm#849610"><em>image</em></a><em> </em>for further details. <p>
+</a>
+<tr><td><a name="853803">
+<em>d</em>.rgb2cmap<p>
+</a><a name="853804">
+(<em>red</em>, <em>green</em>, <em>blue</em>)<p>
+</a><td><a name="853806">
+ Return the color map index of the color that best matches the color triple. The values of the components range from 0 (no color) to 255 (saturated).<p>
+</a>
+<tr><td><a name="853808">
+<em>d</em>.cmap2rgb (<em>color</em>)<p>
+</a><td><a name="853810">
+Decompose the color into a color triple and return the result. <p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs37.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs39.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

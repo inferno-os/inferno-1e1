@@ -1,0 +1,168 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs121.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs123.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="848227">
+<center><h1> stat </h1></center>
+</a><a name="848228">
+stat, wstat - inquire or change file attributes<p>
+</a><a name="848229">
+<h2> Synopsis</h2>
+</a><pre><tt>Tstat  <em>tag</em> [2] <em>fid</em> [2]
+Rstat <em> tag</em> [2] <em>fid</em> [2] <em>stat</em> [116]
+Twstat <em>tag</em> [2] <em>fid</em> [2] <em>stat</em> [116]
+Rwstat <em>tag</em> [2] <em>fid</em> [2]
+</tt></pre></p><a name="848234">
+<h2> Description</h2>
+</a><a name="848235">
+<h3> The stat Transaction</h3>
+</a><a name="848236">
+The stat transaction inquires about the file identified by <em>fid</em>. The reply includes (in the <em>stat</em> argument) a <em>directory entry</em> containing the file's attributes.<p>
+</a><a name="848237">
+The stat request requires no special permissions other than those needed to acquire <em>fid</em>.<p>
+</a><a name="848238">
+<h3> Directory Entry Layout</h3>
+</a><a name="848239">
+Both the <em>stat</em> and <em>wstat</em> messages transmit file attributes in a machine-independent representation called a <em>directory entry</em>.<p>
+</a><a name="848240">
+A directory entry is 116-bytes long. See DIRLEN in &lt;lib9.h&gt;. Integers in this encoding are in little-endian order (least significant byte first). The convM2D and convD2M routines (see <a href="mpgs123.htm#848320"><em>styx</em></a>) convert between directory entries and C language structures.<p>
+</a><a name="848241">
+This encoding may be turned into a machine dependent Dir structure (see &lt;lib9.h&gt;) using routines defined in <em>styx</em>.<p>
+</a><a name="848292">
+A <em>directory entry</em> is laid out as follows: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="848244">
+name [28]<p>
+</a><td><a name="848246">
+File name. If the file is the root directory of the server the name must be <em>/</em>.<p>
+</a>
+<tr><td><a name="848248">
+uid [28]<p>
+</a><td><a name="848250">
+Owner name.<p>
+</a>
+<tr><td><a name="848252">
+gid [28]<p>
+</a><td><a name="848254">
+Group name.<p>
+</a>
+<tr><td><a name="848256">
+qid.path [4]<p>
+</a><td><a name="848258">
+File server's identification for the file. See <a href="mpgs113.htm#848518"><em>Inferno File Protocol, Styx</em></a>.<p>
+</a>
+<tr><td><a name="848260">
+qid.vers [4]<p>
+</a><td><a name="848262">
+Version number for given path. See <a href="mpgs113.htm#848518"><em>Inferno File Protocol, Styx</em></a>.<p>
+</a>
+<tr><td><a name="848264">
+mode [4]<p>
+</a><td><a name="848266">
+Permissions and flags. The <em>mode</em> contains permission bits as described in <a href="mpgs105.htm#859375"><em>Inferno Devices</em></a> and <kbd>16r80000000</kbd> if this file is a directory.<p>
+</a>
+<tr><td><a name="848268">
+atime [4]<p>
+</a><td><a name="848270">
+The last access time. The <kbd>atime</kbd> field records the last read of the contents; it is also set whenever <kbd>mtime </kbd>is set. <p>
+</a><a name="848271">
+For a directory, <kbd>atime</kbd> is set by an attach, walk, or create, all whether successful or not.<p>
+</a><a name="848272">
+The value is measured in seconds since the epoch (Jan &#32;1 &#32;00:00 &#32;1970 &#32;GMT).<p>
+</a>
+<tr><td><a name="848274">
+mtime [4]<p>
+</a><td><a name="848276">
+The last modification time. The <kbd>mtime </kbd>field reflects the time of the last change of content.<p>
+</a><a name="848277">
+For a plain file, <kbd>mtime </kbd>is the time of the most recent create, open with truncation, or write; for a directory it is the time of the most recent remove, create, or <kbd>wstat </kbd>of a file in the directory. <p>
+</a><a name="848278">
+The value is measured in seconds since the epoch<p>
+</a><a name="848279">
+(Jan 1 00:00 1970 GMT).<p>
+</a>
+<tr><td><a name="848281">
+length [8]<p>
+</a><td><a name="848283">
+Length of file in bytes. Directories and most files representing devices have, by convention, a length of 0.<p>
+</a>
+<tr><td><a name="848285">
+type [2]<p>
+</a><td><a name="848287">
+See discussion of <em>devtype</em> in <a href="mpgs113.htm#848518"><em>Inferno File Protocol, Styx</em></a>.<p>
+</a>
+<tr><td><a name="848289">
+dev [2]<p>
+</a><td><a name="848291">
+See discussion of <em>dev</em> in <a href="mpgs113.htm#848518"><em>Inferno File Protocol, Styx</em></a>.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="848293">
+A read of a directory yields an integral number of directory entries in the machine independent encoding given above (see <a href="mpgs120.htm#848193"><em>read</em></a>).<p>
+</a><a name="848294">
+<h3> The wstat Transaction</h3>
+</a><a name="848313">
+The wstat request can change certain file attributes. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="848297">
+name<p>
+</a><td><a name="848299">
+The <kbd>name</kbd> can be changed by anyone with write permission in the parent directory. It is an error to change the name of a file to that of an existing file.<p>
+</a>
+<tr><td><a name="848301">
+mode and mtime<p>
+</a><td><a name="848305">
+The <kbd>mode</kbd> and <kbd>mtime</kbd> can be changed by the owner of the file. The directory bit cannot be changed by a wstat. All the other defined permission and mode bits can be change.<p>
+</a>
+<tr><td><a name="848308">
+gid<p>
+</a><td><a name="848312">
+The <kbd>gid</kbd> can be changed: by the owner if also a member of the new group. (See <a href="mpgs113.htm#848518"><em>Inferno File Protocol, Styx</em></a> for more information about permissions and <em>users</em> for users and groups).<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="848314">
+None of the other attributes can be altered by a wstat. In particular, there is no way to change the owner of a file.<p>
+</a><a name="848315">
+<h2> Entry Points</h2>
+</a><a name="848316">
+Type stat messages are generated by the fstat and <kbd>stat</kbd> calls (see <a href="mpgs87.htm#844841"><em>stat</em></a>).<p>
+</a><a name="848318">
+<h2> See Also</h2>
+</a><a name="869592">
+<a href="mpgs123.htm#848320"><em>styx</em></a>, <a href="mpgs87.htm#844841"><em>stat</em></a>, <a href="mpgs113.htm#848518"><em>Inferno File Protocol, Styx</em></a>, and <a href="mpgs120.htm#848193"><em>read</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs121.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs123.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

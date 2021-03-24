@@ -1,0 +1,48 @@
+put fpi*.[ch] in /usr/inferno/os/ebsit (or any other arm directory).
+add the appropriate $O names to mkfile (mkfile.rc).
+
+
+dat.h needs to have
+
+
+	/*
+	 * FPenv.status
+	 */
+	enum
+	{
+		FPINIT,
+		FPACTIVE,
+		FPINACTIVE,
+	};
+
+	struct	FPenv
+	{
+		ulong	status;
+		ulong	control;
+		ushort	fpistate;	/* emulated fp */
+		ulong	regs[8][3];	/* emulated fp */
+	};
+
+in trap.c, you'll need to invoke fpiarm:
+
+	case PsrMund:
+		spllo();
+		if(waserror()){
+			if(up->type == Interp)
+				disfault(ur, up->env->error);
+			panic("%s", up->env->error);
+		}
+		if(!fpiarm(ur))
+			error("sys: trap: undefined instruction");
+		poperror();
+
+add
+
+	int	fpiarm(Ureg*);
+
+to fns.h.
+
+now all you need are the 5a/5c/5l changes ...
+i can ship them right away if you've got things compiling
+on brazil.  otherwise i need to mangle them to elaborate all the
+struct/union references.

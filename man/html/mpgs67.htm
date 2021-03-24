@@ -1,0 +1,167 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs66.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs68.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="843716">
+<center><h1> compound </h1></center>
+</a><a name="843717">
+Compound - windows for ITV toolkit<p>
+</a><a name="843718">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";
+include "prefab.m";
+prefab:= load Prefab Prefab-&gt;PATH;
+Compound: adt
+{
+  image:   ref Draw-&gt;Image;
+  environ: ref Environ;
+  r:       Draw-&gt;Rect;
+  title:   ref Element;
+  contents:ref Element;
+ 
+  iconbox:  fn(env: ref Environ,
+               p: Draw-&gt;Point, title: string, icon,
+               mask: ref Draw-&gt;Image)             :ref Compound;
+  textbox:  fn(env: ref Environ,
+               r: Draw-&gt;Rect, title, text: string):ref Compound;
+  layoutbox: fn(env: ref Environ,
+                r: Draw-&gt;Rect, title: string, lay: list of Layout)
+                                                  :ref Compound;
+  box:    fn(env: ref Environ, p: Draw-&gt;Point, title, elist: ref 
+Element):ref Compound;
+  draw:    fn(comp: self ref Compound);
+  redraw:  fn(comp: self ref Compound, r: Draw-&gt;Rect);
+  scroll:  fn(comp: self ref Compound, elem: ref Element, d: 
+Draw-&gt;Point);
+  show:    fn(comp: self ref Compound, elem: ref Element): int;
+  select:  fn(comp: self ref Compound,
+        elem: ref Element, i: int, c: chan of int):
+        (int, int, ref Element);
+  tagselect: fn(comp: self ref Compound,
+        elem: ref Element, i: int, c: chan of int):
+        (int, int, ref Element);
+  highlight: fn(comp: self ref Compound,
+        elem: ref Element, on: int);
+};
+</tt></pre></p><a name="843756">
+<h2> Description</h2>
+</a><a name="843757">
+Compound is the abstract data type that defines boxes drawn on the screen. Each appears in a new window, Compound.image, and holds a (possibly nil) title and contents. Element. It occupies the space on the screen defined by Compound.r. Allocating a Compound creates a window but does not draw it; after the Compound is built, Compound.draw must be called to make it visible. Compounds have a border around them, drawn in Style.edgecolor and contain, from top-to-bottom, the title (if any), a horizontal line (if there is a title), and the contents.<p>
+</a><a name="843758">
+<h3> Compound.iconbox (env, p, title, icon, mask) </h3>
+</a><a name="843759">
+Creates a Compound whose contents are made by calling Element.icon (see <a href="mpgs63.htm#843357"><em>elem</em></a>) using the <em>icon</em> and <em>mask</em>. The Compound 's upper left corner is at <em>p</em>; its size is determined by the size of the <em>icon</em> and <em>mask</em>.<p>
+</a><a name="843760">
+<h3> Compound.textbox (env, r, title, text)</h3>
+</a><a name="843761">
+Creates a <kbd>Compound</kbd> whose contents are made by calling <kbd>Element.text</kbd> using the supplied <em>text</em>. As with Element.text, the resulting contents Element will be actually a list of text Elements if the text occupies multiple lines on the screen. The rectangle behaves as in Element.text.<p>
+</a><a name="843762">
+<h3> Compound.layoutbox (env, r, title, layoutlist)</h3>
+</a><a name="843763">
+Like Compound.textbox, but based on <kbd>Element.layout</kbd> rather than Element.text.<p>
+</a><a name="843764">
+<h3> Compound.box (env, p, title, element)</h3>
+</a><a name="843765">
+Creates a <kbd>Compound</kbd> whose contents are made from an existing Element. To build complex structures, use the Element -building functions, size the Element appropriately, and use Compound.box. The result is positioned with its upper left corner at <em>p</em>, and with size determined by that of the Element. However a Compound is built, its size computation makes allowance for the border and title. Moreover, if the requested size and placement makes part appear offscreen, the result may be moved to display it better.<p>
+</a><a name="843766">
+<h3> Compound.draw ( ) </h3>
+</a><a name="843767">
+This function uses the description of the title and contents to paint the on-screen image. It takes no arguments; all the information is included in the description.<p>
+</a><a name="843768">
+<h3> Compound.redraw (r)</h3>
+</a><a name="855029">
+Like Compound.draw, but restricts the drawing to the specified Rect <em>r</em>.<p>
+</a><a name="855030">
+<h3> Compound.select (element, index, c): (int, int, Element)</h3>
+</a><a name="843809">
+The parameters to the select function are: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="855109">
+element<p>
+</a><td><a name="855111">
+The <em>element</em> is contained in the Compound, and may be at any level of its structure. It is most usefully a list, but may be a singleton, in which case it behaves like a list of one element.<p>
+</a>
+<tr><td><a name="855113">
+index<p>
+</a><td><a name="855115">
+The number of the element on the list<p>
+</a>
+<tr><td><a name="855117">
+c<p>
+</a><td><a name="876539">
+The channel, <em>c</em>, is a <kbd>chan</kbd> <kbd>of</kbd> <kbd>int</kbd> connected to an IR remote control interface, typically acquired through the program's <kbd>Context</kbd> (see <a href="mpgs37.htm#841856"><em>context</em></a>).<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="843810">
+The arrow keys on the remote control scroll through the members of the list, using the <kbd>Style.highlightcolor </kbd>associated with each member element to indicate selection. A <kbd>Select</kbd> key on the remote control triggers <kbd>select</kbd> to return a tuple, (<em>key</em>, <em>index</em>,<em> elem</em>), where: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="855048">
+key<p>
+</a><td><a name="855058">
+The <em>key</em> member is the key code of the action (here Select).<p>
+</a>
+<tr><td><a name="855052">
+index<p>
+</a><td><a name="855062">
+The <em>index</em> member is the number of the element in the list (ignoring separators).<p>
+</a>
+<tr><td><a name="855064">
+elem<p>
+</a><td><a name="855070">
+The <em>elem</em> member is the list member highlighted when the key was hit.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="855042">
+Any other key returns the same tuple with<kbd> </kbd><em>index</em><kbd> -1</kbd> and the value of the key. The <em>elem</em> returned is always the most recently highlighted, even if the result was not a selection. When <kbd>select</kbd> returns, it always restores the default appearance of the list.<p>
+</a><a name="855033">
+<h3> Compound.tagselect (element, index, c): (int, int, Element)</h3>
+</a><a name="843811">
+Like <kbd>Compound.select</kbd>, but rather than selecting among all the elements of a list, it selects among only those elements with defined tags in the structure contained within the specified <em>element</em>.<p>
+</a><a name="843812">
+<h3> Compound.highlight (element, on)</h3>
+</a><a name="843813">
+Set the highlighting to be 'on' or 'off' for the <em>element</em> within the compound. <p>
+</a><a name="843815">
+<h3> Compound.scroll (element, d)</h3>
+</a><a name="843816">
+Scroll the <em>element</em> within the compound. The updated image is redrawn after the scrolling.<p>
+</a><a name="843817">
+<h3> Compound.show (elementtag, d)</h3>
+</a><a name="843818">
+Make sure the <em>element</em> is visible within the rectangle of the top-level <kbd>Element</kbd> of the Compound, that is, in effect call <kbd>Element.show </kbd>(<kbd>Compound.contents</kbd>, <em>element</em>). <p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs66.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs68.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

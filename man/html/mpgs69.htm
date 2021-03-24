@@ -1,0 +1,69 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs68.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs70.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844068">
+<center><h1> environ </h1></center>
+</a><a name="844069">
+environ - environment for ITV toolkit<p>
+</a><a name="844070">
+to provide a graphics framework for a item collections<p>
+</a><a name="844071">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";
+include "prefab.m";
+prefab:= load Prefab Prefab-&gt;PATH;
+Environ: adt
+{
+  screen: ref Draw-&gt;Screen;
+  style: ref Style;
+};
+</tt></pre></p><a name="844080">
+<h2> Description</h2>
+</a><a name="844081">
+The Environ abstract data type collects the Style and Screen types necessary to specify how and where to draw Prefab items. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="844084">
+screen<p>
+</a><td><a name="844086">
+Specifies the <kbd>Screen</kbd> upon which items will be displayed.<p>
+</a>
+<tr><td><a name="844088">
+style<p>
+</a><td><a name="844090">
+Specifies the <kbd>Style</kbd> for items in an environment. To draw various items in different fonts or colors, the application should associate different <kbd>Environ</kbd> objects with the various items. (But see also the <kbd>layout</kbd> functions in <em>prefab-element </em>and <em>prefab-compound</em>).<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="844091">
+<h2> See Also</h2>
+</a><a name="844092">
+<a href="mpgs66.htm#843703"><em>Limbo Prefab Modules</em></a>, <a href="mpgs45.htm#842503"><em>screen</em></a>, and <a href="mpgs70.htm#844093"><em>style</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs68.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs70.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

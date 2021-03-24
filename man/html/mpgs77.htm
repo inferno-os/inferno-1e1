@@ -1,0 +1,52 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs76.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs78.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844541">
+<center><h1> dup </h1></center>
+</a><a name="844542">
+dup - duplicate an open file descriptor<p>
+</a><a name="844543">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+dup:    fn(oldfd, newfd: int): int;
+fildes: fn(fd: int):           ref FD;
+</tt></pre></p><a name="844548">
+<h2> Description</h2>
+</a><a name="844549">
+The Limbo programming language and its libraries manage I/O via references to instances of an abstract data type, FD, called a <em>file</em> <em>descriptor</em>. This type holds an integer-valued file descriptor, the form used by the operating system, in a structure that can be reference counted and garbage collected. There are occasions when a program must access the underlying integer file descriptor, such as arranging I/O re-direction for the standard input and output for a new process.<p>
+</a><a name="844550">
+<h3> dup (oldfd, newfd)</h3>
+</a><a name="844551">
+The <kbd>dup</kbd> function takes a valid integer file descriptor, <em>oldfd</em>, referring to an open file, and returns a new integer file descriptor referring to the same file. If <em>newfd</em> is in the range of legal file descriptors, <kbd>dup</kbd> will use that for the new file descriptor (closing any old file associated with <em>newfd</em>); if <em>newfd</em> is -1 the system chooses the lowest available file descriptor. If a suitable file descriptor cannot be found, <kbd>dup</kbd> returns -1.<p>
+</a><a name="844552">
+<h3> fildes (fd)</h3>
+</a><a name="844553">
+The <kbd>fildes</kbd> function uses the integer file descriptor <em>fd</em> to create a new Limbo file descriptor, suitable for other <kbd>Sys</kbd> module functions. It returns <kbd>nil</kbd> if it cannot convert <em>fd</em>.<p>
+</a><a name="844554">
+<h2> See Also </h2>
+</a><a name="854101">
+<em><a href="mpgs71.htm#872019"></em><em>Limbo System Modules</em><em></a> </em>and <a href="mpgs80.htm#844653"><em>open</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs76.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs78.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

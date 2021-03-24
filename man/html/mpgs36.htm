@@ -1,0 +1,679 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs35.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs37.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="855323">
+<center><h1> </h1></center>
+</a><a name="869014">
+Limbo Modules<p>
+</a><a name="869015">
+<h2> Introduction to Limbo modules </h2>
+</a><a name="869016">
+This section introduces the Limbo modules available to the programmer; see the corresponding manual pages for more information. Each module is declared with a single Limbo include file. Before calling a module's functions, an application must load the module; the application uses the resulting handle as the module qualifier. The examples above illustrate the style. It will usually be necessary to qualify names with the appropriate module pointer or to import the types and functions. The manual pages assume the names are accessible in the current scope.<p>
+</a><a name="868614">
+Although many modules are self-contained, dependencies may exist. For example, the system module, Sys, provides basic services that some other modules require.<p>
+</a><a name="868615">
+A number of minor functions are packaged as individual modules but share a single include file. For example, see<kbd> /include/lib</kbd>.m.<p>
+</a><a name="869644">
+The manual pages describe in their synopsis sections how to include a module definition during compilation and load an implementation during execution. The synopsis sections also list the functions, abstract data types, and constants that are discussed in the following Description sections. Although the include files declare these components, the manual pages list them explicitly. In all cases, the enclosing module declaration is assumed so that unqualified identifiers can be used in the text without ambiguity.<p>
+</a><a name="887977">
+Some modules are described in a single page, such as <em>regex</em>. Larger modules are divided into several related pages, such as <a href="mpgs62.htm#848707"><em>Limbo Math Modules</em></a>, <a href="mpgs63.htm#843357"><em>elem</em></a>, <a href="mpgs64.htm#843446"><em>fp</em></a>, and <em><a href="mpgs65.htm#843640"></em><em>linalg</em><em></a>.</em><p>
+</a><a name="869026">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+include "draw.m";
+draw:= load Draw Draw-&gt;PATH;
+include "tk.m";
+tk:= load Tk Tk-&gt;PATH;
+... etc.
+Generically
+include "<em>module</em>.m";
+mod:= load <em>Module</em> <em>Module</em> -&gt;PATH;
+</tt></pre></p><a name="869750">
+<h3> Draw Modules 
+<Table Border="3">
+<caption></caption>
+<tr><th><a name="888060">
+<a href="mpgs37.htm#841856"><em>context</em></a><p>
+</a><th><a name="888062">
+graphics environment<p>
+</a>
+<tr><td><a name="888067">
+<a href="mpgs38.htm#841959"><em>display</em></a><p>
+</a><td><a name="888069">
+connection to draw device<p>
+</a>
+<tr><td><a name="888074">
+<a href="mpgs40.htm#842125"><em>font</em></a><p>
+</a><td><a name="888076">
+character images for Unicode text<p>
+</a>
+<tr><td><a name="888081">
+<a href="mpgs41.htm#842167"><em>image</em></a><p>
+</a><td><a name="888083">
+pictures and drawing<p>
+</a>
+<tr><td><a name="888088">
+<a href="mpgs42.htm#852585"><em>point</em></a><p>
+</a><td><a name="888090">
+coordinate position<p>
+</a>
+<tr><td><a name="888095">
+<a href="mpgs43.htm#866719"><em>pointer</em></a><p>
+</a><td><a name="888097">
+state of a pointer device such as a mouse<p>
+</a>
+<tr><td><a name="888102">
+<a href="mpgs44.htm#842431"><em>rectangle</em></a><p>
+</a><td><a name="888104">
+rectangular portion of the plane<p>
+</a>
+<tr><td><a name="888109">
+<a href="mpgs45.htm#842503"><em>screen</em></a><p>
+</a><td><a name="888111">
+type to define the abstract data structures for the windows on a display, or subwindows within a window<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="868685">
+<h3> Keyring Modules 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="869763">
+<a href="mpgs47.htm#842826"><em>auth</em></a><p>
+</a><td><a name="869765">
+authenticate a connection<p>
+</a>
+<tr><td><a name="869767">
+   readauthinfo<p>
+</a><td><a name="869769">
+<p>
+</a>
+<tr><td><a name="869771">
+   writeauthinfo <p>
+</a><td><a name="869773">
+<p>
+</a>
+<tr><td><a name="869775">
+<a href="mpgs48.htm#842860"><em>certtostr</em></a><p>
+</a><td><a name="869860">
+encryption key conversion functions<p>
+</a>
+<tr><td><a name="869779">
+   pktostr, sktostr,<p>
+</a><td><a name="869781">
+<p>
+</a>
+<tr><td><a name="869783">
+   strtocert, strtopk, strtosk <p>
+</a><td><a name="869785">
+<p>
+</a>
+<tr><td><a name="869787">
+<a href="mpgs49.htm#842887"><em>gensk</em></a><p>
+</a><td><a name="869865">
+generate keys<p>
+</a>
+<tr><td><a name="869791">
+   genSKfromPK, sktopk,<p>
+</a><td><a name="869793">
+<p>
+</a>
+<tr><td><a name="869795">
+   dhparams <p>
+</a><td><a name="869797">
+<p>
+</a>
+<tr><td><a name="869799">
+<a href="mpgs50.htm#876613"><em>getstring</em></a><p>
+</a><td><a name="869870">
+delimited I/O<p>
+</a>
+<tr><td><a name="869803">
+   putstring, getbytearray,<p>
+</a><td><a name="869805">
+<p>
+</a>
+<tr><td><a name="869807">
+   putbytearray, puterror<p>
+</a><td><a name="869809">
+<p>
+</a>
+<tr><td><a name="869811">
+<a href="mpgs51.htm#842934"><em>ipint</em></a> <p>
+</a><td><a name="869813">
+infinite precision integer utility functions<p>
+</a>
+<tr><td><a name="869815">
+<a href="mpgs52.htm#853893"><em>login</em></a> <p>
+</a><td><a name="869875">
+get an Authinfo adt from a certificate authority<p>
+</a>
+<tr><td><a name="869819">
+   getauthinfo <p>
+</a><td><a name="869821">
+<p>
+</a>
+<tr><td><a name="869823">
+<a href="mpgs53.htm#842987"><em>sign</em></a> <p>
+</a><td><a name="869880">
+cryptographic digests and digital signatures<p>
+</a>
+<tr><td><a name="869827">
+   sha, md5, sign, verify <p>
+</a><td><a name="869829">
+<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="870070">
+<h3> Library Modules 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="869993">
+<a href="mpgs55.htm#856758"><em>daytime</em></a><p>
+</a><a name="871523">
+   text, filet, gmt, local,<p>
+</a><a name="871528">
+   now, time, tm2epoch<p>
+</a><td><a name="869995">
+time conversions<p>
+</a>
+<tr><td><a name="870008">
+<a href="mpgs56.htm#843102"><em>filepat</em></a> <p>
+</a><a name="871533">
+  expand, match <p>
+</a><td><a name="870085">
+file pattern matching<p>
+</a>
+<tr><td><a name="870019">
+<a href="mpgs57.htm#843126"><em>newns</em></a> <p>
+</a><td><a name="870021">
+build a new name space from a description file<p>
+</a>
+<tr><td><a name="870026">
+<a href="mpgs58.htm#843147"><em>pipe</em></a><p>
+</a><a name="871538">
+   fds, files<p>
+</a><td><a name="870087">
+get read/write file pair for a pipe<p>
+</a>
+<tr><td><a name="870037">
+<a href="mpgs59.htm#862154"><em>readdir</em></a> <p>
+</a><td><a name="870039">
+read directory and sort files<p>
+</a>
+<tr><td><a name="870044">
+<a href="mpgs60.htm#843216"><em>string</em></a><p>
+</a><a name="871543">
+  append, drop, in, prefix,<p>
+</a><a name="871548">
+  splitl, splitr, splitstrl,<p>
+</a><a name="871553">
+  splitstrr, take, toint,<p>
+</a><a name="871558">
+  tolower, toupper<p>
+</a><td><a name="870089">
+string operations<p>
+</a>
+<tr><td><a name="870067">
+<a href="mpgs61.htm#843286"><em>workdir</em></a> <p>
+</a><td><a name="870069">
+discover the name of the current working directory<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="870079">
+<h3> Math Modules 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="870092">
+<a href="mpgs63.htm#843357"><em>elem</em></a> <p>
+</a><td><a name="870094">
+elementary functions of applied mathematics<p>
+</a>
+<tr><td><a name="870096">
+<a href="mpgs64.htm#843446"><em>fp</em></a> <p>
+</a><td><a name="870098">
+floating point operations<p>
+</a>
+<tr><td><a name="870100">
+<a href="mpgs65.htm#843640"><em>linalg</em></a> <p>
+</a><td><a name="870102">
+linear algebra primitives<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="868803">
+<h3> Prefab Modules 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="870114">
+<a href="mpgs67.htm#843716"><em>compound</em></a> <p>
+</a><td><a name="870116">
+windows for ITV toolkit<p>
+</a>
+<tr><td><a name="870118">
+<a href="mpgs68.htm#843819"><em>element</em></a> <p>
+</a><td><a name="870120">
+menu and display elements for ITV toolkit<p>
+</a>
+<tr><td><a name="870122">
+<a href="mpgs69.htm#844068"><em>environ</em></a><p>
+</a><td><a name="870124">
+environment for ITV toolkit to provide a graphics framework for a item collections<p>
+</a>
+<tr><td><a name="870126">
+<a href="mpgs70.htm#844093"><em>style</em></a> <p>
+</a><td><a name="870128">
+fonts and colors for ITV toolkit<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="868827">
+<h3> System Modules 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="870143">
+<a href="mpgs72.htm#844334"><em>bind</em></a> <p>
+</a><a name="871490">
+   mount,<p>
+</a><a name="871493">
+   unmount<p>
+</a><td><a name="870145">
+change file name space<p>
+</a>
+<tr><td><a name="870151">
+<a href="mpgs73.htm#844368"><em>byte2char</em></a><p>
+</a><a name="871496">
+   char2byte<p>
+</a><td><a name="870310">
+convert between bytes and characters<p>
+</a><a name="870153">
+ <p>
+</a>
+<tr><td><a name="870159">
+<a href="mpgs74.htm#844399"><em>chdir</em></a> <p>
+</a><td><a name="870161">
+change working directory<p>
+</a>
+<tr><td><a name="870163">
+<a href="mpgs75.htm#844412"><em>dial</em></a> <p>
+</a><a name="871501">
+   announce,<p>
+</a><a name="871504">
+   export, listen<p>
+</a><td><a name="870319">
+make network connections    <p>
+</a>
+<tr><td><a name="870171">
+<a href="mpgs76.htm#844528"><em>dirread</em></a> <p>
+</a><td><a name="870173">
+read directory<p>
+</a>
+<tr><td><a name="870175">
+<a href="mpgs77.htm#844541"><em>dup</em></a> <p>
+</a><td><a name="870177">
+duplicate an open file descriptor<p>
+</a>
+<tr><td><a name="870179">
+<a href="mpgs78.htm#854102"><em>file2chan</em></a> <p>
+</a><td><a name="870181">
+create file connected to Limbo channel<p>
+</a>
+<tr><td><a name="870183">
+<a href="mpgs79.htm#844640"><em>millisec</em></a> <p>
+</a><td><a name="870185">
+millisecond timer<p>
+</a>
+<tr><td><a name="870187">
+<a href="mpgs80.htm#844653"><em>open</em></a><p>
+</a><a name="871507">
+   create <p>
+</a><td><a name="870326">
+open/create a file for reading or writing<p>
+</a>
+<tr><td><a name="870195">
+<a href="mpgs81.htm#844675"><em>pctl</em></a> <p>
+</a><td><a name="870197">
+process control<p>
+</a>
+<tr><td><a name="870199">
+<a href="mpgs82.htm#844711"><em>print</em></a> <p>
+</a><td><a name="870333">
+print formatted output<p>
+</a>
+<tr><td><a name="870203">
+   fprint, sprint <p>
+</a><td><a name="870205">
+<p>
+</a>
+<tr><td><a name="870207">
+<a href="mpgs83.htm#844766"><em>read</em></a> <p>
+</a><a name="871512">
+   write <p>
+</a><td><a name="870337">
+read or write file<p>
+</a>
+<tr><td><a name="870215">
+<a href="mpgs84.htm#844787"><em>remove</em></a> <p>
+</a><td><a name="870217">
+remove a file<p>
+</a>
+<tr><td><a name="870219">
+<a href="mpgs85.htm#844801"><em>seek</em></a> <p>
+</a><td><a name="870221">
+change file offset<p>
+</a>
+<tr><td><a name="870223">
+<a href="mpgs86.htm#844830"><em>sleep</em></a> <p>
+</a><td><a name="870225">
+delay execution<p>
+</a>
+<tr><td><a name="870227">
+<a href="mpgs87.htm#844841"><em>stat</em></a> <p>
+</a><a name="871517">
+   fstat, fwstat,<p>
+</a><a name="871520">
+   stat, wstat<p>
+</a><td><a name="870339">
+get and put file status<p>
+</a>
+<tr><td><a name="870235">
+<a href="mpgs88.htm#844934"><em>tokenize</em></a> <p>
+</a><td><a name="870237">
+split string into words<p>
+</a>
+<tr><td><a name="870239">
+<a href="mpgs89.htm#844949"><em>utfbytes</em></a> <p>
+</a><td><a name="870241">
+compute the Unicode length of a UTF byte sequence<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="868929">
+<h3> Toolkit Modules 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="870351">
+<a href="mpgs91.htm#859355"><em>tk</em></a> <p>
+</a><td><a name="870353">
+graphics toolkit<p>
+</a>
+<tr><td><a name="870383">
+<a href="mpgs92.htm#844999"><em>tklib</em></a> <p>
+</a><a name="871572">
+   tkquote, is_err, tkcmds,<p>
+</a><a name="871573">
+   dialog, getstring,<p>
+</a><a name="871570">
+   notice, mktabs, tabsctl<p>
+</a><td><a name="870357">
+Tk user interface functions<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="868945">
+<h3> Miscellaneous Modules 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="870398">
+<a href="mpgs94.htm#855571"><em>bufio</em></a> <p>
+</a><td><a name="870400">
+buffered input/output module<p>
+</a>
+<tr><td><a name="870402">
+<a href="mpgs95.htm#855656"><em>devpointer</em></a> <p>
+</a><td><a name="870404">
+I/O interface for the pointer device<p>
+</a>
+<tr><td><a name="870406">
+<a href="mpgs96.htm#855693"><em>imagefile</em></a> <p>
+</a><td><a name="870408">
+processing external image file formats<p>
+</a>
+<tr><td><a name="870410">
+<a href="mpgs97.htm#855746"><em>ir</em></a> <p>
+</a><td><a name="870412">
+infrared remote control<p>
+</a>
+<tr><td><a name="870414">
+<a href="mpgs98.htm#855907"><em>login</em></a> <p>
+</a><td><a name="870416">
+introduction to the <kbd>Login</kbd> module<p>
+</a>
+<tr><td><a name="870418">
+<a href="mpgs99.htm#856002"><em>mpeg</em></a> <p>
+</a><td><a name="870420">
+interface to the mpeg device driver<p>
+</a>
+<tr><td><a name="870422">
+<a href="mpgs100.htm#894882"><em>regex</em></a> <p>
+</a><td><a name="870424">
+regular expression recognizer<p>
+</a>
+<tr><td><a name="870426">
+<a href="mpgs101.htm#856132"><em>sh</em></a> <p>
+</a><td><a name="870428">
+command interface<p>
+</a>
+<tr><td><a name="870430">
+<a href="mpgs102.htm#856162"><em>srv</em></a> <p>
+</a><td><a name="870432">
+miscellaneous services from the host operating system<p>
+</a>
+<tr><td><a name="870434">
+<a href="mpgs103.htm#856198"><em>volume</em></a><p>
+</a><td><a name="870436">
+volume control for an infrared interface<p>
+</a>
+<tr><td><a name="870438">
+<a href="mpgs104.htm#856249"><em>wmlib</em></a><p>
+</a><td><a name="870440">
+window manager toolkit<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="867451">
+ Limbo Draw Modules<p>
+</a><a name="871644">
+<h2> Draw Modules 
+<Table Border="3">
+<caption></caption>
+<tr><th><a name="888119">
+<a href="mpgs37.htm#841856"><em>context</em></a><p>
+</a><th><a name="888121">
+graphics environment<p>
+</a>
+<tr><td><a name="888126">
+<a href="mpgs38.htm#841959"><em>display</em></a><p>
+</a><td><a name="888128">
+connection to draw device<p>
+</a>
+<tr><td><a name="888133">
+<a href="mpgs40.htm#842125"><em>font</em></a><p>
+</a><td><a name="888135">
+character images for Unicode text<p>
+</a>
+<tr><td><a name="888140">
+<a href="mpgs41.htm#842167"><em>image</em></a><p>
+</a><td><a name="888142">
+pictures and drawing<p>
+</a>
+<tr><td><a name="888147">
+<a href="mpgs42.htm#852585"><em>point</em></a><p>
+</a><td><a name="888149">
+coordinate position<p>
+</a>
+<tr><td><a name="888154">
+<a href="mpgs43.htm#866719"><em>pointer</em></a><p>
+</a><td><a name="888156">
+state of a pointer device such as a mouse<p>
+</a>
+<tr><td><a name="888161">
+<a href="mpgs44.htm#842431"><em>rectangle</em></a><p>
+</a><td><a name="888163">
+rectangular portion of the plane<p>
+</a>
+<tr><td><a name="888168">
+<a href="mpgs45.htm#842503"><em>screen</em></a><p>
+</a><td><a name="888170">
+type to define the abstract data structures for the windows on a display, or subwindows within a window<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="856535">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";
+draw:=  load Draw Draw-&gt;PATH;
+</tt></pre></p><a name="841806">
+<h2> Description</h2>
+</a><a name="841807">
+Inferno's Draw module provides basic graphics facilities, defining drawing contexts, images, character fonts, and rectangular geometric operations. See <a href="mpgs66.htm#843703"><em>Limbo Prefab Modules</em></a> and <a href="mpgs91.htm#859355"><em>tk</em></a> for higher level operations, such as windows and menu handling.<p>
+</a><a name="841808">
+<h3> Pixels </h3>
+</a><a name="841809">
+Images are defined on a rectangular region of an integer plane with a picture element, or <em>pixel</em>, at each grid point. Pixel values are integers with 0, 1, 2, 4, or 8 bits per pixel, and all pixels in a given image have the same size, or <em>depth</em>. Some operations allow images with different depths to be combined, for example to do masking.<p>
+</a><a name="841810">
+When an image is displayed, the value of each pixel determines the color of the display. For color displays, Inferno uses a fixed color map for each display depth (see <a href="mpgs129.htm#849638"><em>rgbv</em></a>) and the application is responsible for mapping its desired colors to the values available. Facilities exist to convert from (red, green, blue) triplets to pixel values.<p>
+</a><a name="841844">
+<h3> Terminology 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="841813">
+Point<p>
+</a><td><a name="841815">
+The graphics plane is defined on an integer grid, with each <kbd>(x, &#32;y)</kbd> coordinate identifying the upper left corner of the corresponding pixel. The plane's origin, <kbd>(0, &#32;0)</kbd>, resides at the upper left corner of the screen; x and y coordinates increase to the right and down. The abstract data type Point defines a coordinate position.<p>
+</a>
+<tr><td><a name="841817">
+Rect<p>
+</a><td><a name="841819">
+The type <kbd>Rect</kbd> defines a rectangular region of the plane. It comprises two <kbd>Points, min</kbd> and <kbd>max</kbd>, and specifies the region defined by pixels with coordinates greater than or equal to min and strictly less than max, in both <kbd>x</kbd> and <kbd>y</kbd>. This <em>half-open </em>property allows rectangles that share an edge to have equal coordinates on the edge.<p>
+</a>
+<tr><td><a name="841821">
+Display<p>
+</a><td><a name="841823">
+The type <kbd>Display</kbd> represents a physical display, corresponding to a single connection to a <em>draw</em> device. Besides the image of the display itself, the <kbd>Display</kbd> type also stores references to off-screen images, fonts, and so on. The contents of such images are stored in the display device, not in the client of the display, which affects how they are allocated and used. See <a href="mpgs41.htm#842167"><em>image</em></a>.<p>
+</a>
+<tr><td><a name="841825">
+Screen<p>
+</a><td><a name="841827">
+The <kbd>Screen</kbd> type is used to manage a set of windows on an image, typically but not necessarily that of a display. Screens and hence windows may be built recursively upon windows for subwindowing or even on off-screen images. <p>
+</a>
+<tr><td><a name="841829">
+Image<p>
+</a><td><a name="841831">
+The <kbd>Image</kbd> type provides basic operations on groups of pixels. Through a few simple operations, most importantly the draw image combination operator (see <a href="mpgs41.htm#842167"><em>image</em></a>), the Image type provides the building blocks for Display, Screen, and Font.<p>
+</a>
+<tr><td><a name="841833">
+Font<p>
+</a><td><a name="841835">
+A <kbd>Font</kbd> defines which character image to draw for each character code value. Although all character drawing operations ultimately use the draw primitive on the underlying images, <kbd>Fonts</kbd> provide convenient and efficient management of display text. Inferno uses the 16-bit Unicode character encoding, so <kbd>Fonts</kbd> are managed hierarchically to control their size and to make common subsets such as ASCII or Greek efficient in practice. See <a href="mpgs40.htm#842125"><em>font</em></a>, <em>utf</em>, and <em>font</em>.<p>
+</a>
+<tr><td><a name="841837">
+Context<p>
+</a><td><a name="841839">
+A <kbd>Context</kbd> provides an interface to the system graphics and interactive devices. The system creates this context when it starts an application.<p>
+</a>
+<tr><td><a name="841841">
+Pointer<p>
+</a><td><a name="841843">
+The <kbd>Pointer</kbd> type conveys information for pointing devices, such as mice or trackballs. <p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="841845">
+<h3> More about Images</h3>
+</a><a name="841846">
+An image occupies a rectangle, Image.r, of the graphics plane. A second rectangle, Image.clipr, defines a clipping region for the image. Typically, the clipping rectangle is the same as the basic image, but they may differ. For example, the clipping region may be made smaller and centered on the basic image to define a protected border.<p>
+</a><a name="841847">
+The pixel depth of an Image is stored as a logarithm called Image.ldepth; pixels with 1, 2, 4, and 8 bits correspond to ldepth values 0, 1, 2, and 3. In future, other image depths may be supported.<p>
+</a><a name="841848">
+An image may be marked for replication: when set, the boolean Image.repl causes the image to behave as if replicated across the entire integer plane, thus tiling the destination graphics area with copies of the source image. When replication is turned on, the clipping rectangle limits the extent of the replication and may even usefully be disjoint from Image.r. See <a href="mpgs41.htm#842167"><em>image</em></a> for examples.<p>
+</a><a name="841849">
+The Image member functions provide facilities for drawing text and geometric objects, manipulating windows, and so on.<p>
+</a><a name="841850">
+Objects of type Display, Font, Screen, and Image must be allocated by the member functions; if such objects are created with a regular Limbo definition, they will not behave properly and may generate run-time errors.<p>
+</a><a name="864203">
+There are no 'free' routines for graphics objects. Instead Limbo's garbage collection frees them automatically. In Limbo, one can eliminate references by assigning nil to reference variables, returning from functions whose local variables hold references, etc.<p>
+</a><a name="864205">
+<h2> Return Values</h2>
+</a><a name="841853">
+Most drawing operations operate asynchronously, so they have no error return. Functions that allocate objects return <kbd>nil</kbd> for failure; in such cases the system error string may be interrogated (such as by the <kbd>%r</kbd> print format) for more information.<p>
+</a><a name="841854">
+<h2> See Also</h2>
+</a><a name="841855">
+<a href="mpgs97.htm#855746"><em>ir</em></a>, <a href="mpgs66.htm#843703"><em>Limbo Prefab Modules</em></a>, <a href="mpgs91.htm#859355"><em>tk</em></a>, <em>font</em>, and <a href="mpgs128.htm#849610"><em>image</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs35.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs37.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

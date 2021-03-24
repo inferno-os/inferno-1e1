@@ -1,0 +1,39 @@
+<../../mkconfig
+<../../$SYSHOST/mkhost
+<../../$OBJDIR/mkfile
+
+TARG=ql
+OFILES=\
+	asm.$O\
+	list.$O\
+	obj.$O\
+	optab.$O\
+	pass.$O\
+	span.$O\
+	enam.$O\
+	cputime.$O\
+	noop.$O\
+	asmout.$O\
+	cnam.$O\
+	sched.$O
+
+HFILES=\
+	l.h\
+	../qc/q.out.h\
+	../mk/ar.h\
+
+# ar.h is located in ../mk directory.
+CFLAGS= $CFLAGS -I../mk
+
+# libbio.a depends on lib9.a so order is important
+LIBS=bio 9
+LDSYSLIBS=
+
+<../../$SYSTARG/mkone
+
+enam.$O:	../qc/enam.c
+	$CC $CFLAGS ../qc/enam.c
+
+
+package:QV:
+	$TRUE

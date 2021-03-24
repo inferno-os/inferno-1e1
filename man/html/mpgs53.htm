@@ -1,0 +1,79 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs52.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs54.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="842987">
+<center><h1> sign </h1></center>
+</a><a name="842988">
+Keyring: sha, md5, sign, verify - cryptographic digests and digital signatures<p>
+</a><a name="842989">
+<h2> Synopsis</h2>
+</a><pre><tt>include "keyring.m";
+kr:= load Keyring Keyring-&gt;PATH;
+sha:  fn(buf : array of byte,
+          nu : int,
+       digest: array of byte,
+        state: ref DigestState): ref DigestState;
+md5:  fn(buf : array of byte,
+          n  : int,
+       digest: array of byte,
+        state: ref DigestState): ref DigestState;
+sign:  fn(sk : ref SK,
+         exp : int,
+        state: ref DigestState,
+          ha : string)    : ref Certificate;
+verify:fn(pk : ref PK,
+         cert: ref Certificate,
+        state: ref DigestState): int;
+</tt></pre></p><a name="843007">
+<h2> Description</h2>
+</a><a name="843008">
+<h3> sha (buf, nu, digest, state) and  md5 (buf, nu, digest, state)</h3>
+</a><a name="843010">
+ Functions sha and md5 are cryptographically secure hash functions that produce output called a message digest. The interface allows sha and md5 functions to be called iteratively to perform a single digest on multiple buffers full of data. The <em>state</em> is chained from one call to another in the DigestState adt. The first call returns a newly allocated DigestState which is then used in subsequent calls. When digest is non-nil, the hash is completed and copied into the <em>digest</em> byte array.<p>
+</a><a name="843011">
+For example a program to read a file and hash it might contain the following inner loop:<p>
+</a><pre><tt>n  := sys-&gt;read(fd, buf, len buf);   
+state:= kr-&gt;sha(buf, n, nil, nil);   
+while((n = sys-&gt;read(fd, buf, len buf)) &gt; 0)
+      kr-&gt;sha(buf, n, nil, state);   
+digest:= array[kr-&gt;SHAdlen] of byte;   
+kr-&gt;sha(buf, 0, digest, state); 
+</tt></pre></p><a name="843019">
+<p>
+</a><a name="872933">
+The sha function returns a 20-byte hash (kr-&gt;SHAdlen), md5 a 16-byte one (kr-&gt;MD5dlen).<p>
+</a><a name="843020">
+<h3> sign (sk, exp, state, ha)</h3>
+</a><a name="843021">
+The sign function is used to create a digital signature of a digest from the concatenation of a message, the name of the signer, and an expiration time. The <em>state</em> parameter is the digest state after running sha or md5 over the message. The <em>ha</em> parameter is a string defining the hash algorithm to use; it can be "sha" or "md5". The sign function extends the digest to cover signer's name (taken from the private key, <em>sk</em>) and the expiration time. It then returns a certificate containing the digital signature of the digest, signer name, hash algorithm and signature algorithm. If any parameters are invalid, sign returns the nil value. The signature algorithm is implied by the type of the private key.<p>
+</a><a name="843022">
+<h3> verify (pk, cert, state)</h3>
+</a><a name="843023">
+The verify function uses a public key to verify a certificate. Once again, <em>state</em> is the digest state after running sha or md5 over the message.<p>
+</a><a name="843024">
+<h2> See Also</h2>
+</a><a name="843025">
+B. Schneier, <em>Applied Cryptography</em>, 1996, J. Wiley &amp; Sons, Inc.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs52.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs54.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

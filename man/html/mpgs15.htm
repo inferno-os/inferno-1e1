@@ -1,0 +1,235 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs14.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs16.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="840996">
+<center><h1> ls</h1></center>
+</a><a name="840997">
+ls - list contents of directory<p>
+</a><a name="840998">
+<h2> Synopsis</h2>
+</a><pre><tt>ls [-dlpqrstu] <em>files...
+</em></tt></pre></p><a name="841000">
+<h2> Description</h2>
+</a><a name="841001">
+For each directory argument, ls lists (to standard output) the contents of the directory; for each file argument, ls repeats its name and any other information requested. When no argument is given, the current directory is listed.<p>
+</a><a name="841002">
+<h2> Options</h2>
+</a><a name="841036">
+There are a number format/content options: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="841005">
+-d<p>
+</a><td><a name="841007">
+If argument is a directory, list it, not its contents.<p>
+</a>
+<tr><td><a name="841009">
+-l<p>
+</a><td><a name="841011">
+List in long format, giving mode (see below), file system type (e.g., for devices, the <kbd>#</kbd> code letter that names it; see <a href="mpgs105.htm#859375"><em>Inferno Devices</em></a>), the instance or subdevice number, owner, group, size in bytes, and time of last modification for each file.<p>
+</a>
+<tr><td><a name="841013">
+-p<p>
+</a><td><a name="841015">
+Print only the final path element of each file name.<p>
+</a>
+<tr><td><a name="841017">
+-q<p>
+</a><td><a name="841019">
+Include the <em>qid</em> (see <strong><a href="mpgs87.htm#844841"></strong><em>stat</em><strong></a></strong>) of each file. By default, the output is sorted alphabetically by name; however, there are a number of sorting options.<p>
+</a>
+<tr><td><a name="841021">
+-r<p>
+</a><td><a name="841023">
+Reverse the order of sort.<p>
+</a>
+<tr><td><a name="841025">
+-s<p>
+</a><td><a name="841027">
+Sort by size.<p>
+</a>
+<tr><td><a name="841029">
+-t<p>
+</a><td><a name="841031">
+Sort by time modified (latest first) instead of by name.<p>
+</a>
+<tr><td><a name="841033">
+-u<p>
+</a><td><a name="841035">
+Sort by time of last access.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="841037">
+<h3> The Long Format </h3>
+</a><a name="865896">
+The information given under the <kbd>-l </kbd>format consists of eight fields: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="865789">
+mode<p>
+</a><td colspan=2 rowspan=1><a name="865791">
+The <em>mode</em> contains ten characters. The first character is <p>
+</a>
+<tr><td><a name="865795">
+<p>
+</a><td><a name="865797">
+<kbd>d</kbd><p>
+</a><td><a name="865799">
+if the entry is a directory;<p>
+</a>
+<tr><td><a name="865801">
+<p>
+</a><td><a name="865803">
+<kbd>-</kbd><p>
+</a><td><a name="865805">
+if the entry is a plain file.<p>
+</a>
+<tr><td><a name="865807">
+<p>
+</a><td colspan=2 rowspan=1><a name="865809">
+The remaining nine characters are interpreted as three sets of three bits each. The first set refers to owner (<em>uid</em>) permissions; the next to permissions to others in the same user-group (<em>gid</em>); and the last to all others.<p>
+</a>
+<tr><td><a name="865813">
+<p>
+</a><td colspan=2 rowspan=1><a name="865815">
+Within each set the three characters indicate permission respectively to read, to write, or to execute the file as a program.<p>
+</a>
+<tr><td><a name="865819">
+<p>
+</a><td colspan=2 rowspan=1><a name="865821">
+For a directory, `execute' permission means permission to search the directory for a specified file.<p>
+</a>
+<tr><td><a name="865825">
+<p>
+</a><td colspan=2 rowspan=1><a name="865827">
+The permissions are indicated as follows:<p>
+</a>
+<tr><td><a name="865831">
+<p>
+</a><td><a name="865833">
+<kbd>r</kbd><p>
+</a><td><a name="865835">
+if the file is readable;<p>
+</a>
+<tr><td><a name="865837">
+<p>
+</a><td><a name="865839">
+<kbd>w</kbd><p>
+</a><td><a name="865841">
+if the file is writable;<p>
+</a>
+<tr><td><a name="865843">
+<p>
+</a><td><a name="865845">
+<kbd>x</kbd><p>
+</a><td><a name="865847">
+if the file is executable;<p>
+</a>
+<tr><td><a name="865849">
+<p>
+</a><td><a name="865851">
+<kbd>-</kbd><p>
+</a><td><a name="865853">
+if none of the above permissions is granted.<p>
+</a>
+<tr><td><a name="865855">
+devtype<p>
+</a><td colspan=2 rowspan=1><a name="865857">
+The <em>device type</em> for the file, a single character representing the root of a file tree implemented by a particular kernel device driver.<p>
+</a>
+<tr><td><a name="865861">
+<em>device</em> <em>number</em><p>
+</a><td colspan=2 rowspan=1><a name="865863">
+A number provided by the file system server.<p>
+</a>
+<tr><td><a name="865867">
+uid<p>
+</a><td colspan=2 rowspan=1><a name="865869">
+The user identity string.<p>
+</a>
+<tr><td><a name="865873">
+gid<p>
+</a><td colspan=2 rowspan=1><a name="865875">
+The group identity string.<p>
+</a>
+<tr><td><a name="865879">
+size<p>
+</a><td colspan=2 rowspan=1><a name="865881">
+The size of the file in bytes. <p>
+</a>
+<tr><td><a name="865885">
+<em>modification</em> <em>time</em><p>
+</a><td colspan=2 rowspan=1><a name="865887">
+The modification time of the file formatted per <kbd>Daytime-&gt;filet: </kbd>files less than 6 months old appear with month, day-of-month, and time-of-day; files over 6 months old show appear with month, day-of-month, and year.<p>
+</a>
+<tr><td><a name="865891">
+name<p>
+</a><td colspan=2 rowspan=1><a name="865893">
+The file name.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="865897">
+<h2> Notes</h2>
+</a><a name="865898">
+The sorting options correspond to the <em>sortkey</em> options of the <em>readdir</em> module. See <a href="mpgs59.htm#862154"><em>readdir</em></a>. <p>
+</a><a name="841179">
+<h2> See Also 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="875252">
+<a href="mpgs87.htm#844841"><em>stat</em></a><p>
+</a><td><a name="875254">
+for general discussion of file attributes<p>
+</a>
+<tr><td><a name="875259">
+<a href="mpgs105.htm#859375"><em>Inferno Devices</em></a><p>
+</a><td><a name="875261">
+for discussion of device type<p>
+</a>
+<tr><td><a name="875266">
+<a href="mpgs122.htm#848227"><em>stat</em></a><p>
+</a><td><a name="875268">
+for definition of modification time<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs14.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs16.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

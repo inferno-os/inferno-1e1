@@ -1,0 +1,25 @@
+#ifdef NOSPOOKS
+#include "lib9.h"
+#include <libcrypt.h>
+
+void
+buffer3OFMEncrypt(uchar *buf, uchar mask[8], uchar key[3][8], int len)
+{
+	uchar *block;
+	DES3state s;
+	int i;
+
+	setupDES3state(&s, key, mask);
+	for (i=8, block=buf; i<=len; i+=8, block+=8)
+		block3OFMEncrypt(block, mask, key, 8, &s);
+	
+	if ((len & 7) != 0)
+		block3OFMEncrypt(block, mask, key, len&7, &s);
+}
+
+void
+buffer3OFMDecrypt(uchar *buf, uchar mask[8], uchar key[3][8], int len)
+{
+	buffer3OFMEncrypt(buf, mask, key, len);
+}
+#endif NOSPOOKS

@@ -1,0 +1,72 @@
+BIN=		$ROOT_DEVEL/$OBJDIR/bin
+libs=		${LIBS:%=$ROOT_DEVEL/$OBJDIR/lib/lib%.$A}
+
+all:V:		$O.out
+
+$O.out:	$OFILES $libs
+	$LD $LDFLAGS $OFILES $libs $LDSYSLIBS -lc
+
+%.$O:	$HFILES		# don't combine with following %.$O rules
+
+%.$O:	%.c
+	$CC $CFLAGS $stem.c
+
+%.$O:	%.s
+	$AS $ASFLAGS $stem.s
+
+y.tab.h y.tab.c:	$YFILES
+	$YACC $YFLAGS $YFILES
+
+install:V:	install-std
+
+install-std:V:	all\
+		$BIN\
+		$BIN/$TARG\
+
+uninstall:V:	uninstall-std
+
+uninstall-std:V:
+	$RM $BIN/$TARG
+
+package:V:	package-std
+
+package-std:V:	all\
+		$PREFIX_PKG/$SYSTARG\
+		$PREFIX_PKG/$SYSTARG/$OBJTYPE\
+		$PREFIX_PKG/$SYSTARG/$OBJTYPE/bin\
+		$PREFIX_PKG/$SYSTARG/$OBJTYPE/bin/$TARG
+
+$BIN/%:	$O.out
+	$RM $BIN/$stem
+	$CP $O.out $BIN/$stem
+
+$PREFIX_PKG/$SYSTARG/$OBJTYPE/bin/%:	$O.out
+	$RM $PREFIX_PKG/$SYSTARG/$OBJTYPE/bin/$stem
+	$CP $O.out $PREFIX_PKG/$SYSTARG/$OBJTYPE/bin/$stem
+
+installall:V:
+	for(objtype in $CPUS)
+		mk install
+
+nuke:V:	nuke-std
+
+#	Normally, one would remove y.tab.?, but that causes
+#	trouble for Inferno.  Leave the yacc-generated files
+#	around.  The mkfiles will regenerate them when the
+#	yacc input changes.
+
+nuke-std:EV:
+	$RM *.[$OS] [$OS].out core y.debug y.output
+#	$RM y.tab.?
+
+clean:V:	clean-std
+
+clean-std:EV:
+	$RM *.[$OS] [$OS].out core y.debug y.output
+#	$RM y.tab.?
+
+$BIN \
+$PREFIX_PKG/$SYSTARG \
+$PREFIX_PKG/$SYSTARG/$OBJTYPE \
+$PREFIX_PKG/$SYSTARG/$OBJTYPE/bin :
+	$MKDIR $target

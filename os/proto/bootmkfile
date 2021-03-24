@@ -1,0 +1,82 @@
+CONF=protoboot
+CONFLIST=proto protoboot
+
+objtype=29000
+</$objtype/mkfile
+CFLAGS=-w -I/usr/inferno/include
+
+DEV=`{rc ../port/mkdevlist $CONF}
+LINK=`{rc ../port/mklinklist $CONF}
+MISC=`{rc ../port/mkmisclist $CONF}
+#IP=`{builtin cd ../ip; ls *.c | sed 's/\.c/.'$O'/'}
+IP=
+
+OBJ=\
+	l.$O\
+	alarm.$O\
+	alloc.$O\
+	chan.$O\
+	clock.$O\
+	convM2S.$O\
+	dbg.$O\
+	dev.$O\
+	exportfs.$O\
+	fault.$O\
+	fault29000.$O\
+	getfields.$O\
+	latin1.$O\
+	main.$O\
+	mmu.$O\
+	ns.$O\
+	page.$O\
+	pgrp.$O\
+	print.$O\
+	proc.$O\
+	qio.$O\
+	qlock.$O\
+	sinkbits.$O\
+	sysfile.$O\
+	sysproc.$O\
+	taslock.$O\
+	trap.$O\
+	$DEV\
+	$IP $MISC $LINK\
+	boot.$O\
+
+LIBS=	/usr/inferno/interp/libinterp.a$O\
+	/usr/inferno/prefab/libprefab.a$O\
+	/usr/inferno/layer/liblayer.a$O\
+	/usr/inferno/image/libimage.a$O\
+	/usr/inferno/memimage/libmemimage.a$O\
+
+b$CONF:	$OBJ $CONF.c $LIBS
+	$CC $CFLAGS '-DKERNDATE='`{date -n} $CONF.c
+	$LD -s -o $target -T0x0 -D0x40000400 -R0 -H0 -l $OBJ $CONF.$O $LIBS -lc -lcrypt
+
+install:V: b$CONF
+	cp b$CONF /386/tv$CONF
+	cp b$CONF /n/bootes/386/tv$CONF
+
+<../port/portmkfile
+
+clock.$O devether.$O fault386.$O main.$O trap.$O:	/$objtype/include/ureg.h
+
+
+/usr/inferno/os/init/protoinit.obj: /dev/cons
+	builtin cd /usr/inferno/os/init
+	mk protoinit.obj
+
+osinit.root.s:	/usr/inferno/os/init/protoinit.obj
+		cp $prereq osinit.out
+		../port/mkroot osinit osinit
+
+phone.root.s:	/usr/inferno/icons/phone.bit
+		cp $prereq phone.out
+		../port/mkroot phone phone
+
+att.root.s:	/usr/inferno/icons/att.bit
+		cp $prereq att.out
+		../port/mkroot att att
+
+%.$O:	../ip/%.c
+	$CC $CFLAGS ../ip/$stem.c

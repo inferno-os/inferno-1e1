@@ -1,0 +1,51 @@
+all:V:		$ROOT_DEVEL/$OBJDIR/lib/$LIB
+
+$ROOT_DEVEL/$OBJDIR/lib/$LIB:\
+		$ROOT_DEVEL/$OBJDIR\
+		$ROOT_DEVEL/$OBJDIR/lib\
+		$OFILES			# force archive even when not needed
+	$AR $ARFLAGS $target $OFILES
+
+%.$O:	$HFILES		# don't combine with following %.$O rules
+
+%.$O:	%.c
+	$CC $CFLAGS $stem.c
+
+%.$O:	%.s
+	$AS $ASFLAGS $stem.s
+	
+%.install:n:	%.$O
+	$AR vu $ROOT_DEVEL/$OBJDIR/lib/$LIB $stem.$O
+
+install:QV:	all
+
+uninstall:V:	uninstall-std
+
+uninstall-std:V:
+	$RM $ROOT_DEVEL/$OBJDIR/lib/$LIB
+
+installall:V:
+	for(objtype in $CPUS) mk install
+
+%.all:V:
+	for(objtype in $CPUS)
+		mk $stem
+
+%.installall:V:
+	for(objtype in $CPUS)
+		mk $stem
+
+clean:V:	clean-std
+
+clean-std:EV:
+	$RM *.[$OS] [$OS].out
+
+nuke:V:		nuke-std
+
+nuke-std:EV:
+	$RM *.[$OS] [$OS].out
+
+$ROOT_DEVEL/$OBJDIR \
+$ROOT_DEVEL/$OBJDIR/lib \
+$PREFIX_PKG/$OBJDIR/lib :
+	$MKDIR $target || echo mkdir did not work

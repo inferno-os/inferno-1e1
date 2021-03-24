@@ -1,0 +1,826 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs1.htm"><img src="Next.gif" alt="[Next]" align=bottom></a>
+<hr><br>
+ 
+<a name="841656">
+<p>
+</a><a name="857393">
+<h1>Inferno Reference </h1>
+</a>
+<hr><p><a name="857394">
+<p>
+</a><a name="910586">
+This reference contains a details of the Inferno utilities and commands. They are grouped as follows:<p>
+</a><a name="910590">
+<a href="mpgs1.htm#859095"><em>Command Line Utilities</em></a><p>
+</a><a name="910594">
+<a href="mpgs32.htm#854398"><em>Environmental Utilities</em></a><p>
+</a><a name="910598">
+<a href="mpgs36.htm#869014"><em>Limbo Modules</em></a><p>
+</a><a name="910602">
+<a href="mpgs105.htm#859375"><em>Inferno Devices</em></a><p>
+</a><a name="910606">
+<a href="mpgs113.htm#848518"><em>Inferno File Protocol, Styx</em></a><p>
+</a><a name="910610">
+<a href="mpgs125.htm#853308"><em>Format Specifications</em></a><p>
+</a><a name="910614">
+<a href="mpgs131.htm#854393"><em>Daemons</em></a><p>
+</a><a name="910615">
+<h2> Command Line Utilities</h2>
+</a><a name="910830">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="910621">
+<a href="mpgs2.htm#848892"><em>bind</em></a><p>
+</a><td><a name="910623">
+change name space<p>
+</a>
+<tr><td><a name="910628">
+<a href="mpgs3.htm#840364"><em>cat</em></a><p>
+</a><td><a name="910630">
+concatenate files<p>
+</a>
+<tr><td><a name="910635">
+<a href="mpgs4.htm#840379"><em>cd</em></a><p>
+</a><td><a name="910637">
+change working directory<p>
+</a>
+<tr><td><a name="910642">
+<a href="mpgs5.htm#840389"><em>chmod</em></a><p>
+</a><td><a name="910644">
+change file mode (permissions)<p>
+</a>
+<tr><td><a name="910649">
+<a href="mpgs6.htm#840426"><em>cmp</em></a><p>
+</a><td><a name="910651">
+compare files<p>
+</a>
+<tr><td><a name="910656">
+<a href="mpgs7.htm#840441"><em>cp</em></a><p>
+</a><td><a name="910658">
+copy file<p>
+</a>
+<tr><td><a name="910663">
+<a href="mpgs8.htm#840464"><em>cs</em></a><p>
+</a><td><a name="910665">
+start connection server daemon<p>
+</a>
+<tr><td><a name="910670">
+<a href="mpgs9.htm#840494"><em>date</em></a><p>
+</a><td><a name="910672">
+print the date<p>
+</a>
+<tr><td><a name="910677">
+<a href="mpgs10.htm#860092"><em>diff</em></a><p>
+</a><td><a name="910679">
+differential file comparator<p>
+</a>
+<tr><td><a name="910684">
+<a href="mpgs11.htm#840558"><em>du</em></a><p>
+</a><td><a name="910686">
+disk usage<p>
+</a>
+<tr><td><a name="910691">
+<a href="mpgs12.htm#840597"><em>echo</em></a><p>
+</a><td><a name="910693">
+print arguments<p>
+</a>
+<tr><td><a name="910698">
+<a href="mpgs13.htm#840718"><em>grep</em></a><p>
+</a><td><a name="910700">
+search file(s) for a pattern<p>
+</a>
+<tr><td><a name="910705">
+<a href="mpgs14.htm#840746"><em>kill</em></a><p>
+</a><td><a name="910707">
+terminate process(es)<p>
+</a>
+<tr><td><a name="910712">
+<a href="mpgs15.htm#840996"><em>ls</em></a><p>
+</a><td><a name="910714">
+list contents of directory<p>
+</a>
+<tr><td><a name="910719">
+<a href="mpgs16.htm#841180"><em>mathcalc</em></a><p>
+</a><td><a name="910721">
+interface to a TclLib calculator module<p>
+</a>
+<tr><td><a name="910726">
+<a href="mpgs17.htm#841188"><em>mkdir</em></a><p>
+</a><td><a name="910728">
+make a directory<p>
+</a>
+<tr><td><a name="910733">
+<a href="mpgs18.htm#841199"><em>mv</em></a><p>
+</a><td><a name="910735">
+rename/move files<p>
+</a>
+<tr><td><a name="910740">
+<a href="mpgs19.htm#841214"><em>netstat</em></a><p>
+</a><td><a name="910742">
+rename/move files<p>
+</a>
+<tr><td><a name="910747">
+<a href="mpgs20.htm#841239"><em>nsbuild</em></a><p>
+</a><td><a name="910749">
+build Inferno name space<p>
+</a>
+<tr><td><a name="910754">
+<a href="mpgs21.htm#841248"><em>os</em></a><p>
+</a><td><a name="910756">
+interface OS commands (non-native Inferno only)<p>
+</a>
+<tr><td><a name="910761">
+<a href="mpgs22.htm#877063"><em>p</em></a><p>
+</a><td><a name="910763">
+paginate<p>
+</a>
+<tr><td><a name="910768">
+<a href="mpgs23.htm#841279"><em>ps</em></a><p>
+</a><td><a name="910770">
+process status<p>
+</a>
+<tr><td><a name="910775">
+<a href="mpgs24.htm#841293"><em>pwd</em></a><p>
+</a><td><a name="910777">
+print working directory<p>
+</a>
+<tr><td><a name="910782">
+<a href="mpgs25.htm#841303"><em>rm</em></a><p>
+</a><td><a name="910784">
+remove file(s)<p>
+</a>
+<tr><td><a name="910789">
+<a href="mpgs26.htm#841311"><em>sh</em></a><p>
+</a><td><a name="910791">
+command line interface to the Inferno system<p>
+</a>
+<tr><td><a name="910796">
+<a href="mpgs27.htm#864356"><em>sleep</em></a><p>
+</a><td><a name="910798">
+suspend execution for an interval<p>
+</a>
+<tr><td><a name="910803">
+<a href="mpgs28.htm#849207"><em>time</em></a><p>
+</a><td><a name="910805">
+time command execution<p>
+</a>
+<tr><td><a name="910810">
+<a href="mpgs29.htm#877121"><em>unicode</em></a><p>
+</a><td><a name="910812">
+interpret Unicode characters<p>
+</a>
+<tr><td><a name="910820">
+<a href="mpgs30.htm#841459"><em>wc</em></a><a href="mpgs31.htm#841491"><em>wish</em></a><p>
+</a><td><a name="910822">
+word (and other things) counter<p>
+</a>
+<tr><td><a name="910827">
+<a href="mpgs31.htm#841491"><em>wish</em></a><p>
+</a><td><a name="910829">
+interface to the Tk graphics toolkit<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="910831">
+<h2> Environmental Utilities</h2>
+</a><a name="910858">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="910837">
+<a href="mpgs33.htm#854433"><em>asm</em></a><p>
+</a><td><a name="910839">
+ Dis assembler<p>
+</a>
+<tr><td><a name="910844">
+<a href="mpgs34.htm#854583"><em>emu</em></a><p>
+</a><td><a name="910846">
+ Inferno emulator<p>
+</a>
+<tr><td><a name="910851">
+<a href="mpgs35.htm#854712"><em>limbo</em></a><p>
+</a><td><a name="910853">
+ Limbo compiler<p>
+</a>
+<tr><td><a name="910855">
+mk<p>
+</a><td><a name="910857">
+Maintain (make) related files.  See the chapter on <em>Using Mk </em>in the <em>Inferno Build Guide</em>.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="910859">
+<h2> Draw Modules</h2>
+</a><a name="910917">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><th><a name="910865">
+<a href="mpgs37.htm#841856"><em>context</em></a><p>
+</a><th><a name="910867">
+graphics environment<p>
+</a>
+<tr><td><a name="910872">
+<a href="mpgs38.htm#841959"><em>display</em></a><p>
+</a><td><a name="910874">
+connection to draw device<p>
+</a>
+<tr><td><a name="910879">
+<a href="mpgs40.htm#842125"><em>font</em></a><p>
+</a><td><a name="910881">
+character images for Unicode text<p>
+</a>
+<tr><td><a name="910886">
+<a href="mpgs41.htm#842167"><em>image</em></a><p>
+</a><td><a name="910888">
+pictures and drawing<p>
+</a>
+<tr><td><a name="910893">
+<a href="mpgs42.htm#852585"><em>point</em></a><p>
+</a><td><a name="910895">
+coordinate position<p>
+</a>
+<tr><td><a name="910900">
+<a href="mpgs43.htm#866719"><em>pointer</em></a><p>
+</a><td><a name="910902">
+state of a pointer device such as a mouse<p>
+</a>
+<tr><td><a name="910907">
+<a href="mpgs44.htm#842431"><em>rectangle</em></a><p>
+</a><td><a name="910909">
+rectangular portion of the plane<p>
+</a>
+<tr><td><a name="910914">
+<a href="mpgs45.htm#842503"><em>screen</em></a><p>
+</a><td><a name="910916">
+type to define the abstract data structures for the windows on a display, or subwindows within a window<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="910918">
+<h2> Keyring Modules</h2>
+</a><a name="910969">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="910924">
+<a href="mpgs47.htm#842826"><em>auth</em></a><p>
+</a><td><a name="910926">
+authenticate a connection<p>
+</a>
+<tr><td><a name="910931">
+<a href="mpgs48.htm#842860"><em>certtostr</em></a><p>
+</a><td><a name="910933">
+encryption key conversion functions<p>
+</a>
+<tr><td><a name="910938">
+<a href="mpgs49.htm#842887"><em>gensk</em></a><p>
+</a><td><a name="910940">
+generate keys<p>
+</a>
+<tr><td><a name="910945">
+<a href="mpgs50.htm#876613"><em>getstring</em></a><p>
+</a><td><a name="910947">
+delimited I/O<p>
+</a>
+<tr><td><a name="910952">
+<a href="mpgs51.htm#842934"><em>ipint</em></a><p>
+</a><td><a name="910954">
+infinite precision integer utility functions<p>
+</a>
+<tr><td><a name="910959">
+<a href="mpgs52.htm#853893"><em>login</em></a><p>
+</a><td><a name="910961">
+get an Authinfo adt from a certificate authority<p>
+</a>
+<tr><td><a name="910966">
+<a href="mpgs53.htm#842987"><em>sign</em></a><p>
+</a><td><a name="910968">
+cryptographic digests and digital signatures<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="910970">
+<h2> Library Module</h2>
+</a><a name="911021">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="910976">
+<a href="mpgs55.htm#856758"><em>daytime</em></a><p>
+</a><td><a name="910978">
+time conversions<p>
+</a>
+<tr><td><a name="910983">
+<a href="mpgs56.htm#843102"><em>filepat</em></a><p>
+</a><td><a name="910985">
+file pattern matching<p>
+</a>
+<tr><td><a name="910990">
+<a href="mpgs57.htm#843126"><em>newns</em></a><p>
+</a><td><a name="910992">
+build a new name space from a description file<p>
+</a>
+<tr><td><a name="910997">
+<a href="mpgs58.htm#843147"><em>pipe</em></a><p>
+</a><td><a name="910999">
+get read/write file pair for a pipe<p>
+</a>
+<tr><td><a name="911004">
+<a href="mpgs59.htm#862154"><em>readdir</em></a><p>
+</a><td><a name="911006">
+read directory and sort files<p>
+</a>
+<tr><td><a name="911011">
+<a href="mpgs60.htm#843216"><em>string</em></a><p>
+</a><td><a name="911013">
+string operations<p>
+</a>
+<tr><td><a name="911018">
+<a href="mpgs61.htm#843286"><em>workdir</em></a><p>
+</a><td><a name="911020">
+discover the name of the current working directory<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="911022">
+<h2> Math Modules</h2>
+</a><a name="911045">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="911028">
+<a href="mpgs63.htm#843357"><em>elem</em></a><p>
+</a><td><a name="911030">
+elementary functions of applied mathematics<p>
+</a>
+<tr><td><a name="911035">
+<a href="mpgs64.htm#843446"><em>fp</em></a><p>
+</a><td><a name="911037">
+floating point operations<p>
+</a>
+<tr><td><a name="911042">
+<a href="mpgs65.htm#843640"><em>linalg</em></a><p>
+</a><td><a name="911044">
+linear algebra primitives<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="911046">
+<h2> Prefab Modules</h2>
+</a><a name="911076">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="911052">
+<a href="mpgs67.htm#843716"><em>compound</em></a><p>
+</a><td><a name="911054">
+windows for ITV toolkit<p>
+</a>
+<tr><td><a name="911059">
+<a href="mpgs68.htm#843819"><em>element</em></a><p>
+</a><td><a name="911061">
+menu and display elements for ITV toolkit<p>
+</a>
+<tr><td><a name="911066">
+<a href="mpgs69.htm#844068"><em>environ</em></a><p>
+</a><td><a name="911068">
+environment for ITV toolkit to provide a graphics framework for a item collections<p>
+</a>
+<tr><td><a name="911073">
+<a href="mpgs70.htm#844093"><em>style</em></a><p>
+</a><td><a name="911075">
+fonts and colors for ITV toolkit<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="911077">
+<h2> System Modules</h2>
+</a><a name="911205">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="911083">
+<a href="mpgs72.htm#844334"><em>bind</em></a><p>
+</a><td><a name="911085">
+change file name space<p>
+</a>
+<tr><td><a name="911090">
+<a href="mpgs73.htm#844368"><em>byte2char</em></a><p>
+</a><td><a name="911092">
+convert between bytes and characters<p>
+</a>
+<tr><td><a name="911097">
+<a href="mpgs74.htm#844399"><em>chdir</em></a><p>
+</a><td><a name="911099">
+change working directory<p>
+</a>
+<tr><td><a name="911104">
+<a href="mpgs75.htm#844412"><em>dial</em></a><p>
+</a><td><a name="911106">
+make network connections<p>
+</a>
+<tr><td><a name="911111">
+<a href="mpgs76.htm#844528"><em>dirread</em></a><p>
+</a><td><a name="911113">
+read directory<p>
+</a>
+<tr><td><a name="911118">
+<a href="mpgs77.htm#844541"><em>dup</em></a><p>
+</a><td><a name="911120">
+duplicate an open file descriptor<p>
+</a>
+<tr><td><a name="911125">
+<a href="mpgs78.htm#854102"><em>file2chan</em></a><p>
+</a><td><a name="911127">
+create file connected to Limbo channel<p>
+</a>
+<tr><td><a name="911132">
+<a href="mpgs79.htm#844640"><em>millisec</em></a><p>
+</a><td><a name="911134">
+millisecond timer<p>
+</a>
+<tr><td><a name="911139">
+<a href="mpgs80.htm#844653"><em>open</em></a><p>
+</a><td><a name="911141">
+open/create a file for reading or writing<p>
+</a>
+<tr><td><a name="911146">
+<a href="mpgs81.htm#844675"><em>pctl</em></a><p>
+</a><td><a name="911148">
+process control<p>
+</a>
+<tr><td><a name="911153">
+<a href="mpgs82.htm#844711"><em>print</em></a><p>
+</a><td><a name="911155">
+print formatted output<p>
+</a>
+<tr><td><a name="911160">
+<a href="mpgs83.htm#844766"><em>read</em></a><p>
+</a><td><a name="911162">
+read or write file<p>
+</a>
+<tr><td><a name="911167">
+<a href="mpgs84.htm#844787"><em>remove</em></a><p>
+</a><td><a name="911169">
+remove a file<p>
+</a>
+<tr><td><a name="911174">
+<a href="mpgs85.htm#844801"><em>seek</em></a><p>
+</a><td><a name="911176">
+change file offset<p>
+</a>
+<tr><td><a name="911181">
+<a href="mpgs86.htm#844830"><em>sleep</em></a><p>
+</a><td><a name="911183">
+delay execution<p>
+</a>
+<tr><td><a name="911188">
+<a href="mpgs87.htm#844841"><em>stat</em></a><p>
+</a><td><a name="911190">
+get and put file status<p>
+</a>
+<tr><td><a name="911195">
+<a href="mpgs88.htm#844934"><em>tokenize</em></a><p>
+</a><td><a name="911197">
+split string into words<p>
+</a>
+<tr><td><a name="911202">
+<a href="mpgs89.htm#844949"><em>utfbytes</em></a><p>
+</a><td><a name="911204">
+compute the Unicode length of a UTF byte sequence<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="911206">
+<h2> Toolkit Modules</h2>
+</a><a name="911222">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="911212">
+<a href="mpgs91.htm#859355"><em>tk</em></a><p>
+</a><td><a name="911214">
+graphics toolkit<p>
+</a>
+<tr><td><a name="911219">
+<a href="mpgs92.htm#844999"><em>tklib</em></a><p>
+</a><td><a name="911221">
+Tk user interface functions<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="911223">
+<h2> Miscellaneous Modules</h2>
+</a><a name="911302">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="911229">
+<a href="mpgs94.htm#855571"><em>bufio</em></a><p>
+</a><td><a name="911231">
+buffered input/output module<p>
+</a>
+<tr><td><a name="911236">
+<a href="mpgs95.htm#855656"><em>devpointer</em></a><p>
+</a><td><a name="911238">
+I/O interface for the pointer device<p>
+</a>
+<tr><td><a name="911243">
+<a href="mpgs96.htm#855693"><em>imagefile</em></a><p>
+</a><td><a name="911245">
+processing external image file formats<p>
+</a>
+<tr><td><a name="911250">
+<a href="mpgs97.htm#855746"><em>ir</em></a><p>
+</a><td><a name="911252">
+infrared remote control<p>
+</a>
+<tr><td><a name="911257">
+<a href="mpgs98.htm#855907"><em>login</em></a><p>
+</a><td><a name="911259">
+introduction to the Login module<p>
+</a>
+<tr><td><a name="911264">
+<a href="mpgs99.htm#856002"><em>mpeg</em></a><p>
+</a><td><a name="911266">
+interface to the mpeg device driver<p>
+</a>
+<tr><td><a name="911271">
+<a href="mpgs100.htm#894882"><em>regex</em></a><p>
+</a><td><a name="911273">
+regular expression recognizer<p>
+</a>
+<tr><td><a name="911278">
+<a href="mpgs101.htm#856132"><em>sh</em></a><p>
+</a><td><a name="911280">
+command interface<p>
+</a>
+<tr><td><a name="911285">
+<a href="mpgs102.htm#856162"><em>srv</em></a><p>
+</a><td><a name="911287">
+miscellaneous services from the host operating system<p>
+</a>
+<tr><td><a name="911292">
+<a href="mpgs103.htm#856198"><em>volume</em></a><p>
+</a><td><a name="911294">
+volume control for an infrared interface<p>
+</a>
+<tr><td><a name="911299">
+<a href="mpgs104.htm#856249"><em>wmlib</em></a><p>
+</a><td><a name="911301">
+window manager toolkit<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="911303">
+<h2> Inferno Devices</h2>
+</a><a name="911354">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="911309">
+<a href="mpgs106.htm#845700"><em>cons</em></a><p>
+</a><td><a name="911311">
+console device<p>
+</a>
+<tr><td><a name="911316">
+<a href="mpgs107.htm#845820"><em>cmd</em></a><p>
+</a><td><a name="911318">
+interface to host operating system commands<p>
+</a>
+<tr><td><a name="911323">
+<a href="mpgs108.htm#876580"><em>draw</em></a><p>
+</a><td><a name="911325">
+graphics device<p>
+</a>
+<tr><td><a name="911330">
+<a href="mpgs109.htm#846002"><em>ip</em></a><p>
+</a><td><a name="911332">
+TCP, UDP network protocols over IP<p>
+</a>
+<tr><td><a name="911337">
+<a href="mpgs110.htm#846072"><em>prog</em></a><p>
+</a><td><a name="911339">
+interface to running programs<p>
+</a>
+<tr><td><a name="911344">
+<a href="mpgs111.htm#895851"><em>root</em></a><p>
+</a><td><a name="911346">
+the root file system<p>
+</a>
+<tr><td><a name="911351">
+<a href="mpgs112.htm#846288"><em>ssl</em></a><p>
+</a><td><a name="911353">
+secure sockets layer device<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="911355">
+<h2> Inferno file protocol, Styx</h2>
+</a><a name="911434">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="911361">
+<a href="mpgs114.htm#848067"><em>attach</em></a><p>
+</a><td><a name="911363">
+messages to initiate activity<p>
+</a>
+<tr><td><a name="911368">
+<a href="mpgs115.htm#848085"><em>clone</em></a><p>
+</a><td><a name="911370">
+duplicate a fid<p>
+</a>
+<tr><td><a name="911375">
+<a href="mpgs116.htm#848095"><em>clunk</em></a><p>
+</a><td><a name="911377">
+forget about a fid<p>
+</a>
+<tr><td><a name="911382">
+<a href="mpgs117.htm#848108"><em>error</em></a><p>
+</a><td><a name="911384">
+return an error<p>
+</a>
+<tr><td><a name="911389">
+<a href="mpgs118.htm#848115"><em>flush</em></a><p>
+</a><td><a name="911391">
+abort a message<p>
+</a>
+<tr><td><a name="911396">
+<a href="mpgs119.htm#848130"><em>open</em></a><p>
+</a><td><a name="911398">
+prepare a fid for I/O on an existing or new file<p>
+</a>
+<tr><td><a name="911403">
+<a href="mpgs120.htm#848193"><em>read</em></a><p>
+</a><td><a name="911405">
+transfer data from and to a file<p>
+</a>
+<tr><td><a name="911410">
+<a href="mpgs121.htm#848213"><em>remove</em></a><p>
+</a><td><a name="911412">
+remove a file from a server<p>
+</a>
+<tr><td><a name="911417">
+<a href="mpgs122.htm#848227"><em>stat</em></a><p>
+</a><td><a name="911419">
+inquire or change file attributes<p>
+</a>
+<tr><td><a name="911424">
+<a href="mpgs123.htm#848320"><em>styx</em></a><p>
+</a><td><a name="911426">
+C interface to Inferno file protocol<p>
+</a>
+<tr><td><a name="911431">
+<a href="mpgs124.htm#848397"><em>walk</em></a><p>
+</a><td><a name="911433">
+descend a directory hierarchy<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="911435">
+<h2> Format Specifications</h2>
+</a><a name="911472">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="911441">
+<a href="mpgs126.htm#853309"><em>db</em></a> <p>
+</a><td><a name="911443">
+connection service database<p>
+</a>
+<tr><td><a name="911448">
+<a href="mpgs127.htm#849587"><em>font</em></a><p>
+</a><td><a name="911450">
+external format for character fonts and subfonts<p>
+</a>
+<tr><td><a name="911455">
+<a href="mpgs128.htm#849610"><em>image</em></a><p>
+</a><td><a name="911457">
+external format for images<p>
+</a>
+<tr><td><a name="911462">
+<a href="mpgs129.htm#849638"><em>rgbv</em></a><p>
+</a><td><a name="911464">
+color map<p>
+</a>
+<tr><td><a name="911469">
+<a href="mpgs130.htm#849689"><em>utf</em></a><p>
+</a><td><a name="911471">
+character set and format<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="911473">
+<h2> Daemons</h2>
+</a><a name="911489">
+ 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="911479">
+<a href="mpgs132.htm#849741"><em>cs</em></a><p>
+</a><td><a name="911481">
+connection server daemon<p>
+</a>
+<tr><td><a name="911486">
+<a href="mpgs133.htm#849848"><em>httpd</em></a><p>
+</a><td><a name="911488">
+HTTP server<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs1.htm"><img src="Next.gif" alt="[Next]" align=bottom></a>
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs58.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs60.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="862154">
+<center><h1> readdir </h1></center>
+</a><a name="843181">
+readdir - read directory and sort files<p>
+</a><a name="843182">
+<h2> Synopsis</h2>
+</a><pre><tt>include "lib.m";
+readdir:= load Readdir Readdir-&gt;PATH;
+NAME, ATIME, MTIME, SIZE, NONE: con iota;
+DESCENDING         : con (1&lt;&lt;5);
+init: fn(path: string, sortkey: int): (array of ref Dir, int);
+</tt></pre></p><a name="843188">
+<h2> Description</h2>
+</a><a name="843189">
+The Readdir module reads the contents of the directory <em>path</em> and sorts the resulting array according to <em>sortkey</em>.<p>
+</a><a name="843190">
+Each element in the returned array is a reference to one Dir element in the array formed by the dirread system call. Readdir also returns the number of entries read, or -1 on failure.<p>
+</a><a name="843212">
+The sorting criteria for the returned array are based on <em>sortkey</em> as follows: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="843193">
+Readdir-&gt;NAME<p>
+</a><td><a name="843195">
+Sort files alphabetically by name.<p>
+</a>
+<tr><td><a name="843197">
+Readdir-&gt;ATIME<p>
+</a><td><a name="843199">
+Sort files by access time, most recently accessed first.<p>
+</a>
+<tr><td><a name="843201">
+Readdir-&gt;MTIME<p>
+</a><td><a name="843203">
+Sort files by modification time, most recently modified first.<p>
+</a>
+<tr><td><a name="843205">
+Readdir-&gt;SIZE<p>
+</a><td><a name="843207">
+Sort files by size, largest file first.<p>
+</a>
+<tr><td><a name="843209">
+Readdir-&gt;NONE<p>
+</a><td><a name="843211">
+Files are left in directory order, unsorted.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="843213">
+If the value Readdir-&gt;DESCENDING is OR'ed into any of the above values (except Readdir-&gt;NONE) the order of sorting is reversed.<p>
+</a><a name="843214">
+<h2> See Also</h2>
+</a><a name="843215">
+<a href="mpgs83.htm#844766"><em>read</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs58.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs60.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

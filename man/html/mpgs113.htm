@@ -1,0 +1,312 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs112.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs114.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="860170">
+<center><h1> </h1></center>
+</a><a name="848518">
+Inferno File Protocol, Styx<p>
+</a><a name="859518">
+The following utilities are used in the Inferno file protocol:  
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="853301">
+<a href="mpgs114.htm#848067"><em>attach</em></a> <p>
+</a><a name="854121">
+  nop <p>
+</a><td><a name="853249">
+ messages to initiate activity<p>
+</a>
+<tr><td><a name="853251">
+<a href="mpgs115.htm#848085"><em>clone</em></a> <p>
+</a><td><a name="853253">
+ duplicate a fid<p>
+</a>
+<tr><td><a name="853255">
+<a href="mpgs116.htm#848095"><em>clunk</em></a> <p>
+</a><td><a name="853307">
+ forget about a fid<p>
+</a>
+<tr><td><a name="853259">
+<a href="mpgs117.htm#848108"><em>error</em></a> <p>
+</a><td><a name="853261">
+ return an error<p>
+</a>
+<tr><td><a name="853263">
+<a href="mpgs118.htm#848115"><em>flush</em></a> <p>
+</a><td><a name="853265">
+ abort a message<p>
+</a>
+<tr><td><a name="853267">
+<a href="mpgs119.htm#848130"><em>open</em></a> <p>
+</a><a name="853302">
+  create <p>
+</a><td><a name="853269">
+ prepare a fid for I/O on an existing or new file<p>
+</a>
+<tr><td><a name="853271">
+<a href="mpgs120.htm#848193"><em>read</em></a> <p>
+</a><a name="853303">
+  write <p>
+</a><td><a name="853273">
+ transfer data from and to a file<p>
+</a>
+<tr><td><a name="853275">
+<a href="mpgs121.htm#848213"><em>remove</em></a> <p>
+</a><td><a name="853277">
+ remove a file from a server<p>
+</a>
+<tr><td><a name="853279">
+<a href="mpgs122.htm#848227"><em>stat</em></a> <p>
+</a><a name="853304">
+  wstat <p>
+</a><td><a name="853281">
+ inquire or change file attributes<p>
+</a>
+<tr><td><a name="853283">
+<a href="mpgs123.htm#848320"><em>styx</em></a> <p>
+</a><a name="853305">
+  call, convs2m, convd2m,<p>
+</a><a name="860377">
+  convm2s, convm2d,<p>
+</a><a name="860378">
+  fcallconv, dirconv,<p>
+</a><a name="865596">
+  dirmodeconv <p>
+</a><td><a name="853285">
+ C interface to Inferno file protocol<p>
+</a>
+<tr><td><a name="853287">
+<a href="mpgs124.htm#848397"><em>walk</em></a> <p>
+</a><td><a name="853289">
+ descend a directory hierarchy<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="847961">
+<h2> <a href="manpgch.htm#848413">Synopsis</a></h2>
+</a><pre><tt>#include &lt;lib9.h&gt;
+#include &lt;styx.h&gt;
+</tt></pre></p><a name="847964">
+<h2> Description</h2>
+</a><a name="847965">
+An Inferno <em>server</em> is an agent that provides one or more hierarchical file systems, file trees, that may be accessed by Inferno processes. A server responds to requests by <em>clients</em> to navigate the hierarchy, and to create, remove, read, and write files. The prototypical server is a separate machine that stores large numbers of user files on permanent media. Another possibility for a server is to synthesize files on demand, perhaps based on information on data structures inside the kernel. For example, the <em>prog</em> <em>device</em> is a part of the Inferno kernel that does this. User programs can also act as servers by using the <em>sys-file2chan</em> interface.<p>
+</a><a name="847966">
+A <em>connection</em> to a server is a bidirectional communication path from the client to the server. There may be a single client or multiple clients sharing the same connection. A server's file tree is attached to a process group's name space by bin and mount and calls. See <a href="mpgs72.htm#844334"><em>bind</em></a> and <a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a>. Processes in the group are then clients of the servers. Their system calls operating on the server's files are translated into requests and transmitted over the connection to the appropriate server. The server's response completes the request.<p>
+</a><a name="847967">
+The Inferno File Protocol, <em>Styx</em>, is used for messages between <em>clients</em> and <em>servers</em>. A client transmits <em>requests</em> <em>(</em>T-messages) to a server, which subsequently returns <em>replies</em> <em>(</em>R-messages) to the client. The combined acts of transmitting (receiving) a request of a particular type (e.g., <em>read</em>, <em>write</em>, <em>stat</em>) and receiving (transmitting) its reply is called a <em>transaction</em> of that type.<p>
+</a><a name="847968">
+Most programs do not see the Styx protocol directly. Most programs make calls to library routines that access files. Their requests are translated by the mount driver, <em>mnt</em>, into Styx messages. Client application programs need not explicitly manage details of <em>fids</em>, <em>tags</em>, etc. described below.<p>
+</a><a name="847969">
+<h3> Message Format</h3>
+</a><a name="847970">
+Each message consists of a sequence of bytes. The first byte is the message type, one of the constants in the enumeration in the C include file &lt;styx.h&gt;. (See <a href="mpgs123.htm#848320"><em>styx</em></a>).<p>
+</a><a name="847971">
+The remaining bytes are parameters. Each parameter consists of a fixed number of bytes (except the <em>data</em> fields of write requests or read replies). In the message descriptions below, the number of bytes in a field is given in brackets after the field name. The two-, four-, and eight-byte fields may hold unsigned integers represented in little-endian order (least significant byte first). Fields that contain names are 28-byte strings (including a terminal NUL (zero) byte).<p>
+</a><a name="847972">
+Other than the NUL terminator, all characters are legal in file names. Systems may choose to reduce the set of legal characters to reduce syntactic problems, for example to remove slashes from name components, but the protocol has no such restriction. Inferno names may contain any printable character (that is, any character outside hexadecimal 00-1F and 80-9F) except slash and blank. Messages are transported in byte form to allow machine independence. The <em>styx</em> manual page describes C routines that convert to and from this form into a machine-dependent C structure.<p>
+</a><a name="850885">
+<h3> Message Types</h3>
+</a><pre><tt>Tnop     <em>tag</em> [2]
+Rnop     <em>tag</em> [2]
+Rerror   <em>tag</em> [2] <em>ename</em> [64]
+Tflush   <em>tag</em> [2] <em>oldtag</em> [2]
+Rflush   <em>tag</em> [2]
+Tattach  <em>tag</em> [2] <em>fid</em> [2] <em>uid</em> [28] <em>aname</em> [28]
+Rattach <em> tag</em> [2] <em>fid</em> [2] <em>qid</em> [8]
+Tclone  <em> tag</em> [2] <em>fid</em> [2] <em>newfid</em> [2]
+Rclone  <em> tag</em> [2] <em>fid</em> [2]
+Twalk  <em>  tag</em> [2] <em>fid</em> [2] <em>name</em> [28]
+Rwalk  <em>  tag</em> [2] <em>fid</em> [2] <em>qid</em> [8]
+Topen  <em>  tag</em> [2] <em>fid</em> [2] <em>mode</em> [1]
+Ropen  <em>  tag</em> [2] <em>fid</em> [2] <em>qid</em> [8]
+Tcreate <em> tag</em> [2] <em>fid</em> [2] <em>name</em> [28] <em>perm</em> [4] <em>mode</em> [1]
+Rcreate <em> tag</em> [2] <em>fid</em> [2] <em>qid</em> [8]
+Tread  <em>  tag</em> [2] <em>fid</em> [2] <em>offset</em> [8] <em>count</em> [2]
+Rread    <em>tag</em> [2] <em>fid</em> [2] <em>count</em> [2]  <em>pad</em> [1] <em>data</em> [count]
+Twrite  <em>  tag</em>  [2]  <em>fid</em> [2]  <em>offset</em> [8] <em>count</em> [2] <em>pad</em> [1] <em>data</em> [count]
+Rwrite  <em> tag</em> [2] <em>fid</em> [2] <em>count</em> [2]
+Tclunk  <em> tag</em> [2] <em>fid</em> [2]
+Rclunk  <em> tag</em> [2] <em>fid</em> [2]
+Tremove <em> tag</em> [2] <em>fid</em> [2]
+Rremove <em> tag</em> [2] <em>fid</em> [2]
+Tstat  <em>  tag</em> [2] <em>fid</em> [2]
+Rstat  <em>  tag</em> [2] <em>fid</em> [2] <em>stat</em> [116]
+Twstat  <em> tag</em> [2] <em>fid</em> [2] <em>stat</em> [116]
+Rwstat  <em> tag</em> [2] <em>fid</em> [2]
+</tt></pre></p><a name="848001">
+The numerical value for the type of an R-message will be one greater than that of the corresponding T-message. See <a href="mpgs123.htm#848320"><em>styx</em></a>. However, when a request fails a Rerror type message is sent instead. The Rerror message has an <em>ename</em> field which contains a string describing the reason for failure.<p>
+</a><a name="848002">
+The nop message request has no obvious effect. Its main purpose is in debugging the connection between a client and a server. It is never required.<p>
+</a><a name="848003">
+<h3> Fids </h3>
+</a><a name="848004">
+Most T-messages contain a <em>fid</em>, a 16-bit unsigned integer that the client uses to identify a current file on the server. Fids are like file descriptors in a user process, but they are not restricted to files open for I/O. They are also used when directories being examined, files are accessed by <a href="mpgs87.htm#844841"><em>stat</em></a> calls, and so on. All files being manipulated by the operating system are identified by fids. Fids are chosen by the client.<p>
+</a><a name="848005">
+All requests on a connection share the same fid space. When several clients share a connection, the agent managing the sharing must arrange that no two clients choose the same fid.<p>
+</a><a name="848006">
+The first fid supplied (in an attach message) will be used by the server to refer to the root of the served file tree. The attach identifies the user to the server and may specify a particular file tree provided by the server (for those servers that supply more than one).<p>
+</a><a name="848007">
+A walk message causes the server to change the current file associated with a fid to be a file in the directory that is the old current file. Usually, a client maintains a fid for the root, and navigates by <em>walk</em>'s on a fid <em>clone</em>'d from the root fid.<p>
+</a><a name="848008">
+<h3> Message Tags</h3>
+</a><a name="848009">
+Each T-message has a <em>tag</em> field, that chosen and used by the client to identify the message. The reply to the message will have the same tag. Clients must arrange that no two outstanding messages on the same connection have the same tag. An exception is the tag NOTAG, value 16rFFFF, meaning 'no tag'. The client can use the <em>NOTAG</em> message, when establishing a connection, to override tag matching in messages.<p>
+</a><a name="848010">
+A client can send multiple T-messages without waiting for the corresponding R-messages, as long as all outstanding T-messages have different tags. The server may delay the response to a request on one fid and respond to later requests on other fids. For example, this may be necessary when the client reads from a file that the server synthesizes from external events such as keyboard input.<p>
+</a><a name="848011">
+<h3> Qids</h3>
+</a><a name="848012">
+Replies (R-messages) to attach, walk, open, and create requests convey a <em>qid</em> field back to the client. The qid represents the server's unique identification for the file being accessed:<p>
+</a><a name="848013">
+<hr>
+<strong>NOTE:</strong><p>
+<em>Two files on the same server hierarchy are the same if and only if their qids 
+are the same.
+</em>
+<hr></a><a name="848014">
+The client may have multiple fids pointing to a single file on a server and hence having a single qid.<p>
+</a><a name="848015">
+The eight-byte qid fields represent two four-byte unsigned integers, first the qid <em>path</em> then the qid <em>version</em>. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="848018">
+path<p>
+</a><td><a name="848020">
+The path is an integer unique among all files in the hierarchy. If a file is deleted and recreated with the same name in the same directory, the old and new path components of the qids should be different. <p>
+</a><a name="848021">
+Directories always have the <kbd>CHDIR</kbd> bit (<kbd>16r80000000</kbd>) set in their qid path.<p>
+</a>
+<tr><td><a name="848023">
+version<p>
+</a><td><a name="848025">
+The version is a version number of the file. Typically, it is incremented every time the file is modified.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="848026">
+<h3> File Operations</h3>
+</a><a name="848027">
+An existing file can be <em>open</em>'ed or a new file may be <em>create</em>'d in the current directory. See <a href="mpgs119.htm#848130"><em>open</em></a>.<p>
+</a><a name="848028">
+I/O of a given number of bytes (limit 8192) at a given <em>offset</em> on an open file is done by read and write. See <a href="mpgs120.htm#848193"><em>read</em></a>.<p>
+</a><a name="848029">
+A client should clunk any fid that is no longer needed. See <a href="mpgs116.htm#848095"><em>clunk</em></a>.<p>
+</a><a name="848030">
+The remove transaction deletes files. See <a href="mpgs121.htm#848213"><em>remove</em></a>.<p>
+</a><a name="848031">
+The stat transaction retrieves information about the file. The <em>stat</em> field in the reply includes the file's name, access permissions (read, write and execute for owner, group and others), access and modification times, and owner and group identifications (each 28-byte strings). The wstat transaction allows some of a file's properties to be changed. See <a href="mpgs87.htm#844841"><em>stat</em></a> and <a href="mpgs122.htm#848227"><em>stat</em></a>.<p>
+</a><a name="848032">
+A request can be aborted with a Tflush request. When a server receives a Tflush, it should not reply to the message with tag <em>oldtag</em> (unless it has already replied), and it should immediately send an Rflush. The client should ignore replies with tag <em>oldtag</em> until it gets the Rflush, at which point <em>oldtag</em> may be reused. See <a href="mpgs118.htm#848115"><em>flush</em></a>.<p>
+</a><a name="848033">
+<h3> Directories</h3>
+</a><a name="848034">
+Directories are created by create with CHDIR set in the permissions argument (see <a href="mpgs122.htm#848227"><em>stat</em></a>). The members of a directory can be found with <em>read</em>.<p>
+</a><a name="848035">
+All servers must support requests to walk from the current directory to the directory <kbd>".." </kbd>(dot-dot, meaning parent directory) although, by convention, directories contain no explicit entry for <kbd>".."</kbd> or <kbd>"."</kbd> (dot, current directory). The parent of the root directory of a server's tree is itself.<p>
+</a><a name="848036">
+<h3> Access Permissions</h3>
+</a><a name="848037">
+Each file server maintains a set of user and group names. Each user can be a member of any number of groups.<p>
+</a><a name="850941">
+Every file request has an implicit user id (copied from the original attach) and an implicit set of groups (every group of which the user is a member).<p>
+</a><a name="848040">
+Each file has an associated <em>owner</em> and <em>group</em> id and three sets of permissions: those of the owner, those of the group, and those of 'other' users.<p>
+</a><a name="848042">
+When the owner attempts to do something to a file, the owner, group, and other permissions are consulted, and if <em>any</em> of them grant the requested permission, the operation is allowed.<p>
+</a><a name="848043">
+For someone who is not the owner, but is a member of the file's group, the group and other permissions are consulted.<p>
+</a><a name="848044">
+For everyone else, only the 'other' permissions are used. ---Plan9'ism.<p>
+</a><a name="848045">
+Each set of permissions says whether reading is allowed, whether writing is allowed, and whether executing is allowed. A walk in a directory is regarded as executing the directory, not reading it.<p>
+</a><a name="848046">
+Permissions, and type are stored in the file <em>mode</em>. A set bit indicates that the corresponding permission is granted. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="848049">
+bit 31 <p>
+</a><td><a name="848051">
+If bit 31 is set, the file is a directory.<p>
+</a>
+<tr><td><a name="848053">
+bits 8, 7, and 6<p>
+</a><td><a name="848055">
+Owner read/write/execute permissions.<p>
+</a>
+<tr><td><a name="848057">
+bits 5, 4, 3<p>
+</a><td><a name="848059">
+Group read/write/execute permissions.<p>
+</a>
+<tr><td><a name="848061">
+bits 2, 1, and 0<p>
+</a><td><a name="848063">
+Other read/write/execute permissions.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="848064">
+<h3> Header Files</h3>
+</a><a name="851069">
+Header files are located as follows: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="851076">
+&lt;lib9.h&gt;<p>
+</a><td><a name="851078">
+&lt;<em>inferno_root</em>&gt; &lt;<em>systarg</em>&gt; / &lt;<em>objtype</em>&gt; /<kbd>include/lib9.h</kbd><p>
+</a>
+<tr><td><a name="851080">
+&lt;styx.h&gt;<p>
+</a><td><a name="851082">
+/<kbd>include/styx.h</kbd><p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="851068">
+<h2> See Also</h2>
+</a><a name="848065">
+<a href="mpgs123.htm#848320"><em>styx</em></a>, <a href="mpgs36.htm#869014"><em>Limbo Modules</em></a>, <a href="mpgs72.htm#844334"><em>bind</em></a>, <a href="mpgs87.htm#844841"><em>stat</em></a>, <a href="mpgs110.htm#846072"><em>prog</em></a>, <a href="mpgs120.htm#848193"><em>read</em></a>, and <a href="mpgs122.htm#848227"><em>stat</em></a> <p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs112.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs114.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

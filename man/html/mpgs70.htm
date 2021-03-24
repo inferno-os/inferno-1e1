@@ -1,0 +1,99 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs69.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs71.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844093">
+<center><h1> style </h1></center>
+</a><a name="844094">
+style - fonts and colors for ITV toolkit<p>
+</a><a name="844095">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";
+include "prefab.m";
+prefab:= load Prefab Prefab-&gt;PATH;
+Style: adt
+{
+  titlefont:      ref Draw-&gt;Font;
+  textfont:       ref Draw-&gt;Font;
+  elemcolor:      ref Draw-&gt;Image;
+  edgecolor:      ref Draw-&gt;Image;
+  titlecolor:     ref Draw-&gt;Image;
+  textcolor:      ref Draw-&gt;Image;
+  highlightcolor: ref Draw-&gt;Image;
+};
+</tt></pre></p><a name="844109">
+<h2> Description</h2>
+</a><a name="844110">
+The Style type collects the font and color information for an application or a set of items within an application. Except when using the layout routines (see <a href="mpgs67.htm#843716"><em>compound</em></a> and <a href="mpgs68.htm#843819"><em>element</em></a>), the members of a Style are the only way to control the appearance of Prefab items. Note that although the 'color' members in practice often refer to a literal color (a single replicated pixel of color), they can be any image.<p>
+</a><a name="844111">
+Styles are allocated by regular Limbo definitions; there is no allocation function. All the members of a Style must be defined. Although it will not cause errors to modify the members of a Style after it has been created and passed to a Prefab routine, the results may be unpredictable. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="844114">
+edgecolor<p>
+</a><td><a name="844116">
+This Image specifies how to draw the edges, or borders, of compounds.<p>
+</a>
+<tr><td><a name="844118">
+elemcolor<p>
+</a><td><a name="844120">
+This <kbd>Image</kbd> specifies how to draw the base, or background, of elements and compounds.<p>
+</a>
+<tr><td><a name="844122">
+highlightcolor<p>
+</a><td><a name="844124">
+This <kbd>Image</kbd> specifies the color to use to highlight a selected element.<p>
+</a>
+<tr><td><a name="844126">
+textcolor<p>
+</a><td><a name="844128">
+This <kbd>Image</kbd> specifies the color in which to draw an item's regular text.<p>
+</a>
+<tr><td><a name="844130">
+textfont<p>
+</a><td><a name="844132">
+This <kbd>Font</kbd> specifies the font in which to draw an item's regular text.<p>
+</a>
+<tr><td><a name="844134">
+titlecolor<p>
+</a><td><a name="844136">
+This <kbd>Image</kbd> specifies the color in which to draw an item's title text.<p>
+</a>
+<tr><td><a name="844138">
+titlefont<p>
+</a><td><a name="844140">
+This <kbd>Font</kbd> specifies the font in which to draw an item's title text.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="844141">
+<h2> See Also</h2>
+</a><a name="844142">
+<em><a href="mpgs66.htm#843703"></em><em>Limbo Prefab Modules</em><em></a> </em>and <a href="mpgs69.htm#844068"><em>environ</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs69.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs71.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+<../../mkconfig
+<../../$SYSHOST/mkhost
+<../../$OBJDIR/mkfile
+
+TARG=xbm2pic
+
+BIN=$ROOT_DEVEL/$OBJDIR/bin
+
+all install:V: $BIN/$TARG
+
+$BIN/$TARG:
+	cp $TARG.sh $BIN/$TARG
+	chmod +x $BIN/$TARG
+
+clean nuke:
+	rm -f $TARG

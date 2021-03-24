@@ -1,0 +1,99 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs9.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs11.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="860092">
+<center><h1> diff </h1></center>
+</a><a name="840508">
+diff - differential file comparator<p>
+</a><a name="840509">
+<h2> Synopsis</h2>
+</a><pre><tt>diff [-efbwr] <em>file1... file2
+</em></tt></pre></p><a name="840511">
+<h2> Description</h2>
+</a><a name="840512">
+The diff command tells what lines must be changed in two files to bring them into agreement. If one file is a directory, then a file in that directory with basename the same as that of the other file is used. If both files are directories, similarly named files in the two directories are compared by the method of diff for text files and cmp otherwise. If more than two file names are given, then each argument is compared to the last argument as above. The normal output contains lines of these forms:<p>
+</a><ul><a name="840517">
+<li><kbd>n1 </kbd><kbd>a</kbd><kbd> n3,n4</kbd><em> </em><p>
+</a><a name="840521">
+<li><kbd>n1,n2 </kbd><kbd>d</kbd><kbd> n3</kbd><em> </em><p>
+</a><a name="840525">
+<li><kbd>n1,n2</kbd><kbd> c</kbd><kbd> n3,n4</kbd><p>
+</a><a name="840526">
+These lines resemble commands of the Unix System editor ed to convert <em>file1</em> into <em>file2</em>. The numbers after the letters pertain to <em>file2</em>. In fact, by exchanging <kbd>'a'</kbd> for <kbd>'d'</kbd> and reading backward one may ascertain equally how to convert <em>file2</em> into <em>file1</em>. As in ed, identical pairs where <em>n1</em> = <em>n2</em> or <em>n3</em> = <em>n4</em> are abbreviated as a single number.<p>
+</a><a name="840527">
+Following each of these lines come all the lines that are affected in the first file flagged by <kbd>'&lt;'</kbd>, then all the lines that are affected in the second file flagged by <kbd>'&gt;'</kbd>.<p>
+</a><a name="840528">
+Except in rare circumstances, diff finds a smallest sufficient set of file differences.<p>
+</a></ul><a name="840550">
+<h2> Options 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="840531">
+-e<p>
+</a><td><a name="840533">
+The -<kbd>e</kbd> option produces a script of <em>a</em><em>,</em> <em>c </em>and <em>d</em> <em>commands</em> for the Unix system editor ed, which will recreate <em>file2</em> from <em>file1</em>.<p>
+</a>
+<tr><td><a name="840535">
+-f<p>
+</a><td><a name="840537">
+The <kbd>-f</kbd> option produces a similar script, not useful with ed, in the opposite order. It may, however, be useful as input to a stream-oriented post-processor.<p>
+</a>
+<tr><td><a name="840539">
+-b<p>
+</a><td><a name="840541">
+The<kbd> -b</kbd> option causes trailing blanks (spaces and tabs) to be ignored and other strings of blanks to compare equal.<p>
+</a>
+<tr><td><a name="840543">
+-w<p>
+</a><td><a name="840545">
+The <kbd>-w</kbd> option causes all white-space to be removed from input lines before applying the difference algorithm.<p>
+</a>
+<tr><td><a name="840547">
+-r<p>
+</a><td><a name="840549">
+The <kbd>-r</kbd> option causes <kbd>diff</kbd> to process similarly named subdirectories recursively.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="840551">
+<h2> Files</h2>
+</a><a name="840552">
+<kbd>/tmp/diff</kbd><p>
+</a><a name="840553">
+<h2> See Also</h2>
+</a><a name="840554">
+<a href="mpgs6.htm#840426"><em>cmp</em></a> <p>
+</a><a name="840555">
+<h2> BUGS</h2>
+</a><a name="840556">
+Editing scripts produced under the -e or -f option are naive about creating lines consisting of a single<kbd> '.'</kbd>.<p>
+</a><a name="840557">
+When running <kbd>diff</kbd> on directories, the notion of what is a text file is open to debate.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs9.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs11.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

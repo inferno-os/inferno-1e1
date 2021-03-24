@@ -1,0 +1,74 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs5.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs7.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="840426">
+<center><h1> cmp </h1></center>
+</a><a name="872365">
+cmp - compare files<p>
+</a><a name="872366">
+<h2> Synopsis</h2>
+</a><pre><tt>cmp [-Ll] <em>file1</em> <em>file2</em> [<em>offset1</em>] [<em>offset2</em>]
+</tt></pre></p><a name="840430">
+<h2> Description</h2>
+</a><a name="840431">
+The <em>cmp</em> command byte-wise compares the contents of files <em>file1</em> and <em>file2</em> starting at offsets <em>offset1</em> and <em>offset2</em> (default 0).<p>
+</a><a name="840432">
+If there are no differences, the command produces no output. If a difference is detected, a message is generated to standard output reporting the location of the first different character in the format shown below:<p>
+</a><pre><tt>	<em>file1</em> <em>file2</em> differ: char <em>xxx</em> 
+</tt></pre></p><a name="840434">
+where <kbd>xxx</kbd> is in decimal format.<p>
+</a><a name="840435">
+<h2> Options 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="866075">
+<kbd>-L</kbd><p>
+</a><td><a name="887124">
+Add the line number to the difference message:<p>
+</a><pre><tt><em>file1</em> <em>file2</em> differ: char <em>xxx</em> line yy
+</tt></pre></p><a name="866083">
+where <em>yy</em> is in decimal format.<p>
+</a>
+<tr><td><a name="866079">
+<kbd>-l</kbd><p>
+</a><td><a name="866091">
+Starting at the first difference detected, print a line for each subsequent byte.<p>
+</a><a name="866094">
+Each line consists of the byte number (decimal) and the corresponding byte values (hexadecimal) from each file. <p>
+</a><a name="866095">
+If one file is shorter, there is an additional line stating on which file the EOF was encountered.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="854983">
+<h2> Note</h2>
+</a><a name="854987">
+Though the output line speaks of <kbd>char</kbd> differences, the comparison is, in fact, byte-oriented.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs5.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs7.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,182 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs62.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs64.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="843357">
+<center><h1> elem </h1></center>
+</a><a name="843358">
+elem - elementary functions of applied mathematics<p>
+</a><a name="843359">
+<h2> Synopsis</h2>
+</a><pre><tt>include "math.m";
+math:= load Math Math-&gt;PATH;
+cbrt, sqrt    : fn(x: real)   : real;
+pow           : fn(x, y: real): real;
+pow10         : fn(p: int)    : real;
+hypot         : fn(x, y: real): real;
+exp, expm1, log, log10, log1p: fn(x: real): real;
+ cos,  cosh,  sin,  sinh,  tan,  tanh: fn(x: real): real;
+acos, acosh, asin, asinh, atan, atanh: fn(x: real): real;
+atan2         : fn(y, x: real): real;
+lgamma        : fn(x: real)   :(int, real);
+erf, erfc     : fn(x: real)   : real;
+j0, j1, y0, y1: fn(x: real)   : real;
+jn, yn        : fn(n: int, x: real): real;
+</tt></pre></p><a name="843374">
+<h2> Description</h2>
+</a><a name="843416">
+These routines implement the basic elementary functions of applied mathematics. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="843377">
+sqrt (<em>x</em>)<p>
+</a><td><a name="843379">
+Computes the square root of <em>x</em>.<p>
+</a>
+<tr><td><a name="843381">
+cbrt (<em>x</em>)<p>
+</a><td><a name="843383">
+Computes the cube root.<p>
+</a>
+<tr><td><a name="843385">
+pow (<em>x</em>, <em>y</em>)<p>
+</a><td><a name="843387">
+Computes <em>x</em> raised to the exponent <em>y</em>.<p>
+</a>
+<tr><td><a name="843389">
+pow10 (<em>p</em>)<p>
+</a><td><a name="843391">
+Raises 10 to the integer power <em>n</em>.<p>
+</a>
+<tr><td><a name="843393">
+hypot (<em>x</em>, <em>y</em>)<p>
+</a><td><a name="843395">
+Computes sqrt(<em>x</em> *<em>x</em> +<em>y</em> *<em>y</em>).<p>
+</a>
+<tr><td><a name="843397">
+exp (<em>x</em>)<p>
+</a><td><a name="843399">
+Returns the exponential function of <em>x</em>.<p>
+</a>
+<tr><td><a name="843401">
+expm1 (<em>x</em>)<p>
+</a><td><a name="843403">
+Equivalent to exp(<em>x</em>)-1.<p>
+</a>
+<tr><td><a name="843405">
+log (<em>x</em>)<p>
+</a><td><a name="843407">
+Returns the natural logarithm of <em>x</em>.<p>
+</a>
+<tr><td><a name="843409">
+log10 (<em>x</em>)<p>
+</a><td><a name="843411">
+Returns the logarithm base 10.<p>
+</a>
+<tr><td><a name="843413">
+log1p (<em>x</em>)<p>
+</a><td><a name="843415">
+Returns the logarithm of 1+<em>x</em>.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="843426">
+The trigonometric functions use radians. The ranges of the inverse functions are: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="866889">
+acos<p>
+</a><td><a name="866891">
+ [0,<img src="chars/pi.gif">] <p>
+</a>
+<tr><td><a name="866893">
+asin<p>
+</a><td><a name="866895">
+ [-<img src="chars/pi.gif">/2,<img src="chars/pi.gif">/2] <p>
+</a>
+<tr><td><a name="866897">
+atan<p>
+</a><td><a name="866899">
+[-<img src="chars/pi.gif">/2,<img src="chars/pi.gif">/2] <p>
+</a>
+<tr><td><a name="866901">
+atan2 (<em>y</em>,<em> x</em>) <em>=</em> <em>arctan</em> (<em>y</em> /<em>x</em>) <p>
+</a><td><a name="866903">
+[-<img src="chars/pi.gif">,<img src="chars/pi.gif">]<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a>  
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="843429">
+lgamma (<em>x</em>)<p>
+</a><td><a name="843431">
+The gamma function. The tuple returned, (<em>s</em>, <em>lg</em>) encodes the gamma function by <img src="chars/capgamma.gif">(<em>x</em>) = <em>s</em> *exp(<em>lg</em>). <p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+
+<a name="843442">
+The hyperbolic trigonometric functions sinh etc. behave as expected. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="843435">
+erf (<em>x</em>)<p>
+</a><td><a name="843437">
+The error function.<p>
+</a>
+<tr><td><a name="843439">
+erfc (<em>x</em>)<p>
+</a><td><a name="843441">
+Equivalent to 1 - erf(<em>x</em>).<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="843443">
+The Bessel functions are computed by <kbd>j0, j1, jn, y0, y1,</kbd> and<kbd> yn</kbd>.<p>
+</a><a name="843444">
+<h2> See Also</h2>
+</a><a name="843445">
+<a href="mpgs62.htm#848707"><em>Limbo Math Modules</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs62.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs64.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

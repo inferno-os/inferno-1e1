@@ -1,0 +1,68 @@
+<../mkconfig
+<../$SYSHOST/mkhost
+<../$OBJDIR/mkfile
+
+LIB=libmemimage.$A
+OFILES= \
+	alloc-$SYSTARG.$O\
+	arc.$O\
+	cload-$SYSTARG.$O\
+	defont.$O\
+	draw-$SYSTARG.$O\
+	ellipse.$O\
+	fillpoly.$O\
+	line.$O\
+	load-$SYSTARG.$O\
+	poly.$O\
+	string.$O\
+	subfont.$O\
+	unload-$SYSTARG.$O\
+
+HFILES=\
+	../include/image.h\
+	../include/memimage.h\
+
+<../$SYSTARG/mksyslib
+
+package:QV:
+	$TRUE
+
+alloc-Irix.$O:		alloc-x11.c
+alloc-Hp.$O:		alloc-x11.c
+alloc-Solaris.$O:	alloc-x11.c
+alloc-Linux.$O:		alloc-x11.c
+alloc-Inferno.$O:	alloc.c
+alloc-Plan9.$O:		alloc.c
+alloc-Nt.$O:		alloc.c
+
+cload-Irix.$O:		cload-x11.c
+cload-Hp.$O:		cload-x11.c
+cload-Solaris.$O:	cload-x11.c
+cload-Linux.$O:		cload-x11.c
+cload-Inferno.$O:	cload.c
+cload-Plan9.$O:		cload.c
+cload-Nt.$O:		cload.c
+
+draw-Irix.$O:		draw-x11.c
+draw-Hp.$O:		draw-x11.c
+draw-Solaris.$O:	draw-x11.c
+draw-Linux.$O:		draw-x11.c
+draw-Inferno.$O:	draw.c
+draw-Plan9.$O:		draw.c
+draw-Nt.$O:		draw.c
+
+load-Irix.$O:		load-x11.c
+load-Hp.$O:		load-x11.c
+load-Solaris.$O:	load-x11.c
+load-Linux.$O:		load-x11.c
+load-Inferno.$O:	load.c
+load-Plan9.$O:		load.c
+load-Nt.$O:		load.c
+
+unload-Irix.$O:		unload-x11.c
+unload-Hp.$O:		unload-x11.c
+unload-Solaris.$O:	unload-x11.c
+unload-Linux.$O:	unload-x11.c
+unload-Inferno.$O:	unload.c
+unload-Plan9.$O:	unload.c
+unload-Nt.$O:		unload.c

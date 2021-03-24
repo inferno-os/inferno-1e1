@@ -1,0 +1,73 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs50.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs52.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="842934">
+<center><h1> ipint </h1></center>
+</a><a name="842935">
+Keyring: IPint - infinite precision integer utility functions<p>
+</a><a name="842936">
+<h2> Synopsis</h2>
+</a><pre><tt>include "keyring.m"
+keyring:= load Keyring Keyring-&gt;PATH;
+#infinite precision integers
+IPint: adt
+{
+  x:    int;
+  #conversions
+  iptob64:   fn(i: self ref IPint): string;
+  b64toip:   fn(str: string)  : ref IPint;
+  iptobytes: fn(i: self ref IPint): array of byte;
+  #large random integer generator
+  random:    fn(minbits, maxbits: int): ref IPint;
+  #operations
+  bits:      fn(i:  self ref IPint): int;
+  expmod:     fn(base: self ref IPint, exp, mod: ref IPint):ref IPint;
+  eq:        fn(i1:  self ref IPint, i2: ref IPint): int;
+};
+</tt></pre></p><a name="842954">
+<h2> Description</h2>
+</a><a name="855004">
+The IPint adt provides integer manipulation functions required for cryptographic support in Limbo. The iptob64 function converts a large integer to a base 64 string for convenient transmission over a network connection. The b64toip function performs the inverse operation. The iptobytes function converts an large integer to an array of bytes for faster communication to the kernel ssl device.<p>
+</a><a name="855005">
+<h3> random (minbits, maxbits)</h3>
+</a><a name="855006">
+The random function generates large random numbers with a range of <em>minbits</em> to <em>maxbits</em>. The maximum number allowed in the current implementation is 2<sup>28192</sup>-1. The seed for the generator is obtained by dueling clocks. The 'operations' functions manipulate IPint types during security protocols.<p>
+</a><a name="842958">
+<h3> bits (i)</h3>
+</a><a name="842959">
+The bits function returns the number of bits of precision in IPint.<p>
+</a><a name="855024">
+<h3> expmod (base, exp, mod)</h3>
+</a><a name="855025">
+The expmod function returns <em>base</em><sup>exp</sup><kbd> &#32;mod &#32;</kbd><em>mod</em><em>.</em><p>
+</a><a name="855026">
+<h3> eq (i1, i2)</h3>
+</a><a name="842963">
+The eq function is a simple comparison of two IPint that returns 1 if the two are equal, 0 otherwise.<p>
+</a><a name="842964">
+<h2> See Also</h2>
+</a><a name="853892">
+B. Schneier, <em>Applied Cryptography</em>, 1996, J. Wiley &amp; Sons, Inc.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs50.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs52.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

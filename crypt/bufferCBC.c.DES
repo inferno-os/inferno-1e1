@@ -1,0 +1,34 @@
+#ifdef NOSPOOKS
+#include "lib9.h"
+#include <libcrypt.h>
+
+void
+bufferCBCEncrypt(uchar *buf, uchar *icv, uchar *key, int len)
+{
+	uchar *block;
+	DESstate s;
+	int i;
+
+	setupDESstate(&s, key, icv);
+	for (i=8, block=buf; i<=len; i+=8, block+=8)
+		bCBCEncrypt(block, s.ivec, s.expanded, 8);
+	
+	if ((len & 7) != 0)
+		bCBCEncrypt(block, s.ivec, s.expanded, len&7);
+}
+
+void
+bufferCBCDecrypt(uchar *buf, uchar *icv, uchar *key, int len)
+{
+	uchar *block;
+	DESstate s;
+	int i;
+	
+	setupDESstate(&s, key, icv);
+	for (i=8, block=buf; i<=len; i+=8, block+=8)
+		bCBCDecrypt(block, s.ivec, s.expanded, 8);
+	
+	if ((len & 7) != 0)
+		bCBCDecrypt(block, s.ivec, s.expanded, len&7);
+}
+#endif NOSPOOKS

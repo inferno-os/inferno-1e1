@@ -1,0 +1,20 @@
+
+dev
+	root		/
+	cons		c
+	mnt		M
+	uart29k		t
+
+link
+
+misc
+	osinit.root
+	phone.root
+	att.root
+
+port
+	int cpuserver = 0;
+	void consdebug(void){}
+
+boot
+	il

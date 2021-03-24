@@ -1,0 +1,46 @@
+
+dev
+	root		/
+	cons		c
+	mnt		M
+	ns16552		t
+	rtc		r
+	ether		l	netif
+	ip		I
+	tv		V
+	ssl		D
+	tinyfs		F
+	draw		d
+	srv		s
+	prog		p
+	ata		H
+
+link
+	ether509
+	ether82557		pci
+	vgamach64ct		pci
+	vgas3
+
+misc
+	osinit.root
+	phone.root
+	lucent.root
+	ir.root
+
+port
+	void consdebug(void){}
+
+boot boot #H/hd0
+	il
+	tcp
+
+lib
+	interp
+	tk
+	prefab
+	image
+	memlayer
+	memimage
+	keyring
+	k
+	crypt

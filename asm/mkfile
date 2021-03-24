@@ -1,0 +1,26 @@
+<../mkconfig
+<../$SYSHOST/mkhost
+<../$SYSTARG/$OBJTYPE/mkfile
+
+TARG=asm
+OFILES=\
+	lex.$O\
+	assem.$O\
+	y.tab.$O
+
+HFILES=\
+	asm.h\
+	../interp/tab.h\
+	../include/isa.h\
+	y.tab.h
+
+LIBS=\
+	bio\
+	9\
+
+YFILES=	asm.y
+
+<../$SYSTARG/mkone
+
+package:QV:	package-std
+	$TRUE

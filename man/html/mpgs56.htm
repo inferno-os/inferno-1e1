@@ -1,0 +1,71 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs55.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs57.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="843102">
+<center><h1> filepat </h1></center>
+</a><a name="843103">
+filepat: expand, match - file pattern matching<p>
+</a><a name="843104">
+<h2> Synopsis</h2>
+</a><pre><tt>include "lib.m";
+filepat:= load Filepat Filepat-&gt;PATH;
+expand:   fn(pat: string)      : list of string;
+match:    fn(pat, name: string): int;
+</tt></pre></p><a name="843118">
+<h2> Description 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="843111">
+expand (<em>pat</em>)<p>
+</a><td><a name="843113">
+The expand function builds a list of file names in alphabetical order that matches the pattern <em>pat</em>. The pattern is tokenized using / as a delimiter.<p>
+</a>
+<tr><td><a name="843115">
+match (<em>pat</em>, <em>name</em>)<p>
+</a><td><a name="843117">
+The <kbd>match</kbd> function returns the length of name <em>if</em> it matches the pattern <em>pat</em>. Otherwise, it returns 0.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="843119">
+The <em>pat</em> passed to match and each token of <em>pat</em> passed to expand may include combinations of the special characters *,?, [, and].<p>
+</a><a name="843120">
+The asterisk <kbd>*</kbd> matches a string of zero or more characters.<p>
+</a><a name="843121">
+The query ? matches any single character.<p>
+</a><a name="843122">
+The notation [<em>s</em>], where <em>s</em> is a non-empty string, matches any single character in <em>s</em>. A range of characters can be expressed by a string <em>s</em> of the form <em>c</em><sub>start</sub><kbd>-</kbd><em>c</em><sub>end</sub>. The notation [^<em>s</em>], where <em>s</em> is a non-empty string, matches any single character not in <em>s</em>. The characters *,?, and [ lose their special meaning if they occur in <em>s</em>. <p>
+</a><a name="843123">
+If any character is preceded by the character \, that character loses any special meaning and is interpreted literally.<p>
+</a><a name="843124">
+<h2> See Also</h2>
+</a><a name="843125">
+<em><a href="mpgs88.htm#844934"></em><em>tokenize</em><em></a> </em>and <a href="mpgs59.htm#862154"><em>readdir</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs55.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs57.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

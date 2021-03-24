@@ -1,0 +1,117 @@
+<../../mkconfig
+<../../$SYSHOST/mkhost
+<../../$OBJDIR/mkfile
+
+CFLAGS=-I../port -I../../interp -I$ROOT_DEVEL/$SYSTARG/$OBJTYPE/include  $CFLAGS
+
+CONF=a7000
+CONFLIST=a7000
+
+INIT=wminit
+IR=irsim
+
+DEV=`$SH ../port/mkdevlist.sh $CONF`
+LINK=`$SH ../port/mklinklist.sh $CONF`
+MISC=`$SH ../port/mkmisclist.sh $CONF`
+IP=`cd ../ip; ls *.c | sed 's/\.c/.'$O'/'`
+
+OBJ=\
+	l.$O\
+	div.$O\
+	clock.$O\
+	main.$O\
+	kbd.$O\
+	mmu.$O\
+	mouse.$O\
+	rtc.$O\
+	screen.$O\
+	trap.$O\
+	uart.$O\
+	video.$O\
+	alarm.$O\
+	alloc.$O\
+	xalloc.$O\
+	chan.$O\
+	dev.$O\
+	dbg.$O\
+	exportfs.$O\
+	fault.$O\
+	dis.$O\
+	discall.$O\
+	latin1.$O\
+	ns.$O\
+	pgrp.$O\
+	print.$O\
+	proc.$O\
+	qio.$O\
+	qlock.$O\
+	styx.$O\
+	inferno.$O\
+	sysfile.$O\
+	dial.$O\
+	taslock.$O\
+	$DEV\
+	$IP $MISC $LINK\
+	utils.$O\
+
+LIBS=\
+	../../$OBJDIR/lib/libinterp.a$O\
+	../../$OBJDIR/lib/libtk.a$O\
+	../../$OBJDIR/lib/libprefab.a$O\
+	../../$OBJDIR/lib/libimage.a$O\
+	../../$OBJDIR/lib/libmemlayer.a$O\
+	../../$OBJDIR/lib/libmemimage.a$O\
+	../../$OBJDIR/lib/libkeyring.a$O\
+	../../$OBJDIR/lib/libk.a$O\
+	../../$OBJDIR/lib/libcrypt.a$O\
+
+inferno$CONF:	$OBJ $CONF.c $LIBS daten size
+	$CC $CFLAGS '-DKERNDATE='`./daten` $CONF.c
+	$LD -o $target -T0x8000C020 -l $OBJ $CONF.$O $LIBS
+	./size $target
+
+install:V: inferno$CONF
+	cp inferno$CONF ../../$OBJDIR/bin/tv$CONF
+
+uninstall:V:
+	$RM ../../$OBJDIR/bin/inferno$CONF
+
+<../port/portmkfile-sh
+
+clock.$O devether.$O main.$O trap.$O: \
+				../../$OBJDIR/include/ureg.h
+
+osinit.root.s:	../init/$INIT.dis 
+		rm -f osinit.out
+		cp ../init/$INIT.dis osinit.out
+		chmod u+x ../port/mkroot.sh
+		../port/mkroot.sh osinit osinit
+
+../init/$INIT.dis:	../init/$INIT.b
+		cd ../init; mk $INIT.dis
+
+ir.root.s:	../init/$IR.dis 
+		rm -f ir.out
+		cp ../init/$IR.dis ir.out
+		chmod u+x ../port/mkroot.sh
+		../port/mkroot.sh ir ir
+
+../init/$IR.dis:
+		cd ../init; mk $IR.dis
+
+phone.root.s:	../../icons/phone.bit 
+		rm -f phone.out
+		cp ../../icons/phone.bit phone.out
+		chmod u+x ../port/mkroot.sh
+		../port/mkroot.sh phone phone
+
+lucent.root.s:	../../icons/lucent.bit 
+		rm -f lucent.out
+		cp ../../icons/lucent.bit lucent.out
+		chmod u+x ../port/mkroot.sh
+		../port/mkroot.sh lucent lucent
+
+screen.$O: lucent.root.s
+
+%.$O:	../ip/%.c
+	$CC $CFLAGS ../ip/$stem.c

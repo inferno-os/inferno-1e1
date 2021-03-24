@@ -1,0 +1,26 @@
+SYSTARG=Plan9
+OBJTYPE=sparc
+CPUS=386 sparc
+
+A=		ak
+O=		k
+OS=		8ko
+
+AR=		ar
+ARFLAGS=	cvru
+
+AS=		ka
+ASFLAGS=
+
+CC=		kc
+CFLAGS=\
+		-w\
+		-I$ROOT_DEVEL/$SYSTARG/$OBJTYPE/include\
+		-I$ROOT_DEVEL/include\
+
+LD=		kl
+LDFLAGS=
+LDSYSLIBS=
+
+YACC=		yacc
+YFLAGS=		-d

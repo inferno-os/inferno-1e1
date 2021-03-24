@@ -1,0 +1,76 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs12.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs14.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="840718">
+<center><h1> grep </h1></center>
+</a><a name="840719">
+grep - search file(s) for a pattern<p>
+</a><a name="840720">
+<h2> Synopsis</h2>
+</a><pre><tt>grep [-l] [-n] [-e <em>pattern</em>] [-v] <em>pattern</em> [<em>file...</em> ]
+</tt></pre></p><a name="840722">
+<h2> Description</h2>
+</a><a name="840723">
+The grep command searches the input <em>files</em> (standard input, by default) for lines that match the <em>pattern</em>, a regular expression as defined in <em>regex</em>. Lines matching the pattern ('matching' lines) are printed to the standard output.<p>
+</a><a name="840724">
+The minus (<em>' - '</em>) sign can be used on the command line to explicitly name standard input as an input source. The following command will search <em>file1</em>, then standard input, then <em>file2</em>.<p>
+</a><pre><tt>	grep <em>pattern</em> file1 - file2
+</tt></pre></p><a name="840743">
+<h2> Options 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="840728">
+-l<p>
+</a><td><a name="840730">
+Print (once) the names of files with any matching lines; the matched lines are not printed.<p>
+</a>
+<tr><td><a name="840732">
+-n<p>
+</a><td><a name="840734">
+Prefix each line of output with its line number within its file. <p>
+</a>
+<tr><td><a name="840736">
+-v<p>
+</a><td><a name="840738">
+Reverse: print lines that do not match the pattern.<p>
+</a>
+<tr><td><a name="840740">
+-e <em>pattern</em> <p>
+</a><td><a name="840742">
+Use the following field as the <em>pattern</em> for selecting lines. Handy when searching for patterns that might be interpreted as options. The following command searches for instances of <kbd>-n </kbd>in <em>file</em>. <p>
+</a><pre><tt>    <kbd>grep -e -n</kbd> <kbd>file
+</kbd></tt></pre></p>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="840744">
+<h2> See Also</h2>
+</a><a name="840745">
+<a href="mpgs100.htm#894882"><em>regex</em></a> <p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs12.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs14.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<../mkconfig
+<../$SYSHOST/mkhost
+<../$OBJDIR/mkfile
+
+LIB=libprefab.$A
+OFILES=\
+	box.$O\
+	compound.$O\
+	element.$O\
+	elistelement.$O\
+	iconbox.$O\
+	iconelement.$O\
+	textbox.$O\
+	textelement.$O\
+
+HFILES=\
+	../include/image.h\
+	../include/prefab.h\
+
+<../$SYSTARG/mksyslib
+
+$OFILES:	../module/prefab.m
+
+package:QV:
+	$TRUE

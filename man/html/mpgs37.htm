@@ -1,0 +1,170 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs36.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs38.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="841856">
+<center><h1> context </h1></center>
+</a><a name="841857">
+Context - graphics environment<p>
+</a><a name="841858">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";
+draw:= load Draw Draw-&gt;PATH;
+Context: adt
+{
+  screen:  ref Screen;
+  display: ref Display;
+  cir:     chan of int;
+  ckbd:    chan of int;
+  cptr:    chan of ref Pointer;
+  ctoappl: chan of int;
+  ctomux:  chan of int;
+};
+</tt></pre></p><a name="841871">
+<h2> Description</h2>
+</a><a name="841872">
+The Context abstract data type encapsulates the data types and channels used by an interactive application. A reference to the Context is passed as the first argument to an application when it begins execution:<p>
+</a><pre><tt>include "draw.m"; 
+Command: module 
+{
+     init:  fn(nil: ref Draw-&gt;Context; nil: list of string);
+};
+</tt></pre></p><a name="841877">
+Most programs do not create Contexts but rather inherit one from their parent, typically a shell or window system.<p>
+</a><a name="841887">
+<h3> General Interfaces 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="841880">
+screen<p>
+</a><td><a name="841882">
+The <kbd>Screen</kbd> adt to which the application is connected; may be nil. See <a href="mpgs45.htm#842503"><em>screen</em></a>.<p>
+</a>
+<tr><td><a name="841884">
+display<p>
+</a><td><a name="841886">
+The <kbd>Display</kbd> adt to which the application is connected; may be nil. See <a href="mpgs38.htm#841959"><em>display</em></a>.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="841955">
+<h3> MUX Interfaces 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="841890">
+cir<p>
+</a><td colspan=2 rowspan=1><a name="841892">
+A channel of type <kbd>int</kbd> that delivers events from an infrared remote control device, if one is present. See the discussion below and <em>ir</em> for more information.<p>
+</a>
+<tr><td><a name="841896">
+ckbd<p>
+</a><td colspan=2 rowspan=1><a name="841898">
+A channel of type <kbd>int</kbd> that delivers keystrokes from a keyboard.<p>
+</a>
+<tr><td><a name="841902">
+cptr<p>
+</a><td colspan=2 rowspan=1><a name="841904">
+A channel of type <kbd>ref</kbd> Pointer that delivers events from a pointing device such as a mouse. <p>
+</a>
+<tr><td><a name="841908">
+ctoappl<p>
+</a><td colspan=2 rowspan=1><a name="841910">
+A channel of type <kbd>int</kbd> that delivers control messages to the application from the Mux application multiplexer. One message is defined: <p>
+</a>
+<tr><td><a name="841914">
+<p>
+</a><td><a name="841916">
+MAtop <p>
+</a><td><a name="841918">
+Requests the application to make its set of windows fully visible.<p>
+</a>
+<tr><td><a name="841920">
+ctomux<p>
+</a><td colspan=2 rowspan=1><a name="841922">
+A channel of type <kbd>int</kbd> used by the application to send messages to the Mux regarding the application's use of system devices. The defined messages are:<p>
+</a>
+<tr><td><a name="841926">
+<p>
+</a><td><a name="841928">
+AMstartir<p>
+</a><td><a name="841930">
+The application is ready to accept IR-data on the <kbd>cir</kbd> channel.<p>
+</a>
+<tr><td><a name="841932">
+<p>
+</a><td><a name="841934">
+AMstartkbd<p>
+</a><td><a name="841936">
+The application is ready to accept keyboard data on the <kbd>ckbd</kbd> channel.<p>
+</a>
+<tr><td><a name="841938">
+<p>
+</a><td><a name="841940">
+AMstartptr<p>
+</a><td><a name="841942">
+The application is ready to accept <kbd>Pointer</kbd> data on the <kbd>cptr</kbd> channel.<p>
+</a>
+<tr><td><a name="841944">
+<p>
+</a><td><a name="841946">
+AMnewpin<p>
+</a><td><a name="841948">
+The application needs a PIN.<p>
+</a>
+<tr><td><a name="841950">
+<p>
+</a><td><a name="841952">
+AMexit<p>
+</a><td><a name="841954">
+An application should send this message before it exits, to allow the Mux to recover resources.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="841957">
+<h2> See Also 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="856540">
+<a href="mpgs97.htm#855746"><em>ir</em></a><p>
+</a><td><a name="856542">
+for description of the cir channel. <p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs36.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs38.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+#ifdef NOSPOOKS
+#include "lib9.h"
+#include <libcrypt.h>
+
+void
+bCBCEncrypt(uchar *in, uchar *icv, uchar *int_key, int count)
+{
+	int j;
+	
+	if (count == 8) {
+		for (j=0; j < 8; j++)
+			in[j] ^= icv[j];
+		block_cipher(int_key, in, 0);
+		for (j=0; j < 8; j++)
+			icv[j] = in[j];
+	}
+	else {
+		block_cipher(int_key, icv, 0);
+		for (j = 0; j < count; j++)
+			in[j] ^= icv[j];
+	}
+	
+}
+
+void
+bCBCDecrypt(uchar *in, uchar *icv, uchar *int_key, int count)
+{
+	uchar tmp[8];
+	int j;
+	
+	if (count == 8) {
+		for (j=0; j < 8; j++)
+			tmp[j] = in[j];
+		block_cipher(int_key, in, 1);
+		for (j=0; j < 8; j++) {
+			in[j] ^= icv[j];
+			icv[j] = tmp[j];
+		}
+	}
+	else {
+		block_cipher(int_key, icv, 0);
+		for (j = 0; j < count; j++)
+			in[j] ^= icv[j];
+	}
+	
+}
+
+void
+blockCBCEncrypt(uchar *in, uchar *icv, uchar *key, int count, DESstate *s)
+{
+	if(s->setup != 0xdeadbeef)
+		setupDESstate(s, key, icv);
+	bCBCEncrypt(in, s->ivec, s->expanded, count);
+}
+
+void
+blockCBCDecrypt(uchar *in, uchar *icv, uchar *key, int count, DESstate *s)
+{
+	if(s->setup != 0xdeadbeef)
+		setupDESstate(s, key, icv);
+	bCBCDecrypt(in, s->ivec, s->expanded, count);
+}
+#endif NOSPOOKS

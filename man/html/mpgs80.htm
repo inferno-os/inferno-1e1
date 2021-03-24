@@ -1,0 +1,113 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs79.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs81.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844653">
+<center><h1> open </h1></center>
+</a><a name="844654">
+open, create - open/create a file for reading or writing<p>
+</a><a name="844655">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+open:  fn(file: string, omode: int)      : ref FD;
+create:fn(file: string, omode, perm: int): ref FD;
+</tt></pre></p><a name="844660">
+<h2> Description</h2>
+</a><a name="844661">
+<h3> open (file, omode) </h3>
+</a><a name="844662">
+The open function opens the <em>file</em> for I/O and returns an associated file descriptor. The <em>omode</em> argument is one of 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="855190">
+ Sys-&gt;OREAD<p>
+</a><td><a name="855192">
+open for reading<p>
+</a>
+<tr><td><a name="855194">
+ Sys-&gt;OWRITE<p>
+</a><td><a name="855196">
+open for writing<p>
+</a>
+<tr><td><a name="855198">
+ Sys-&gt;ORDWR<p>
+</a><td><a name="855200">
+open for reading and writing<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="855187">
+The following values may be OR'ed with the above values for additional actions: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="855207">
+ Sys-&gt;OTRUNC <p>
+</a><td><a name="855209">
+Truncate the file before opening it; this requires write permission even if <em>omode</em> is Sys-&gt;OREAD.<p>
+</a>
+<tr><td><a name="855211">
+<kbd>Sys-&gt;ORCLOSE</kbd><p>
+</a><td><a name="855213">
+Remove the file on closure.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="844663">
+The open function returns nil if the file does not exist or the user does not have permission to open it as requested (see <a href="mpgs87.htm#844841"><em>stat</em></a> for a description of permissions).<p>
+</a><a name="844664">
+<h3> create (file, omode, perm)</h3>
+</a><a name="844665">
+The create function creates a new file <em>or</em> prepares to rewrite an existing <em>file</em>, opens it according to <em>omode</em> (as described for open), and returns an associated file descriptor.<p>
+</a><a name="844666">
+If the file is new, the owner is set to the <em>user</em> <em>id</em> of the creating process group, the group to that of the containing directory, and the permissions to perm <em>AND'ed</em> with the permissions of the containing directory. See <a href="mpgs119.htm#848169"><em>The create Transaction</em></a> section of <a href="mpgs119.htm#848130"><em>open</em></a>.<p>
+</a><a name="844667">
+If the file already exists, it is truncated to 0 length, and the permissions, owner, and group remain unchanged.<p>
+</a><a name="844668">
+The created file will be a directory if the <kbd>Sys-&gt;CHDIR</kbd> bit is set in <em>omode</em>.<p>
+</a><a name="844669">
+The <kbd>create</kbd> function returns <kbd>nil</kbd> if the path up to the last element of file <em>cannot</em> be evaluated, if the user does not have write permission in the final directory, or if the file already exists and does not permit the access defined by <em>omode</em>.<p>
+</a><a name="844670">
+If the file is new and the directory in which it is created is a union directory (see <a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a>) then the constituent directory where the file is created depends on the structure of the union: see <a href="mpgs72.htm#844334"><em>bind</em></a>.<p>
+</a><a name="844671">
+<h2> Caveat</h2>
+</a><a name="844672">
+There is no explicit 'close' routine; when the last reference to the file descriptor is released, the system closes the associated file.<p>
+</a><a name="877027">
+For devices and network protocols where shutdown must be guaranteed, write a "<kbd>hangup"</kbd> message to the associated control file and use the return value of the <kbd>write</kbd> to verify closure. For example, see <a href="mpgs109.htm#846002"><em>ip</em></a>.<p>
+</a><a name="844673">
+<h2> See Also</h2>
+</a><a name="844674">
+<a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a>: <a href="mpgs72.htm#844334"><em>bind</em></a>, <a href="mpgs87.htm#844841"><em>stat</em></a>, and <a href="mpgs119.htm#848130"><em>open</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs79.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs81.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

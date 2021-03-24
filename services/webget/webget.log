@@ -1,0 +1,83 @@
+33: 
+NEW CLIENT
+33: 
+REQUEST: GET 0 1 http://inferno.bell-labs.com/inferno/ text/html,text/plain,image/x-compressed max-stale=0
+
+33: transport 1:  get http://inferno.bell-labs.com/inferno/
+33: http: dialing tcp!inferno.bell-labs.com!80
+33: http: connected
+33: http:  response from network or cache: HTTP/1.0 200 OK
+server: Plan9
+date: Fri, 12 Dec 1997 16:48:37 GMT
+last-modified: Wed, 08 Oct 1997 16:32:36 GMT
+etag: "32385v20"
+content-type: text/html
+content-length: 6418
+
+33: http: reply ready for 1: OK 6418 1 text/html http://inferno.bell-labs.com/inferno/
+30: 
+NEW CLIENT
+30: 
+REQUEST: GET 0 2 http://www.ecma.ch/indexr.htm text/html,text/plain,image/x-compressed max-stale=3600
+
+30: transport 1:  get http://www.ecma.ch/indexr.htm
+30: http: dialing tcp!www.ecma.ch!80
+30: http: connected
+30: http:  response from network or cache: HTTP/1.0 200 OK
+server: Microsoft-IIS/3.0
+date: Fri, 12 Dec 1997 16:52:14 GMT
+content-type: text/html
+accept-ranges: bytes
+last-modified: Wed, 22 Oct 1997 07:50:26 GMT
+content-length: 988
+
+30: http: reply ready for 2: OK 988 2 text/html http://www.ecma.ch/indexr.htm
+30: 
+REQUEST: GET 0 3 http://www.ecma.ch/ECMA.GIF image/x-compressed max-stale=3600
+
+30: transport 1:  get http://www.ecma.ch/ECMA.GIF
+30: http: dialing tcp!www.ecma.ch!80
+30: http: connected
+30: http:  response from network or cache: HTTP/1.0 200 OK
+server: Microsoft-IIS/3.0
+date: Fri, 12 Dec 1997 16:52:18 GMT
+content-type: image/gif
+accept-ranges: bytes
+last-modified: Wed, 09 Apr 1997 15:25:00 GMT
+content-length: 2665
+
+30: http: reply ready for 3: OK 7750 3 image/x-compressed2 http://www.ecma.ch/ECMA.GIF
+31: 
+NEW CLIENT
+31: 
+REQUEST: GET 0 4 http://www.ecma.ch/indexl.htm text/html,text/plain,image/x-compressed max-stale=3600
+
+31: transport 1:  get http://www.ecma.ch/indexl.htm
+31: http: dialing tcp!www.ecma.ch!80
+31: http: connected
+31: http:  response from network or cache: HTTP/1.0 200 OK
+server: Microsoft-IIS/3.0
+date: Fri, 12 Dec 1997 16:52:21 GMT
+content-type: text/html
+accept-ranges: bytes
+last-modified: Thu, 11 Dec 1997 16:22:04 GMT
+content-length: 2740
+
+31: http: reply ready for 4: OK 2740 4 text/html http://www.ecma.ch/indexl.htm
+35: 
+NEW CLIENT
+35: 
+REQUEST: GET 0 5 http://www.ecma.ch/stand/standard.htm text/html,text/plain,image/x-compressed max-stale=3600
+
+35: transport 1:  get http://www.ecma.ch/stand/standard.htm
+35: http: dialing tcp!www.ecma.ch!80
+35: http: connected
+35: http:  response from network or cache: HTTP/1.0 200 OK
+server: Microsoft-IIS/3.0
+date: Fri, 12 Dec 1997 16:52:26 GMT
+content-type: text/html
+accept-ranges: bytes
+last-modified: Wed, 29 Oct 1997 06:39:02 GMT
+content-length: 39661
+
+35: http: reply ready for 5: OK 39661 5 text/html http://www.ecma.ch/stand/standard.htm

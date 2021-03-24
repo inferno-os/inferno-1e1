@@ -1,0 +1,100 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs111.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs113.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="846288">
+<center><h1> ssl </h1></center>
+</a><a name="846289">
+ssl - secure sockets layer device<p>
+</a><a name="846290">
+<h2> Synopsis</h2>
+</a><pre><tt>bind '#D' /n/ssl
+/n/ssl/data
+/n/ssl/ctl
+/n/ssl/secretin
+/n/ssl/secretout
+</tt></pre></p><a name="846296">
+<h2> Description</h2>
+</a><a name="895863">
+The <kbd>SSL</kbd> device implements the link layer of the secure sockets layer defined by Netscape. Each binding of <kbd>#D</kbd> into the name space creates a new <kbd>ssl </kbd>device. Once associated with a network connection the <kbd>ssl</kbd> device can be thought of as a filter for the connection. The <kbd>ssl</kbd> device can send data in the clear, digested or encrypted. In all cases, if an <kbd>ssl</kbd> device is associated with both ends of a connection, all messages are delimited. As long as reads always specify buffers that are of equal or greater lengths than the writes at the other end of the connection, one write will correspond to one read.<p>
+</a><a name="846298">
+Writing to <kbd>/n/ssl/ctl </kbd>controls the <kbd>ssl</kbd> device. The following control messages are possible: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="846301">
+<kbd>fd </kbd><kbd>n</kbd><p>
+</a><td><a name="895870">
+Associate the network connection on file descriptor <em>n</em> with the <kbd>ssl</kbd> device.<p>
+</a>
+<tr><td><a name="846305">
+<kbd>alg clear</kbd><p>
+</a><td><a name="846307">
+Allow data to pass in the clear with only message delimiters added. The device starts in this mode.<p>
+</a>
+<tr><td><a name="846310">
+<kbd>alg sha</kbd><p>
+</a><td><a name="846312">
+Append a <kbd>sha</kbd> digest to each buffer written to<kbd> /n/ssl/data</kbd>. The digest covers the outgoing secret (written to <kbd>/n/ssl/secretout</kbd>), the message, and a message number which starts at 0 and increments by one each message. Messages read have their appended digests compared to a digest computed using the incoming secret (written to <kbd>/n/ssl/secretin</kbd>). If the comparison fails, so will the read.<p>
+</a>
+<tr><td><a name="846314">
+<kbd>alg md5</kbd><p>
+</a><td><a name="846316">
+Like <kbd>sha</kbd> but using the <kbd>md5</kbd> message digest.<p>
+</a>
+<tr><td><a name="846318">
+<kbd>alg rc4</kbd><p>
+</a><td><a name="846320">
+RC4 encrypt each message written to<kbd> /n/ssl/data</kbd> with the key written to <kbd>/n/ssl/secretout</kbd>.<p>
+</a>
+<tr><td><a name="846322">
+<kbd>Decrypt</kbd><p>
+</a><td><a name="846324">
+Incoming messages with the key written to<kbd> </kbd><kbd>/n/ssl/secretin</kbd>.<p>
+</a>
+<tr><td><a name="846326">
+<kbd>alg descbc</kbd><p>
+</a><td><a name="895871">
+Available only in the commercial product<p>
+</a>
+<tr><td><a name="846330">
+<kbd>alg desecb</kbd><p>
+</a><td><a name="846332">
+Available only in the commercial product<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="846333">
+Files<kbd> /n/ssl/secretin</kbd> and <kbd>/n/ssl/secretout</kbd> must be written before the digesting or encryption is turned on. If only one is written, they are both assumed to be the same.<p>
+</a><a name="846334">
+The mode may be changed at any time during a connection.<p>
+</a><a name="846335">
+See Also<p>
+</a><a name="847914">
+B. Schneier, <em>Applied Cryptography</em>, 1996, J. Wiley &amp; Sons, Inc.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs111.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs113.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

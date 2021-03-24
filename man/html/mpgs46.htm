@@ -1,0 +1,266 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs45.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs47.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="860138">
+<center><h1> </h1></center>
+</a><a name="848755">
+Limbo Keyring Modules<p>
+</a><a name="848757">
+The <kbd>Keyring</kbd> module relates to security and encryption related functions. The modules are as follows:<p>
+</a><a name="871740">
+<h2> Keyring Modules 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="871654">
+<a href="mpgs47.htm#842826"><em>auth</em></a><p>
+</a><td><a name="871656">
+authenticate a connection<p>
+</a>
+<tr><td><a name="871658">
+   readauthinfo<p>
+</a><td><a name="871660">
+<p>
+</a>
+<tr><td><a name="871662">
+   writeauthinfo <p>
+</a><td><a name="871664">
+<p>
+</a>
+<tr><td><a name="871669">
+<a href="mpgs48.htm#842860"><em>certtostr</em></a><p>
+</a><td><a name="871671">
+encryption key conversion functions<p>
+</a>
+<tr><td><a name="871673">
+   pktostr, sktostr,<p>
+</a><td><a name="871675">
+<p>
+</a>
+<tr><td><a name="871677">
+   strtocert, strtopk, strtosk <p>
+</a><td><a name="871679">
+<p>
+</a>
+<tr><td><a name="871684">
+<a href="mpgs49.htm#842887"><em>gensk</em></a><p>
+</a><td><a name="871686">
+generate keys<p>
+</a>
+<tr><td><a name="871688">
+   genSKfromPK, sktopk,<p>
+</a><td><a name="871690">
+<p>
+</a>
+<tr><td><a name="871692">
+   dhparams <p>
+</a><td><a name="871694">
+<p>
+</a>
+<tr><td><a name="871700">
+<a href="manpgch.htm#842907"><a href="mpgs50.htm#876613"></a><em>getstring</em></a> <p>
+</a><td><a name="871702">
+delimited I/O<p>
+</a>
+<tr><td><a name="871704">
+   putstring, getbytearray,<p>
+</a><td><a name="871706">
+<p>
+</a>
+<tr><td><a name="871708">
+   putbytearray, puterror<p>
+</a><td><a name="871710">
+<p>
+</a>
+<tr><td><a name="871715">
+<a href="mpgs51.htm#842934"><em>ipint</em></a> <p>
+</a><td><a name="871717">
+infinite precision integer utility functions<p>
+</a>
+<tr><td><a name="871722">
+<a href="mpgs52.htm#853893"><em>login</em></a> <p>
+</a><td><a name="871724">
+get an Authinfo adt from a certificate authority<p>
+</a>
+<tr><td><a name="871726">
+   getauthinfo <p>
+</a><td><a name="871728">
+<p>
+</a>
+<tr><td><a name="871733">
+<a href="mpgs53.htm#842987"><em>sign</em></a> <p>
+</a><td><a name="871735">
+cryptographic digests and digital signatures<p>
+</a>
+<tr><td><a name="871737">
+   sha, md5, sign, verify <p>
+</a><td><a name="871739">
+<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="848769">
+<h2> <a href="manpgch.htm#843342">Synopsis</a></h2>
+</a><pre><tt>include "keyring.m"
+keyring:= load Keyring Keyring-&gt;PATH;
+SigAlg: adt
+{
+  name:  string;
+};
+PK: adt
+{
+  sa:    ref SigAlg;
+  owner: string;
+};
+SK: adt
+{
+  sa:     ref SigAlg;
+  owner:  string;
+};
+Certificate: adt
+{
+  sa:     ref SigAlg;
+  ha:     string;
+  signer: string;
+  exp:    int;
+};
+DigestState: adt
+{
+  x:      int;
+};
+Authinfo: adt
+{
+  mysk:  ref SK;
+  mypk:  ref PK;
+  cert:  ref Certificate;
+  spk:   ref PK;
+  alpha: ref IPint;
+  p:     ref IPint;
+};
+</tt></pre></p><a name="842740">
+<h2> Description</h2>
+</a><a name="855265">
+The Keyring module contains the types and functions that are necessary to provide secure communications in Inferno. The functions:<p>
+</a><ul><a name="866750">
+<li>Perform infinite precision modular arithmetic (see <a href="mpgs51.htm#842934"><em>ipint</em></a>).<p>
+</a><a name="866755">
+<li>Compute cryptographically secure digests (see <a href="mpgs53.htm#842987"><em>sign</em></a>).<p>
+</a><a name="866757">
+<li>Generate public/private key pairs and transform them to and from text format (see <a href="mpgs49.htm#842887"><em>gensk</em></a>).<p>
+</a><a name="866765">
+<li>Create and verify cryptographic signatures using the public keys (see <a href="mpgs47.htm#842826"><em>auth</em></a>).<p>
+</a><a name="866770">
+<li>Authenticate the parties on a connection (see <a href="mpgs47.htm#842826"><em>auth</em></a>).<p>
+</a><a name="866772">
+<li>Read and write files containing the information needed to authenticate the parties on a connection.<p>
+</a><a name="866774">
+<li>Send Limbo byte arrays and strings across a connection <p>
+</a></ul><a name="855310">
+<h3> High Precision Arithmetic</h3>
+</a><a name="891778">
+The IPint adt provides certain cryptographic functions so that various popular public key algorithms can be implemented directly in Limbo. The current implementation limits the maximum integer to 2<sup>3192</sup>-1.<p>
+</a><a name="842773">
+An IPint can be converted into two external formats: an array of bytes (in which the first byte is the highest order byte of the integer) that is useful when communicating with the kernel's internal ssl device (#D) (see <a href="mpgs112.htm#846288"><em>ssl</em></a>); and a MIME base 64 format that allows an IPint to be stored in files or transmitted across networks in text form.<p>
+</a><a name="842774">
+<h3> Public Key Cryptography</h3>
+</a><a name="842775">
+Inferno relies on public key cryptography for digital signatures. Each Inferno user can generate a pair of matched keys, one public and one private. The private key is used to digitally sign data, the public one to verify the signature. Public key algorithms have been chosen to make it difficult to spoof a signature or guess the private key.<p>
+</a><a name="842776">
+For public keys algorithms to work, there must be a way to distribute the public keys. That is, in order to verify that X signed something, we have to know X's public key. To simplify the problem, a trust hierarchy is set up that requires users to know only the public keys of the certifying authorities (CA) contained in the SIGNER variable. After generating a public key, one can have the concatenation of one's name, a key expiration date, and a key signed by the certifying authority. This information, together with the name of the SIGNER and the signature, is called a <em>certificate</em>.<p>
+</a><a name="842777">
+At the beginning of a conversation, the parties exchange certificates. They then use the SIGNER's public key to verify each other's public keys. The CA's public key, a system-wide Diffie-Hellman base and modulus, one's private key, one's public key and certificate are kept in an abstract data type called Keyring-&gt;Authinfo. An Authinfo adt is read from a file using the Keyring-&gt;readauthinfo function or written to a file using Keyring-&gt;writeauthinfo function. See <a href="mpgs47.htm#842826"><em>auth</em></a>.<p>
+</a><a name="842778">
+Authinfo adts are normally created during login and registration.<p>
+</a><a name="842779">
+<h3> Authentication</h3>
+</a><a name="842780">
+Two parties conversing on a network connection authenticate each other's identity using the keyring-&gt;auth function. See <a href="mpgs47.htm#842826"><em>auth</em></a>. Keyring-&gt;auth uses the Keyring-&gt;Authinfo information to perform a Station-to-Station (STS) authentication protocol. STS authenticates a party's identity to the other and establishes a random bit string known only to the two parties. This bit string is used as a key either to encrypt or to authenticate subsequent messages sent between the two parties.<p>
+</a><a name="842781">
+<h3> Secure Communications</h3>
+</a><a name="842782">
+After exchanging secrets, communicating parties can encode the conversation to guarantee varying levels of security:<p>
+</a><ul><a name="866779">
+<li>none<p>
+</a><a name="866781">
+<li>messages cannot be forged<p>
+</a><a name="891790">
+<li>messages cannot be intercepted<p>
+</a><a name="891800">
+Encoding uses the same line formats as defined by the Secure Sockets Layer. See <a href="mpgs112.htm#846288"><em>ssl</em></a><em>-<a href="mpgs36.htm#869014"></em><em>Limbo Modules</em><em></a></em>.<p>
+</a></ul><a name="891798">
+<h3> Login and Registration </h3>
+</a><a name="891799">
+The Inferno authentication procedure requires that both parties have a Keyring-&gt;Authinfo adt containing a locally generated public/private key pair, the public key of a commonly trusted CA, and a signed certificate from the CA binding the party's identity to his/her public key. This Authinfo adt is normally kept in a file. However, at some point it has to be generated and conveyed securely between the user's machine and the CA. There are two ways to do this, the login and registration procedures.<p>
+</a><a name="842799">
+Both login and registration require an out-of-band channel between the CA and the user.<p>
+</a><a name="842800">
+The login procedures are used by typed commands and by programs using the Tk GUI. The login procedure is based on the CA and the user having established a common secret or password. This is done off line either by mail or telephone. This secret is then used to provide a secure path between CA and user machine to transfer the certificate and CA public key. See <a href="mpgs62.htm#848707"><em>Limbo Math Modules</em></a>.<p>
+</a><a name="842801">
+The registration procedure is built into the Mux interface and is intended for the set top box environment. When the set top box is first turned on, it creates a public/private key pair and dials the service provider's CA to get a key signed. The CA returns its public key and a signed certificate, blinded by a random bit string known only to the CA. A hash of the information is then displayed on the user screen. The user must then telephone the CA and compare this hashed foot print with the one at the CA. If they match and the user proves that he is a customer, the CA makes the blinding string publicly known. <p>
+</a><a name="842823">
+<h3> Data Types 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="842804">
+SigAlg<p>
+</a><td><a name="842806">
+The SigAlg adt contains a single string that specifies the algorithm used for digital signatures. The allowable values are MD5 and SHA, which specify which one-way hash function is used to produce a digital signature, or message digest. In general, a one-way hash function converts an arbitrary length message to a unique fixed-length message digest. MD5 produces a 128-bit; SHA produces a 160-bit hash.<p>
+</a>
+<tr><td><a name="842808">
+PK and SK<p>
+</a><td><a name="842810">
+The PK adt contains the data necessary to construct a public key; the SK adt contains the data necessary to construct a secret key. Both keys are built from the combination of a specified signature algorithm and a string representing the name of owner of the key.<p>
+</a>
+<tr><td><a name="842812">
+Certificate<p>
+</a><td><a name="842814">
+The Certificate adt contains a digital signature with the certification of the trusted authority (CA).<p>
+</a>
+<tr><td><a name="842816">
+DigestState <p>
+</a><td><a name="842818">
+The DigestState adt contains the state of partially completed hash functions during processing.<p>
+</a>
+<tr><td><a name="842820">
+Authinfo <p>
+</a><td><a name="842822">
+The Authinfo adt contains an individual user's private and public key, the signer's certificate and the signer's public key, and the Diffie-Hellman parameters.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="842824">
+<h2> See Also</h2>
+</a><a name="842825">
+B. Schneier, <em>Applied Cryptography</em>, 1996, J. Wiley &amp; Sons, Inc.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs45.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs47.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

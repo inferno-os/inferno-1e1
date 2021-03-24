@@ -1,0 +1,47 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs16.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs18.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="841188">
+<center><h1> mkdir </h1></center>
+</a><a name="841189">
+mkdir - make a directory<p>
+</a><a name="841190">
+<h2> Synopsis</h2>
+</a><pre><tt>mkdir <em>dirname...
+</em></tt></pre></p><a name="841192">
+<h2> Description</h2>
+</a><a name="841193">
+The mkdir command creates the specified directories. It requires write permission in the parent directory.<p>
+</a><a name="841194">
+The new directories are created with permissions starting with <kbd>8r777</kbd> but masked with the permissions of the parent directory according the to formula given in <em>open</em>. This has the effect of capping the permissions of the newly created directories by those of the parent directory. For example, if the parent directory lacks write permission for group and all permissions for 'other', then so will the newly created directory.<p>
+</a><a name="841195">
+<h2> Diagnostics</h2>
+</a><a name="841196">
+A warning message is generated if a directory of the specified name already exists. Execution continues for the remaining names in the argument list, if any.<p>
+</a><a name="841197">
+<h2> See Also</h2>
+</a><a name="841198">
+<a href="mpgs5.htm#840389"><em>chmod</em></a>, <a href="mpgs25.htm#841303"><em>rm</em></a> and <a href="mpgs80.htm#844653"><em>open</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs16.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs18.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

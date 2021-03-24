@@ -1,0 +1,78 @@
+PROGS=${TARG:%=$O.%}
+libs=${LIBS:%=$ROOT_DEVEL/$OBJDIR/lib/lib%.$A}
+bintargs=${TARG:%=$ROOT_DEVEL/$OBJDIR/bin/%}
+pkgtargs=${TARG:%=$PREFIX_PKG/$OBJDIR/bin/%}
+
+all:V:		$PROGS
+
+$O.%:	%.$O $OFILES $libs
+	$LD $LDFLAGS -o $target $prereq $libs $LDSYSLIBS
+
+%.$O:	$HFILES		# don't combine with following %.$O rules
+
+%.$O:	%.c
+	$CC $CFLAGS $stem.c
+
+%.$O:	%.s
+	$AS $AFLAGS $stem.s
+
+y.tab.h y.tab.c:	$YFILES
+	$YACC $YFLAGS $prereq
+
+%.install:V:	$ROOT_DEVEL/$OBJDIR/bin/%
+
+$ROOT_DEVEL/$OBJDIR/bin/%:	$O.%
+	$CP $O.$stem $ROOT_DEVEL/$OBJDIR/bin/$stem
+
+%.installall:V:
+	for (OBJTYPE in $CPUS)
+		mk $stem.install
+
+install:V:	install-std
+
+install-std:V:	all\
+		$ROOT_DEVEL/$OBJDIR/bin
+	$RM $bintargs
+	for (file in $TARG)
+		$CP $O.$file $ROOT_DEVEL/$OBJDIR/bin/$file
+
+uninstall:V:	uninstall-std
+
+uninstall-std:V:
+	$RM $bintargs
+
+package:V:	package-std
+
+package-std:V:	all\
+		$PREFIX_PKG/$SYSTARG\
+		$PREFIX_PKG/$SYSTARG/$OBJTYPE\
+		$PREFIX_PKG/$SYSTARG/$OBJTYPE/bin
+	$RM $pkgtargs
+	for (file in $TARG)
+		$CP $O.$file $ROOT_DEVEL/$OBJDIR/bin/$file
+
+installall:V:
+	for(OBJTYPE in $CPUS)
+		mk $MKFLAGS install
+
+nuke:V:	nuke-std
+
+#	Normally, one would remove y.tab.?, but that causes
+#	trouble for Inferno.  Leave the yacc-generated files
+#	around.  The mkfiles will regenerate them when the
+#	yacc input changes.
+
+nuke-std:EV:
+	$RM *.[$OS] y.debug y.output [$OS].$TARG $TARG
+#	$RM y.tab.?
+
+clean:V:	clean-std
+
+clean-std:V:
+	$RM *.[$OS] y.debug y.output [$OS].$TARG $TARG
+#	$RM y.tab.?
+
+$PREFIX_PKG/$SYSTARG \
+$PREFIX_PKG/$SYSTARG/$OBJTYPE \
+$PREFIX_PKG/$SYSTARG/$OBJTYPE/bin :
+	$MKDIR $target

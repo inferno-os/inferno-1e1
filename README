@@ -1,0 +1,14 @@
+Vita Nuova's modified copy of ``BETA.2 Build 16'' from Lucent's Inferno Business Unit
+
+This software was originally provided by Lucent Technologies Inc under NOTICE.orig and LICENSE.orig.
+It is now being made available under the new licence in NOTICE, by Vita Nuova Holdings Limited,
+under an agreement with Lucent on 1 March 2000.
+
+With the exception of new NOTICE files and this README, it is provided here as originally archived,
+for historical reference.
+
+It was the first source release received by Vita Nuova Limited, in 1996.
+
+* includes source for emu and os
+* there is support for Plan 9
+* the tree was received in 1996 but this snapshot includes changes made by VN and others into 1997

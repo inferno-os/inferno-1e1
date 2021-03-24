@@ -1,0 +1,27 @@
+CC = c89
+CFLAGS = -D_HPUX_SOURCE   +e -I. -I../include -I../Hp/s800/include
+
+lib9.a: \
+lib9(create.o) \
+lib9(dirstat-posix.o) \
+lib9(dirstat.o) \
+lib9(dirwstat.o) \
+lib9(doprint.o) \
+lib9(errstr-posix.o) \
+lib9(exits.o) \
+lib9(getfields.o) \
+lib9(getuser-posix.o) \
+lib9(print.o) \
+lib9(rune.o) \
+lib9(runestrlen.o) \
+lib9(seek.o) \
+lib9(strdup.o) \
+lib9(strtoll.o) \
+lib9(utflen.o) \
+lib9(utfrrune.o) \
+lib9(utfrune.o) 
+	@echo lib9 now up 2 date
+
+.c.a:	
+	$(CC) -c $(CFLAGS) $<
+	ar rv $@ $*.o

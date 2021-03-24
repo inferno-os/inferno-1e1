@@ -1,0 +1,165 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs74.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs76.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844412">
+<center><h1> dial </h1></center>
+</a><a name="844413">
+announce, dial, export, listen - make network connections<p>
+</a><a name="844414">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+Connection: adt
+{
+  dfd: ref FD; # data file
+  cfd: ref FD; # control file
+  dir: string; # pathname of line directory
+};
+announce: fn(addr: string):          (int, Connection);
+dial:     fn(addr, local: string):   (int, Connection);
+listen:   fn(c: Connection):         (int, Connection);
+export:   fn(fd: ref FD, flag: int):  int;
+</tt></pre></p><a name="881437">
+<h2> Description</h2>
+</a><a name="881438">
+These routines establish network connections. Their description uses the following definitions: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="895749">
+<em>addr</em> <p>
+</a><td colspan=2 rowspan=1><a name="895751">
+An network address in one of the following forms:<p>
+</a><em>network</em>!<em>machine</em>!<em>service
+</em><em>network</em>!<em>netaddr
+</em><em>netaddr
+</em>
+<tr><td><a name="895774">
+<em>network</em> <p>
+</a><td colspan=2 rowspan=1><a name="895776">
+Any directory listed in <kbd>/net</kbd> or the special token, net.<p>
+</a>
+<tr><td><a name="895780">
+<p>
+</a><td><a name="895782">
+net<p>
+</a><td><a name="895784">
+A free variable that stands for any network in common between the source and the host <em>netaddr</em>. The netaddr <em>portion</em> can be a host name, a domain name, a network address, or a meta-name of the form $<em>attribute</em>, which is resolved according to the information specified in the file /cs/db.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="881477">
+If a connection attempt is successful <em>dir</em> is the path name of a <em>line</em> <em>directory</em> that has files for accessing the connection. One line directory exists for each possible connection. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="844469">
+data<p>
+</a><td colspan=2 rowspan=1><a name="844471">
+The <kbd>data</kbd> file in the line directory should be used to communicate with the destination.<p>
+</a>
+<tr><td><a name="844475">
+ctl<p>
+</a><td colspan=2 rowspan=1><a name="844477">
+The <kbd>ctl</kbd> file in the line directory can be used to send commands to the line. See <a href="mpgs109.htm#846002"><em>ip</em></a><em> </em>for messages that can be written to the <kbd>ctl</kbd> file. The last close of the <kbd>data</kbd> or <kbd>ctl</kbd> file will close the connection.<p>
+</a>
+<tr><td><a name="844481">
+dial<p>
+</a><a name="844482">
+(<em>addr</em>, <em>local</em>)<p>
+</a><td colspan=2 rowspan=1><a name="844484">
+The dial routine makes a call to destination <em>addr</em> <em>on</em> a multiplexed network. If the network in <em>addr</em> is net, <kbd>dial</kbd> will try in succession all networks in common between source and destination until a call succeeds. It returns a file descriptor open for reading and writing the <kbd>data</kbd> file in the line directory. The <kbd>addr</kbd> file in the line directory contains the address called. If the network allows the local address to be set, as is the case with UDP and TCP port numbers, and <em>local</em> is non-empty, the local address will be set to <em>local</em>.<p>
+</a>
+<tr><td><a name="844488">
+announce<p>
+</a><a name="844489">
+(addr) and<p>
+</a><a name="844490">
+listen(c)<p>
+</a><td colspan=2 rowspan=1><a name="844492">
+The <kbd>announce</kbd> and <kbd>listen</kbd> functions are the complements of dial. The <kbd>announce</kbd> function establishes a network name to which incoming calls can be made. Like dial, <kbd>announce</kbd> returns an open <kbd>Connection</kbd> abstract data type (adt). The <kbd>listen</kbd> function takes as its only argument the <kbd>Connection</kbd> adt of a successful call to announce. When a call is received, <kbd>listen</kbd> returns an open <kbd>Connection</kbd> adt as if from dial.<p>
+</a>
+<tr><td><a name="844496">
+export<p>
+</a><a name="844497">
+(<em>fd</em>, <em>flag</em>)<p>
+</a><td colspan=2 rowspan=1><a name="844499">
+The <kbd>export</kbd> function responds to client requests for file operations on the server's file name space. This is the server end of a client's mount call. Typically, <kbd>export's</kbd> first argument is the dfd member of a Connection returned from listen. The export function can take two mutually exclusive flags<p>
+</a>
+<tr><td><a name="844503">
+<p>
+</a><td><a name="844505">
+EXPWAIT<p>
+</a><td><a name="844507">
+The export function blocks until all client requests are complete.<p>
+</a>
+<tr><td><a name="844509">
+<p>
+</a><td><a name="844511">
+EXPASYNC<p>
+</a><td><a name="844513">
+Client requests are handled by a background thread while export returns immediately<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="865003">
+<h2> Examples</h2>
+</a><a name="865004">
+Make a call and return an open file descriptor to use for communications:<p>
+</a><pre><tt>callkremvax( ): (int, Connection)
+{
+    return sys-&gt;dial("tcp!kremvax", nil);
+}
+</tt></pre></p><a name="893990">
+Call the local authentication server:<p>
+</a>dialauth(service: string): (int, Connection)
+{
+    return sys-&gt;dial("net!$auth", nil);
+}
+</tt></pre></p><a name="844526">
+<h2> See Also 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="877418">
+<a href="mpgs72.htm#844334"><em>bind</em></a><p>
+</a><td><a name="877420">
+Discussion of the mount function<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs74.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs76.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

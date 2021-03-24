@@ -1,0 +1,41 @@
+<../mkconfig
+<../$SYSHOST/mkhost
+
+DIRS=\
+	ar\
+	cc\
+	5a\
+	5c\
+	5l\
+	8a\
+	8c\
+	8l\
+
+all:QV:		all-$SYSHOST
+clean:QV:	clean-$SYSHOST
+install:QV:	install-$SYSHOST
+nuke:QV:	nuke-$SYSHOST
+package:QV:	package-$SYSHOST
+uninstall:QV:	uninstall-$SYSHOST
+
+%-Inferno :QV:
+	for (j in $DIRS)
+	{
+		echo '@{cd' $j '; mk $MKFLAGS $stem}'
+		@{cd $j; mk $MKFLAGS $stem}
+	}
+
+%-Hp :QV:
+	mk $MKFLAGS mk
+
+%-Irix \
+%-Linux \
+%-Solaris :QV:
+	for j in $DIRS
+	do
+		echo "(cd $j; mk $MKFLAGS $stem)"
+		(cd $j; mk $MKFLAGS $stem)
+	done
+
+%-Nt:QV:
+	$ECHO do not know how to make $target

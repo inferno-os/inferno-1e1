@@ -1,0 +1,102 @@
+OBJTYPE=386
+objtype=386
+<../../mkconfig
+<../../$SYSHOST/mkhost
+<../../$OBJDIR/mkfile
+
+CFLAGS=-I../port -I../../interp $CFLAGS
+
+CONF=pc
+CONFLIST=pc
+
+INIT=wminit
+IR=irsim
+
+DEV=`{$SH ../port/mkdevlist $CONF}
+LINK=`{$SH ../port/mklinklist $CONF}
+MISC=`{$SH ../port/mkmisclist $CONF}
+IP=`{cd ../ip; ls *.c | sed 's/\.c/.'$O'/'}
+LIBS=`{$SH ../port/mkliblist $CONF}
+
+OBJ=\
+	l.$O\
+	alarm.$O\
+	alloc.$O\
+	xalloc.$O\
+	chan.$O\
+	clock.$O\
+	dbg.$O\
+	dev.$O\
+	dma.$O\
+	exportfs.$O\
+	fault.$O\
+	dis.$O\
+	discall.$O\
+	fault386.$O\
+	latin1.$O\
+	main.$O\
+	mmu.$O\
+	ns.$O\
+	pgrp.$O\
+	print.$O\
+	proc.$O\
+	qio.$O\
+	qlock.$O\
+	screen.$O\
+	styx.$O\
+	inferno.$O\
+	sysfile.$O\
+	dial.$O\
+	taslock.$O\
+	trap.$O\
+	$DEV\
+	$IP $MISC $LINK\
+	kbd.$O\
+	utils.$O\
+
+b$CONF:	$OBJ $CONF.c $LIBS
+	$CC $CFLAGS '-DKERNDATE='`{date -n} $CONF.c
+	$LD -o $target -T0x80100020 -l $OBJ $CONF.$O $LIBS
+	size $target
+
+install:V: b$CONF
+	cp b$CONF ../../$OBJDIR/bin/b$CONF
+
+uninstall:V:
+	$RM ../../$OBJDIR/bin/tv$CONF
+
+<../port/portmkfile
+
+%.$O:	io.h
+clock.$O devether.$O fault386.$O main.$O trap.$O: \
+				../../$OBJDIR/include/ureg.h
+
+osinit.root.c:	../init/$INIT.dis $cputype.data2c
+		./$cputype.data2c osinit ../init/$INIT.dis $target
+
+../init/$INIT.dis:	../init/$INIT.b
+		cd ../init; mk
+
+ir.root.c:	../init/$IR.dis $cputype.data2c
+		./$cputype.data2c ir ../init/$IR.dis $target
+
+../init/$IR.dis:
+		cd ../init; mk $IR.dis
+
+phone.root.c:	../../icons/phone.bit $cputype.data2c
+		./$cputype.data2c phone ../../icons/phone.bit $target
+
+lucent.root.c:	../../icons/lucent.bit $cputype.data2c
+		./$cputype.data2c lucent ../../icons/lucent.bit $target
+
+screen.$O: lucent.root.c
+
+%.$O:	../ip/%.c
+	$CC $CFLAGS ../ip/$stem.c
+$cputype.data2c:	../port/data2c.c
+	objtype=$cputype pcc -o $target ../port/data2c.c
+
+devroot.$O: rootdata.h rootfs.h
+
+rootdata.h: mkroot ../init/$INIT.dis $cputype.data2c ../init/$IR.dis
+	mkroot $INIT > rootdata.h

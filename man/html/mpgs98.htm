@@ -1,0 +1,143 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs97.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs99.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="855907">
+<center><h1> login</h1></center>
+</a><a name="855908">
+Login - introduction to the Login module<p>
+</a><a name="855909">
+<h2> Synopsis</h2>
+</a><pre><tt>include "security.m";
+login:= load Login Login-&gt;PATH;
+</tt></pre></p><a name="855912">
+<h2> Description</h2>
+</a><a name="855913">
+The login module provides routines to communicate with a Certifying Authority (CA) in order to create a Keyring-&gt;Authinfo adt. (See <a href="mpgs46.htm#848755"><em>Limbo Keyring Modules</em></a>). It does this assuming a secret, a password, has already been established between the user and the CA. <p>
+</a><a name="855918">
+The password is used by the encrypted key exchange protocol defined below to establish a secure channel between the user and CA. The description uses the following notation:  
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="855921">
+ivec<p>
+</a><td><a name="855923">
+an 8 - byte random number chosen for this conversation<p>
+</a>
+<tr><td><a name="855925">
+sha<p>
+</a><td><a name="855927">
+the 20 - byte secure hash (SHA-1) of the password<p>
+</a>
+<tr><td><a name="855929">
+key<p>
+</a><td><a name="855931">
+an 8 - byte secret formed as follows:<p>
+</a>
+<tr><td><a name="855933">
+<p>
+</a><td><a name="855935">
+<kbd>key[0] = ivec[0]^sha[0]^sha[8]^sha[16]   </kbd><p>
+</a>
+<tr><td><a name="855937">
+<p>
+</a><td><a name="855939">
+<kbd>key[1] = ivec[1]^sha[1]^sha[9]^sha[17] </kbd><p>
+</a>
+<tr><td><a name="855941">
+<p>
+</a><td><a name="855943">
+<kbd>...   </kbd><p>
+</a>
+<tr><td><a name="855945">
+<p>
+</a><td><a name="855947">
+<kbd>key[5] = ivec[5]^sha[5]^sha[13];   </kbd><p>
+</a>
+<tr><td><a name="855949">
+<p>
+</a><td><a name="855951">
+<kbd>key[6] = ivec[6]^sha[6]^sha[14];   </kbd><p>
+</a>
+<tr><td><a name="855953">
+<p>
+</a><td><a name="855955">
+<kbd>key[7] = ivec[7]^sha[7]^sha[15]; </kbd><p>
+</a>
+<tr><td><a name="855957">
+alpha<p>
+</a><td><a name="855959">
+a Diffie-Hellman base used system wide<p>
+</a>
+<tr><td><a name="855961">
+p<p>
+</a><td><a name="855963">
+a Diffie-Hellman modulus used system wide <p>
+</a>
+<tr><td><a name="855965">
+key (<em>m</em>)<p>
+</a><td><a name="855967">
+<em>m</em> encrypted using the RC4 algorithm with key<p>
+</a>
+<tr><td><a name="855969">
+Rx<p>
+</a><td><a name="855971">
+a random number of the same order as p.<p>
+</a>
+<tr><td><a name="855973">
+secret<p>
+</a><td><a name="855975">
+the Diffie-Hellman secret alpha**(r0*r1) mod p<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="855976">
+In the following protocol, the notation "user-&gt;CA <em>xxx</em>" means that a user sends the message "<em>xxx</em>" to the certifying authority. At any point in the exchange, either party can send an error instead of a message to terminate the protocol.<p>
+</a><pre><tt><kbd>	user --&gt; CA  name   
+</kbd><kbd>	CA --&gt; user  ACK
+</kbd><kbd>     
+</kbd><kbd>	user --&gt; CA  ivec   
+</kbd><kbd>	CA --&gt; user  key(alpha**r0 mod p), alpha, p
+</kbd>
+<kbd>	user --&gt; CA  alpha**r1 mod p
+</kbd><kbd>	CA --&gt; user  CA's public key, SHA(CA's public key + secret)
+</kbd><kbd> 
+</kbd><kbd>	user --&gt;CA  user's public key, SHA(user's public key + secret)
+</kbd><kbd>	CA --&gt; user  user's public key certificate
+</kbd>
+</tt></pre></p><a name="855989">
+The complexity of this protocol is intended to shield the password. To start a clear text attack against the password, one needs to first attack the Diffie-Hellman exponential to determine alpha**r0 mod p. A possible weakness is that the encrypted quantity is base 64 encoded, constraining the possible values of each byte. This could aid a brute force attack.<p>
+</a><a name="855990">
+The values alpha and p are sent unprotected, though the user code does a few sanity checks on the values it receives. This is another potential point of attack.<p>
+</a><a name="855991">
+The role of ivec is to foil any replay attacks by someone spoofing the CA, though this is probably overkill.<p>
+</a><a name="855993">
+<h2> See Also</h2>
+</a><a name="855994">
+B. Schneier, <em>Applied Cryptography</em>, 1996, J. Wiley &amp; Sons, Inc.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs97.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs99.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

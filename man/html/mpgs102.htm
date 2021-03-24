@@ -1,0 +1,59 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs101.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs103.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="856162">
+<center><h1> srv </h1></center>
+</a><a name="856163">
+srv - miscellaneous services from the host operating system<p>
+</a><a name="856164">
+<h2> Synopsis</h2>
+</a><pre><tt>include "srv.m"
+srv:= load Srv Srv-&gt;PATH;
+Srv: module
+{
+  PATH:  con "$Srv";
+  reads:  fn(str: string, off, nbytes: int): (array of byte, string);
+  iph2a: fn(host: string)                : list of string;
+  ipn2p: fn(net, service: string)        : string;
+};
+</tt></pre></p><a name="856174">
+<h2> Description</h2>
+</a><a name="856175">
+<h3> reads (string, off, nbytes)</h3>
+</a><a name="856176">
+The reads function will convert a substring of the given string <em>str</em> into a returned array of byte. The substring is defined by arguments <em>off</em> (offset) and <em>nbytes</em> (length). <p>
+</a><a name="856180">
+<h3> iph2a (host)	</h3>
+</a><a name="856181">
+The iph2a function calls the host's gethostbyname function for the argument <em>host</em>. The matching addresses are returned as a list of strings.<p>
+</a><a name="856183">
+<h3> ipn2p (net, service)</h3>
+</a><a name="856184">
+The ipn2p function calls the host's getservbyname function for the specified network (<em>net</em>) and service name (<em>service</em>). The port number is returned as a string.<p>
+</a><a name="856186">
+<h2> See Also</h2>
+</a><a name="856190">
+<a href="mpgs8.htm#840464"><em>cs</em></a> <p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs101.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs103.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,105 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs28.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs30.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="877121">
+<center><h1> unicode</h1></center>
+</a><a name="877122">
+unicode - interpret Unicode characters<p>
+</a><a name="877123">
+<h2> Synopsis</h2>
+</a><pre><tt>unicode [-nt] <em>hexmin</em> - <em>hexmax
+</em>unicode [-t] <em> hex </em>[...]
+unicode [-n] <em> characters
+</em></tt></pre></p><a name="891719">
+<h2> Description</h2>
+</a><a name="877128">
+The <kbd>unicode </kbd>command converts between UTF and character values from the Unicode Standard (see <a href="mpgs130.htm#849689"><em>utf</em></a>).<p>
+</a><a name="877129">
+If given a range of hexadecimal numbers, <kbd>unicode </kbd>prints a table of the specified Unicode characters - their values and UTF representations. Otherwise it translates from UTF to numeric value or <em>vice versa</em>, depending on the appearance of the supplied text; 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="877132">
+<kbd>-n</kbd><p>
+</a><td><a name="877134">
+The<kbd> -n </kbd>option forces numeric output to avoid ambiguity with numeric characters.<p>
+</a>
+<tr><td><a name="877136">
+<kbd>-t</kbd><p>
+</a><td><a name="877138">
+If converting to UTF, the characters are printed one per line unless the <kbd>-t </kbd>flag is set, in which case the output is a single string containing only the specified characters.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="877139">
+The output of <kbd>unicode </kbd>may be unhelpful if the characters printed are not available in the current font.<p>
+</a><a name="877140">
+The file<kbd> /lib/unicode </kbd>contains a table of characters and descriptions, sorted in hexadecimal order.<p>
+</a><a name="877150">
+<h2> Examples 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="877143">
+<kbd>unicode p</kbd><p>
+</a><td><a name="877145">
+Print the hex value of<kbd> 'p'</kbd>.<p>
+</a>
+<tr><td><a name="877147">
+<kbd>unicode 2200-22f1</kbd><p>
+</a><td><a name="877149">
+Print a table of miscellaneous mathematical symbols.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="877156">
+<h2> Files 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="877153">
+<kbd>/lib/unicode</kbd><p>
+</a><td><a name="877155">
+table of characters and descriptions.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="877157">
+<h2> See Also</h2>
+</a><a name="877158">
+<a href="mpgs130.htm#849689"><em>utf</em></a> and <a href="mpgs127.htm#849587"><em>font</em></a> <p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs28.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs30.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

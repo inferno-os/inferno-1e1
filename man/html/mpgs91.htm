@@ -1,0 +1,83 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs90.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs92.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="859355">
+<center><h1> tk </h1></center>
+</a><a name="844964">
+Tk -graphics toolkit<p>
+</a><a name="854293">
+<h2> Synopsis</h2>
+</a><pre><tt>include "tk.m";
+tk:= load Tk Tk-&gt;PATH;
+Toplevel: adt
+{
+    id:   int;
+    image: ref Draw-&gt;Image;
+};
+toplevel: fn(screen: ref Draw-&gt;Screen, arg: string): ref Toplevel;
+namechan: fn(t: ref Toplevel, c: chan of string, n: string): string;
+cmd:      fn(t: ref Toplevel, arg: string): string;
+mouse:    fn(x, y, button: int);
+keyboard: fn(key: int);
+</tt></pre></p><a name="844977">
+<h2> Description</h2>
+</a><a name="844978">
+The Tk module provides primitives for building user interfaces, based on Ousterhout's Tcl/Tk. The interface to the toolkit itself is primarily the passing of strings to and from the elements of the toolkit using the cmd function.<p>
+</a><a name="844979">
+<h3> toplevel (screen, arg)</h3>
+</a><a name="844980">
+The <kbd>toplevel</kbd> function, given an existing <kbd>Screen</kbd> (usually one inherited from the graphics Context; see <a href="mpgs37.htm#841856"><em>context</em></a>), creates a new window, called a Toplevel, under the control of the Tk toolkit. The <kbd>Toplevel</kbd> is passed to the <kbd>cmd</kbd> and <kbd>namechan</kbd> functions to drive the widgets in the window. The <em>arg</em> parameter is a string containing creation options (such as -borderwidth <kbd>2</kbd>) that are applied when creating the <kbd>toplevel</kbd> window.<p>
+</a><a name="844981">
+<h3> cmd (t, arg)</h3>
+</a><a name="844982">
+The <kbd>cmd</kbd> function passes command strings to the widgets in the Toplevel <em>t</em> and returns the string resulting from their execution. For example, given a canvas <kbd>.c</kbd> in the <kbd>Toplevel</kbd> <kbd>t</kbd>,   <p>
+</a><pre><tt>	x:= int tk-&gt;cmd (t, ".c cget -actx"); 
+</tt></pre></p><a name="844984">
+returns the integer <em>x</em> coordinate of the canvas.<p>
+</a><a name="844985">
+<h3> namechan (t, c, n)</h3>
+</a><a name="844986">
+Bindings can be created in a <kbd>Toplevel</kbd> that trigger strings to be sent on Limbo channels. Such channels must be declared to the <kbd>Tk</kbd> module using namechan. For example, to create a button that sends the word <kbd>Ouch</kbd> when it is pressed:<p>
+</a><pre><tt>hitchannel:= chan of string;
+tk-&gt;namechan(t, hitchannel, "channel");
+tk-&gt;cmd(t, "button.b.Hit -text Hit -command {send channel Ouch}");
+expl:= &lt;-hitchannel;    # will see "Ouch" when button pressed
+</tt></pre></p><a name="844991">
+<h3> mouse ( ) and keyboard ( )</h3>
+</a><a name="844992">
+The <kbd>mouse</kbd> and <kbd>keyboard</kbd> functions deliver mouse and keyboard events to Tk, for delivery to widgets. They are usually called only by the window manager.<p>
+</a><a name="844993">
+<h2> See Also</h2>
+</a><a name="844994">
+<a href="mpgs37.htm#841856"><em>context</em></a>, <a href="mpgs92.htm#844999"><em>tklib</em></a>, and <a href="mpgs104.htm#856249"><em>wmlib</em></a><p>
+</a><a name="844995">
+John K. Ousterhout, <em>Tcl and the Tk Toolkit</em>, Addison-Wesley Publishing Company, Reading Massachusetts, 1994.<p>
+</a><a name="853492">
+'The Limbo/Tk Implementation,' <em>Inferno Developer's Guide</em>, Appendix A.<p>
+</a><a name="844997">
+<h2> Caveat</h2>
+</a><a name="844998">
+Because <kbd>Tk</kbd> input is handled globally, there can be only one instance of a <kbd>Tk</kbd> implementation on a given machine or a given emulator.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs90.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs92.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<../../mkconfig
+<../../$SYSHOST/mkhost
+
+OBJ1=\
+	ftpfs.dis\
+	styx.dis\
+	styxreply.dis\
+
+OBJ2=\
+	wmftp.dis\
+
+OBJ=	$OBJ1\
+	$OBJ2
+
+all:V:	$OBJ1 $OBJ2
+
+MODULE= ./styx.m\
+	../../module/bufio.m\
+	../../module/daytime.m\
+	../../module/draw.m\
+	../../module/string.m\
+	../../module/sys.m\
+	../../module/tk.m\
+	../../module/tklib.m\
+	../../module/wmlib.m\
+
+OBJINST=${OBJ1:%=../../dis/lib/%} ${OBJ2:%=../../dis/wm/%}
+OBJPKG=${OBJ1:%=$PREFIX_PKG/dis/lib/%} ${OBJ2:%=$PREFIX_PKG/dis/wm/%}
+
+$OBJ:	$MODULE
+
+install:V: $OBJ
+	$RM $OBJINST
+	$CP $OBJ1 ../../dis/lib
+	$CP $OBJ2 ../../dis/wm
+
+uninstall:V:
+	$RM $OBJINST
+
+package:V:	$OBJ\
+		$PREFIX_PKG/dis
+	$RM $OBJPKG
+	$CP $OBJ1 $PREFIX_PKG/dis/lib
+	$CP $OBJ2 $PREFIX_PKG/dis/wm
+
+%.install:V:	%.dis
+	cp $stem.dis ../../dis
+
+nuke \
+clean:V:
+	$RM *.dis *.sbl
+
+%.dis:	%.b
+	limbo -I../../module -gw $stem.b
+
+%.s:	%.b
+	limbo -I../../module -wG -S $stem.b
+
+$PREFIX_PKG/dis:
+	$MKDIR $target

@@ -1,0 +1,47 @@
+<../../../mkconfig
+<../../../$SYSHOST/mkhost
+
+OBJ=\
+	arg.dis\
+	mkext.dis\
+	mkfs.dis\
+	part.dis\
+	
+
+all:V:	$OBJ
+
+MODULE=\
+	arg.m\
+
+OBJINST=${OBJ:%=../../../dis/disk/%}
+OBJPKG=${OBJ:%=$PREFIX_PKG/dis/disk/%}
+
+$OBJ:	$MODULE
+
+install:V: $OBJ
+	$RM $OBJINST
+	$CP $OBJ ../../../dis/disk
+
+uninstall:V:
+	$RM $OBJINST
+
+package:V:	$OBJ\
+		$PREFIX_PKG/dis/disk
+		$RM $OBJPKG
+		$CP $OBJ $PREFIX_PKG/dis/disk
+
+%.install:V:	%.dis
+	cp $stem.dis ../../../dis/svc/httpd
+
+clean nuke:V:
+	$RM *.dis *.sbl
+
+%.dis:	%.b
+	limbo -I../../../module -gw $stem.b
+
+%.s:	%.b
+	limbo -I../../../module -w -G -S $stem.b
+
+$PREFIX_PKG/dis/disk:
+	$MKDIR $target
+

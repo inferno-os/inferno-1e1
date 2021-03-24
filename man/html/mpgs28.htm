@@ -1,0 +1,71 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs27.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs29.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="849207">
+<center><h1> time </h1></center>
+</a><a name="841444">
+time - time command execution<p>
+</a><a name="841445">
+<h2> Synopsis</h2>
+</a><pre><tt>time <em>cmd args..
+</em></tt></pre></p><a name="841447">
+<h2> Description</h2>
+</a><a name="841448">
+The <kbd>time</kbd> command is a 'front end' to the execution of the <em>cmd</em> and arguments that appear on the command line. On completion of the subject program (<em>cmd</em>), <kbd>time</kbd> prints to standard error a line with the load, run, and total times (in seconds) for the subject.<p>
+</a><a name="841449">
+The <kbd>time</kbd> command follows the same rules as the shell for converting <em>cmd</em> to the pathname of an executable module. <p>
+</a><a name="841450">
+The load time displayed is just the value for <kbd>time</kbd> to load <em>cmd</em>. Any loads performed by <em>cmd</em> are included in the reported run time.<p>
+</a><a name="841451">
+The <kbd>time</kbd> command is designed to act on a single command, not a command pipeline. If statistics on a pipeline are needed, the pipeline should be encapsulated into a separate script for timing. For example,<p>
+</a><pre><tt>	echo 'ls | grep sh' &gt; pipeline;  time sh pipeline
+</tt></pre></p><a name="841453">
+In the above example, the load value returned by <kbd>time</kbd> is for the loading of <em>sh</em>, not the subsidiary commands of the pipeline.<p>
+</a><a name="841454">
+<h2> See Also 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="864642">
+<a href="mpgs26.htm#841311"><em>sh</em></a> <p>
+</a><td><a name="864644">
+Rules on converting <em>command field</em> to module pathname<p>
+</a>
+<tr><td><a name="864646">
+<a href="mpgs79.htm#844640"><em>millisec</em></a> <p>
+</a><td><a name="864648">
+Description of millisecond resolution timer.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="841457">
+<h2> BUGS</h2>
+</a><a name="841458">
+The <em>time</em> command will interfere with the generation of end of file condition when used on a command reading a pipeline.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs27.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs29.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

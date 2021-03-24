@@ -1,0 +1,9 @@
+OFILES=\
+	doprint.$O\
+	errstr-Inferno.$O\
+	icossin.$O\
+	icossin2.$O\
+	print.$O\
+	runestrlen.$O\
+	strtoll.$O\
+	rune.$O\

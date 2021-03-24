@@ -1,0 +1,86 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs44.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs46.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="842503">
+<center><h1> screen </h1></center>
+</a><a name="842504">
+Screen - type to define the abstract data structures for the windows on a display, or subwindows within a window<p>
+</a><a name="842505">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";
+draw:= load Draw Draw-&gt;PATH;
+Screen: adt
+{
+ id:        int;
+ image:     ref Image;
+ fill:      ref Image;
+ allocate: fn(image, fill: ref Image, public: int):  ref Screen;
+ newwindow:fn(screen: self ref Screen, r: Rect, color:int)
+                                                 :  ref Image;
+ top:        fn(screen: self ref Screen, wins: array of ref Image);
+};
+</tt></pre></p><a name="842517">
+<h2> Description</h2>
+</a><a name="842518">
+A Screen is the abstract data structure representing a set of windows visible on a particular Image such as the display or a parent window. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="842521">
+id<p>
+</a><td><a name="842523">
+When a <kbd>Screen</kbd> object is allocated (see <kbd>allocate</kbd> below), the system assigns it a unique integer, id. It may be declared 'public' and accessible to arbitrary processes and machines with access to the screen's Display. The id value may be used as an argument to Display.publicscreen; see <em>draw-display</em>.<p>
+</a>
+<tr><td><a name="842525">
+fill<p>
+</a><td><a name="842527">
+When windows are deleted from a screen, the system uses the <kbd>fill</kbd> image to repaint the screen's base image.<p>
+</a>
+<tr><td><a name="842529">
+image<p>
+</a><td><a name="842531">
+The image upon which the windows appear.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="842532">
+<h3> allocate (image, fill, public)	</h3>
+</a><a name="842533">
+The <kbd>allocate</kbd> function makes a new Screen object. The <em>image</em> argument provides the base image on which the windows will be made. The <em>fill</em> argument provides the <kbd>Screen.fill</kbd> image. <kbd>Allocate</kbd> does not affect the contents of <em>image</em>; it may be necessary after allocation to paint the base image with fill.<p>
+</a><a name="842534">
+Using a non-zero <em>public</em> argument allocates a public screen; zero requests a private screen. Public screens may be attached by any process on any machine with access to the <kbd>Display</kbd> upon which the screen is allocated, enabling remote processes to create windows on the screen. Knowing only the <kbd>id</kbd> field of the original Screen, the remote process can call the <kbd>Display.publicscreen</kbd> function to acquire a handle to the screen. The <kbd>image</kbd> and <kbd>fill</kbd> fields of a <kbd>Screen</kbd> obtained this way are nil, but they are not needed for ordinary window management.<p>
+</a><a name="842535">
+<h3> screen.newwindow (r)</h3>
+</a><a name="842536">
+The <kbd>newwindow</kbd> function allocates a window on the display at the specified rectangle; the return value is an <kbd>Image</kbd> that may be used like any other.<p>
+</a><a name="842537">
+<h3> screen.top (wins)</h3>
+</a><a name="842538">
+The <kbd>top</kbd> function organizes a group of windows on a screen. Given <kbd>wins</kbd>, an array of window images, it places the <kbd>wins</kbd><kbd>[0]</kbd> element at the top,<kbd> </kbd><kbd>wins</kbd><kbd>[1]</kbd> behind that, and so on, with the last element of <kbd>wins</kbd> in front of the all the windows on the screen not in<kbd> </kbd><kbd>wins</kbd>. Images in the array must be on the specified screen (<kbd>nil</kbd> elements are ignored).<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs44.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs46.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

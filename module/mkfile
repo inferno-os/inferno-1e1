@@ -1,0 +1,75 @@
+<../mkconfig
+<../$SYSHOST/mkhost
+
+FILES=\
+	brutus.m\
+	brutusext.m\
+	bufio.m\
+	cci.m\
+	daytime.m\
+	debug.m\
+	devpointer.m\
+	draw.m\
+	emio.m\
+	filepat.m\
+	gr.m\
+	hash.m\
+	html.m\
+	imagefile.m\
+	ir.m\
+	keyring.m\
+	lib.m\
+	linalg.m\
+	math.m\
+	mpeg.m\
+	newns.m\
+	pipe.m\
+	prefab.m\
+	quicktime.m\
+	rand.m\
+	readdir.m\
+	regex.m\
+	riff.m\
+	runt.m\
+	security.m\
+	sh.m\
+	smtp.m\
+	srv.m\
+	srvrunt.b\
+	string.m\
+	sys.m\
+	tcllib.m\
+	tk.m\
+	tklib.m\
+	url.m\
+	version.m\
+	volume.m\
+	webget.m\
+	wmlib.m\
+	workdir.m\
+
+
+FILESPKG=${FILES:%=$PREFIX_PKG/module/%}
+
+all:VQ:
+	echo all is up to date
+
+install:VQ:
+	echo install is up to date
+	
+
+package:V:	$PREFIX_PKG/module
+	$RM $FILESPKG
+	$CP $FILES $PREFIX_PKG/module
+
+clean:QV:
+	echo clean is up to date
+
+nuke:QV:
+	echo nuke is up to date
+
+uninstall:QV:
+	$RM $FILESPKG
+
+$PREFIX_PKG/module:
+	$MKDIR $target

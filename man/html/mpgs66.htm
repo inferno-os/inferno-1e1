@@ -1,0 +1,82 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs65.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs67.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="860155">
+<center><h1> </h1></center>
+</a><a name="843703">
+Limbo Prefab Modules<p>
+</a><a name="848790">
+The Limbo Prefab modules are similar to interactive television (ITV) tookit and are as follows:<p>
+</a><a name="871870">
+<h2> Prefab Modules 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="871846">
+<a href="mpgs67.htm#843716"><em>compound</em></a> <p>
+</a><td><a name="871848">
+windows for ITV toolkit<p>
+</a>
+<tr><td><a name="871853">
+<a href="mpgs68.htm#843819"><em>element</em></a> <p>
+</a><td><a name="871855">
+menu and display elements for ITV toolkit<p>
+</a>
+<tr><td><a name="871860">
+<a href="mpgs69.htm#844068"><em>environ</em></a><p>
+</a><td><a name="871862">
+environment for ITV toolkit to provide a graphics framework for a item collections<p>
+</a>
+<tr><td><a name="871867">
+<a href="mpgs70.htm#844093"><em>style</em></a> <p>
+</a><td><a name="871869">
+fonts and colors for ITV toolkit<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="843705">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";
+include "prefab.m";
+prefab:= load Prefab Prefab-&gt;PATH;
+</tt></pre></p><a name="843709">
+<h2> Description</h2>
+</a><a name="843710">
+The Prefab module contains components for building graphics objects suitable for Interactive Television (ITV) applications using infrared remote controls. Using the Draw module's operations for simple text and images (see <a href="mpgs36.htm#867451"><em>Limbo Draw Modules</em></a>), the toolkit can group individual items, treat those groups as units, and then activate the items on command. The other user interface toolkit, (see <em>tk)</em>, provides facilities for keyboard- and mouse-driven applications.<p>
+</a><a name="843711">
+The objects on the screen are of type Compound, each of which occupies a unique window on the display and contains objects of type Element. An Element may be a single object or a list of further Elements that can be used to build hierarchically structured components.<p>
+</a><a name="843712">
+Prefab defines Environ and Style types that specify the appearance of objects: their colors, fonts, backgrounds, and so on. A Style gives font and color information, while an Environ identifies the Screen upon which the items will be displayed and the Style in which they will be drawn.<p>
+</a><a name="843713">
+Applications should allocate an Element or Compound only through the appropriate member functions as described in the corresponding sections of the manual. Moreover, except where indicated, applications should not modify the data members directly. Although the type definitions make data members visible, the members should be treated as read-only data.<p>
+</a><a name="843714">
+<h2> See Also</h2>
+</a><a name="843715">
+<em><a href="mpgs36.htm#867451"></em><em>Limbo Draw Modules</em><em></a> </em>and <a href="mpgs97.htm#855746"><em>ir</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs65.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs67.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

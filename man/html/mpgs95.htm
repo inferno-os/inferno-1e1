@@ -1,0 +1,65 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs94.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs96.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="855656">
+<center><h1> devpointer </h1></center>
+</a><a name="855657">
+devpointer - I/O interface for the pointer device<p>
+</a><a name="855658">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";   #for Draw-&gt;Pointer
+include "devpointer.m";
+ptr:= load Devpointer Devpointer-&gt;PATH;
+Devpointer: module
+{
+  PATH:      con "/dis/lib/devpointer.dis";
+   Size:      con 1+3*12;	# 'm' plus 3 12-byte decimal integers
+   init:        fn(file: string, posn: chan of ref Draw-&gt;Pointer): int;
+  bytes2ptr: fn(buf: array of byte)    : ref Draw-&gt;Pointer;
+  ptr2bytes: fn(ptr: ref Draw-&gt;Pointer): array of byte;
+};
+</tt></pre></p><a name="855670">
+<h2> Description</h2>
+</a><a name="855671">
+<h3> init (file, posn) </h3>
+</a><a name="855672">
+The init function spawns a thread to continually read the pointer device specified by <em>file</em> and return a Pointer adt (see <a href="mpgs43.htm#866719"><em>pointer</em></a>) over the channel specified by <em>posn</em>. If <em>file</em> is nil, the default device is /dev/pointer.<p>
+</a><a name="855676">
+<h3> bytes2ptr (buf)</h3>
+</a><a name="855677">
+The bytes2ptr function converts the array of characters in <em>buf</em> to a Pointer and returns a reference to it. The <em>buf</em> array should consist of exactly Size bytes and be in the format returned by /dev/pointer.<p>
+</a><a name="855678">
+<h3> ptr2bytes (ptr)</h3>
+</a><a name="855679">
+The ptr2bytes function provides an inverse transformation of the bytes2ptr function.<p>
+</a><a name="855680">
+<h2> Files</h2>
+</a><a name="855681">
+<kbd>/dev/pointer</kbd><p>
+</a><a name="855682">
+<h2> See Also</h2>
+</a><a name="894181">
+<a href="mpgs43.htm#866719"><em>pointer</em></a> and <a href="mpgs108.htm#876580"><em>draw</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs94.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs96.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

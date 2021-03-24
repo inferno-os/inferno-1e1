@@ -1,0 +1,98 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs46.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs48.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="842826">
+<center><h1> auth </h1></center>
+</a><a name="842827">
+Keyring: auth, readauthinfo, writeauthinfo - authenticate a connection<p>
+</a><a name="842828">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+include "keyring.m";
+kr:=      load Keyring Keyring-&gt;PATH;
+auth:     fn(fd: ref Sys-&gt;FD, info: ref Authinfo, setid: int)
+                          : (string, array of byte);
+readauthinfo: fn(filename: string)         : ref Authinfo;
+writeauthinfo:fn(filename: string, info: ref Authinfo): int;
+</tt></pre></p><a name="842836">
+<h2> Description</h2>
+</a><a name="842837">
+<h3> auth (fd, info, setid) </h3>
+</a><a name="842838">
+The auth function performs mutual authentication over a network connection, usually between a client and a server. The auth function is symmetric, that is, each party runs it on their end of the connection. The Authinfo adt, <em>info</em>, contains the public key of a certifying authority (PK<em>ca</em>), the private key of the user (SK<em>u</em>), the public key (PK<em>u</em>) of the user signed by the certifying authority (CERT<em>u</em>), and Diffie-Hellman parameters (<em>alpha</em>, <em>p</em>). <p>
+</a><a name="842839">
+The auth function returns a string and a byte array. If the byte array is nil then the authentication has failed and the string is an error message. If the byte array is non-nil, then it represents a secret shared by the two communicating parties. In this case the string is the name of the party at the other end of the connection.<p>
+</a><a name="842840">
+If the authentication is successful and the argument <em>setid</em> is non-zero then auth attempts to write the id of the party at the other end of the connection into /dev/user (see <a href="mpgs106.htm#845700"><em>cons</em></a>). No error is generated if this does not succeed. If the authentication is not successful and <em>setid</em> is non-zero, auth writes "none" into /dev/user.<p>
+</a><a name="842841">
+The authentication protocol is based on the Station-to-Station protocol. In the following the parties are labeled 0 and 1. Sig0(<em>x</em>) is <em>x</em> signed with 0's private key.<p>
+</a><pre><tt>0 -&gt; 1  alpha**r0 mod p, CERTu0, PKu0   
+1 -&gt; 0  alpha**r1 mod p, CERTu1, PKu1   
+0 -&gt; 1  sig0(alpha**r0 mod p, alpha**r1 mod p)   
+1 -&gt; 0  sig1(alpha**r0 mod p, alpha**r1 mod p) 
+</tt></pre></p><a name="855315">
+At this point both 0 and 1 share the secret alpha**(r0*r1) which is returned in the byte array.<p>
+</a><a name="842847">
+<h3> readauthinfo (filename)</h3>
+</a><a name="842848">
+The readauthinfo function reads an Authinfo adt from a file. It returns nil if there is a read or conversion error, a reference to the adt otherwise.<p>
+</a><a name="842849">
+<h3> writeauthinfo (filename, info)</h3>
+</a><a name="842850">
+The writeauthinfo function writes an Authinfo adt to a file. It returns -1 if the write operation fails, 0 otherwise.<p>
+</a><a name="866793">
+<h2> Files</h2>
+</a><a name="889453">
+Note that <kbd>$user</kbd> is the id of the user. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="866798">
+<kbd>/usr/$user/keyring</kbd><p>
+</a><td><a name="866800">
+The conventional directory for storing Authinfo files.<p>
+</a>
+<tr><td><a name="866802">
+<kbd>/usr/$user/keyring/default</kbd><p>
+</a><td><a name="866804">
+The file normally used by server programs.<p>
+</a>
+<tr><td><a name="866806">
+<kbd>/usr/$user/keyring/</kbd><kbd>$server</kbd><kbd> </kbd><p>
+</a><td><a name="866808">
+The files normally used by clients where <em>$server</em> is the network name of the server being called, for example, <p>
+</a><pre><tt>tcp!<em>server_name</em>.
+</tt></pre></p>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="842858">
+<h2> See Also</h2>
+</a><a name="842859">
+B. Schneier, <em>Applied Cryptography</em>, 1996, J. Wiley &amp; Sons, Inc.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs46.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs48.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

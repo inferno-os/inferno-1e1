@@ -1,0 +1,39 @@
+<../../mkconfig
+<../../$SYSHOST/mkhost
+<../../$OBJDIR/mkfile
+
+TARG=5l
+OFILES=\
+	asm.$O\
+	list.$O\
+	noop.$O\
+	obj-$SYSTARG.$O\
+	optab.$O\
+	pass.$O\
+	span.$O\
+	enam.$O\
+	cputime.$O\
+
+HFILES=\
+	l.h\
+	../5c/5.out.h\
+	../mk/ar.h\
+
+# ar.h is located in ../mk directory.
+CFLAGS= $CFLAGS -I../mk
+
+# libbio.a depends on lib9.a so order is important
+LIBS=bio 9
+LDSYSLIBS=
+
+<../../$SYSTARG/mkone
+
+obj-Irix.$O:	obj-posix.c
+obj-Solaris.$O:	obj-posix.c
+obj-Linux.$O:	obj-posix.c
+
+enam.$O:	../5c/enam.c
+	$CC $CFLAGS ../5c/enam.c
+
+package:QV:
+	$TRUE

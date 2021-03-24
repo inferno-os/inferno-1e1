@@ -1,0 +1,45 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs110.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs112.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="895851">
+<center><h1> root </h1></center>
+</a><a name="846276">
+root - the root file system<p>
+</a><a name="846277">
+<h2> Synopsis</h2>
+</a><pre><tt>/
+/chan
+/dev
+/net
+/nvfs
+/prog
+/boot
+</tt></pre></p><a name="846285">
+<h2> Description</h2>
+</a><a name="846286">
+Since the syntax <kbd>#/</kbd> is illegal, this device can only be accessed directly by the kernel.<p>
+</a><a name="846287">
+This device is set up by the kernel to be the root of the name space. The names in the one-level tree are mostly just place-holders, to allow a place for binding other files. The exception is /boot (not present in the emulation environment) which provides an executable Dis binary when read. Native kernels load /boot when initializing the system. Other files needed for bootstrap may also reside in this device.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs110.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs112.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

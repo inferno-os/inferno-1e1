@@ -1,0 +1,104 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs102.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs104.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="856198">
+<center><h1> volume </h1></center>
+</a><a name="856199">
+volume - volume control for an infrared interface<p>
+</a><a name="856200">
+<h2> Synopsis</h2>
+</a><pre><tt>Volumectl: module
+{
+PATH:      con "/dis/lib/volume.dis";
+volumectl: fn(ctxt: ref Draw-&gt;Context, ch: chan of int, device: 
+string);
+};
+</tt></pre></p><a name="856206">
+<h2> Description</h2>
+</a><a name="856207">
+The volumectl module should be spawned as a separate process from any process that desires volume control via an infrared interface.<p>
+</a><a name="856237">
+The parameters are: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="856210">
+<em>ctxt</em> <p>
+</a><td colspan=2 rowspan=1><a name="856212">
+A Context that provides volumectl with access to the display. It is used to display a slider widget. The slider automatically disappears after several seconds of inactivity.<p>
+</a>
+<tr><td><a name="856214">
+<em>ch</em> <p>
+</a><td colspan=2 rowspan=1><a name="856216">
+A chan of int through which volumectl receives input from the infrared controller. The values recognized are:<p>
+</a>
+<tr><td><a name="856218">
+<p>
+</a><td><a name="856220">
+<kbd>VolUP</kbd><p>
+</a><td><a name="877441">
+increase volume<p>
+</a>
+<tr><td><a name="856222">
+<p>
+</a><td><a name="856224">
+<kbd>VolDN</kbd><p>
+</a><td><a name="877443">
+decrease volume<p>
+</a>
+<tr><td><a name="856226">
+<p>
+</a><td><a name="856228">
+<kbd>Enter</kbd><p>
+</a><td><a name="877445">
+exit<p>
+</a>
+<tr><td><a name="856230">
+<p>
+</a><td><a name="856232">
+Other values<p>
+</a><td><a name="877447">
+are ignored<p>
+</a>
+<tr><td><a name="856234">
+<em>device</em> <p>
+</a><td colspan=2 rowspan=1><a name="856236">
+This argument is a string that is used as a prefix to commands to the device (e.g., "audio out").<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="895587">
+<h2> Files</h2>
+</a><a name="895588">
+<kbd>/dev/volume</kbd><p>
+</a><a name="856240">
+<h2> See Also</h2>
+</a><a name="856247">
+<a href="mpgs97.htm#855746"><em>ir</em></a> <p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs102.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs104.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+SYSTARG=Posix
+OBJTYPE=386
+CPUS=mips 386
+
+A=		a8
+O=		8
+OS=		v85o
+
+AR=		ar
+ARFLAGS=	cvru
+
+AS=		8a
+ASFLAGS=
+
+CC=		pcc -c -9
+CFLAGS=\
+		-w\
+		-I$ROOT_DEVEL/$SYSTARG/$OBJTYPE/include\
+		-I$ROOT_DEVEL/include\
+		-I$ROOT_DEVEL/os/pc\
+
+LD=		pcc
+LDFLAGS=
+LDSYSLIBS=
+
+YACC=		yacc
+YFLAGS=		-dS

@@ -1,0 +1,72 @@
+#!/bin/rc
+
+if(! ~ $#* 1){
+	echo usage: mkdevc file >[1=2]
+	exit 1
+}
+
+cat <<'---'
+#include	"u.h"
+#include	"../port/lib.h"
+#include	"mem.h"
+#include	"dat.h"
+#include	"fns.h"
+#include	"../port/error.h"
+
+#include	"devtab.h"
+
+Dev	devtab[]={
+---
+
+../port/mkextract dev 0 $* | awk '{
+	print "	{ "  $1 "reset, "\
+	$1 "init, "\
+	$1 "attach, "\
+	$1 "clone, "\
+	$1 "walk, "\
+	$1 "stat, "\
+	$1 "open, "\
+	$1 "create,"
+	print "	  "\
+	$1 "close, "\
+	$1 "read, "\
+	$1 "bread, "\
+	$1 "write, "\
+	$1 "bwrite, "\
+	$1 "remove, "\
+	$1 "wstat, },"
+	}'
+echo '};'
+../port/mkextract dev 0 $* | awk '
+	BEGIN{
+		printf "Rune *devchar=L\"" }
+	{	printf "%s", $2 }
+	END{	printf "\";\n"
+	 }
+	'
+
+../port/mkextract misc 0 $* | sed -n 's/(.*)\.root/\1/p' | awk '
+	/kfs|dossrv/	{	print "extern uchar\tfscode[];"
+				print "extern ulong\tfslen;"
+				next }
+			{	print "extern uchar\t" $1 "code[];"
+				print "extern ulong\t" $1 "len;" }
+	'
+../port/mkextract link 0 $* | awk '
+	{	print "extern void\t" $1 "link(void);" }
+	'
+../port/mkextract misc 0 $* | sed -n 's/(.*)\.root/\1/p' | awk '
+	BEGIN{	print "void links(void){" }
+	/kfs|dossrv/	{ print "\taddrootfile(\"fs\", fscode, fslen);"
+			  next }
+			{ print "\taddrootfile(\"" $1 "\", " $1 "code, " $1 "len);" }
+	'
+../port/mkextract link 0 $* | awk '
+	{ print "\t" $1 "link();" }
+	END{	print "}" }
+	'
+
+../port/mkextract port 0 $*
+
+if(! grep conffile $* > /dev/null)echo 'char	*conffile = "'$1'";'
+echo 'ulong	kerndate = KERNDATE;'

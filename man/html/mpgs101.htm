@@ -1,0 +1,74 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs100.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs102.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="856132">
+<center><h1> sh </h1></center>
+</a><a name="856133">
+sh - command interface<p>
+</a><a name="856134">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sh.m";
+Command: module
+{
+  PATH: con "/dis/sh.dis";
+  init: fn(ctxt: ref Draw-&gt;Context, argv: list of string);
+};
+</tt></pre></p><a name="856141">
+<h2> Description</h2>
+</a><a name="856151">
+A generic module interface appropriate for modules launched by the Inferno shell. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="856144">
+ctxt<p>
+</a><td><a name="856146">
+The <em>ctxt</em> parameter is of type ref Draw-&gt;Context and can be used by graphical applications.<p>
+</a>
+<tr><td><a name="856148">
+argv<p>
+</a><td><a name="856150">
+The <em>argv</em> parameter is of type list of string. The Inferno shell constructs this list from the fields parsed from the user's response line to the command prompt. The module (command) being invoked (the leftmost field) is made the first accessible item of the list. The other fields are accessible in the order entered. <p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="856152">
+Any module (not just the Inferno shell) can launch a command-style module (specified by at run time by <em>filename</em>, the second operand to Limbo's load operator) by using this interface.<p>
+</a><a name="856153">
+<h2> Example</h2>
+</a><pre><tt>  include "sh.m";
+  cmd:= load Command <em>filename</em>;
+  <em>define ctxt
+</em>  <em>construct argv with module name at top of the list
+</em>  cmd-&gt;init(ctxt, argv);
+</tt></pre></p><a name="856159">
+<h2> Caveat</h2>
+</a><a name="856160">
+The usual convention of using <em>ModuleType</em> -&gt;PATH at load time is inappropriate in this case.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs100.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs102.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs98.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs100.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="856002">
+<center><h1> mpeg </h1></center>
+</a><a name="856003">
+mpeg - interface to the mpeg device driver<p>
+</a><a name="856004">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m"; import Display, Image, Rect: Draw;
+include "mpeg.m";
+mpeg:= load Mpeg Mpeg-&gt;PATH;
+Mpeg: module
+{
+  PATH:   con "/dis/lib/mpeg.dis";
+  play:     fn(d:       ref Display,
+               w:       ref Image,
+               dopaint: int,
+               r:       Rect,
+               file:    string,
+               notify:  chan of string)   : string;
+  ctl:      fn(msg: string)               : int;
+  keycolor: fn(d: ref Display)            : ref Image;
+};
+</tt></pre></p><a name="856020">
+<h2> Description</h2>
+</a><a name="856021">
+This module has a primitive interface to the mpeg device driver.<p>
+</a><a name="856022">
+<h3> play (d, w, dopaint, r, file, notify)</h3>
+</a><a name="856023">
+The play function plays the specified MPEG file (<em>file</em>) in rectangle <em>r</em> within window <em>w</em> on display <em>d</em>. The <em>dopaint</em> flag specifies whether, before playing the movie, to paint the rectangle with the chroma key color of the device.<p>
+</a><a name="856024">
+The <em>notify</em> argument is a channel upon which to receive errors and status. If <em>notify</em> is nil, <em>play</em> runs synchronously, returning the empty string ("") when the movie completes or a description of any error. If <em>notify</em> is not nil, <em>play</em> spawns an asynchronous process to play the movie and returns the empty string immediately; the process will return status on the <em>notify</em> channel when the movie completes.<p>
+</a><a name="856026">
+<h3> ctl (msg) </h3>
+</a><a name="856027">
+The ctl function writes <em>msg</em>, the string given as an argument, to the MPEG control interface /dev/mpegctl.<p>
+</a><a name="856028">
+<h3> keycolor(d)</h3>
+</a><a name="856029">
+This function uses the Display specified by <em>d</em> to create an Image an single-pixel, replicated off screen Image of color Chroma (16r05).<p>
+</a><a name="856031">
+<h2> Files</h2>
+</a><a name="856032">
+<kbd>/dev/mpeg /dev/mpegctl</kbd><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs98.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs100.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

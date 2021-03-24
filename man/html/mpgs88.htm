@@ -1,0 +1,51 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs87.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs89.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844934">
+<center><h1> tokenize </h1></center>
+</a><a name="844935">
+tokenize - split string into words<p>
+</a><a name="844936">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+tokenize: fn(s, delim: string): (int, list of string);
+</tt></pre></p><a name="844940">
+<h2> Description</h2>
+</a><a name="844942">
+The tokenize function breaks <em>s</em> into words separated by characters in <em>delim</em>.<p>
+</a><a name="844943">
+The returned tuple, <kbd>(</kbd><em>n</em><kbd>, </kbd><em>list</em><kbd>)</kbd>, holds the number of words, <em>n</em>, and an ordered list, <em>list</em>, of those words. The first item on <em>list</em> (i.e.,<kbd> hd </kbd><em>list</em>) is the leftmost word from <em>s</em>.<p>
+</a><a name="844944">
+Words are delimited by the maximal sequences of any character from the <em>delim</em> string. The tokenize function skips delimiter characters at the beginning and end of <em>s</em>, so each element in the returned list has non-zero length.<p>
+</a><a name="844945">
+If <em>s</em> is nil or contains no words, tokenize returns a count of zero and a nil list.<p>
+</a><a name="844946">
+The <em>delim</em> argument may be nil or the empty string, specifying no delimiter characters. The resulting word list will be nil (if <em>s</em> is nil or the empty string) or a single-item list with a copy of <em>s</em>.<p>
+</a><a name="844947">
+<h2> See Also</h2>
+</a><a name="844948">
+<a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs87.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs89.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

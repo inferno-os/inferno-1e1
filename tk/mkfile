@@ -1,0 +1,61 @@
+<../mkconfig
+<../$SYSHOST/mkhost
+<../$OBJDIR/mkfile
+
+CPUS=mips 386
+
+LIB=libtk.$A
+OFILES=\
+	buton.$O\
+	canvs.$O\
+	canvu.$O\
+	carcs.$O\
+	cbits.$O\
+	cimag.$O\
+	cline.$O\
+	coval.$O\
+	cpoly.$O\
+	crect.$O\
+	ctext.$O\
+	cwind.$O\
+	ebind.$O\
+	entry.$O\
+	frame.$O\
+	image.$O\
+	label.$O\
+	listb.$O\
+	menus.$O\
+	packr.$O\
+	parse.$O\
+	scale.$O\
+	scrol.$O\
+	textu.$O\
+	textw.$O\
+	tindx.$O\
+	tmark.$O\
+	ttags.$O\
+	twind.$O\
+	utils.$O\
+	windw.$O\
+	xdata.$O\
+
+DISPKG=${DIS:%=$PREFIX_PKG/tk/%}
+
+HFILES=\
+	../include/tk.h\
+	../include/image.h\
+	
+<../$SYSTARG/mksyslib
+
+all \
+install :V:
+
+clean:V:	clean-std
+
+nuke:V:		nuke-std
+
+package:V:	$PREFIX_PKG/tk
+	$RM $DISPKG
+
+$PREFIX_PKG/tk:
+	$MKDIR $target

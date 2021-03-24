@@ -1,0 +1,88 @@
+CONF=a7000
+CONFLIST=a7000
+ROOT=../..
+
+INIT=wminit
+
+objtype=arm
+</$objtype/mkfile
+CFLAGS=-w -I$ROOT/include -I$ROOT/interp
+
+DEV=`{rc ../port/mkdevlist $CONF}
+LIBS=`{rc ../port/mkliblist $CONF}
+LINK=`{rc ../port/mklinklist $CONF}
+MISC=`{rc ../port/mkmisclist $CONF}
+IP=`{builtin cd ../ip; ls *.c | sed 's/\.c/.'$O'/'}
+
+OBJ=\
+	l.$O\
+	div.$O\
+	clock.$O\
+	main.$O\
+	kbd.$O\
+	mmu.$O\
+	mouse.$O\
+	rtc.$O\
+	screen.$O\
+	trap.$O\
+	uart.$O\
+	video.$O\
+	alarm.$O\
+	alloc.$O\
+	xalloc.$O\
+	chan.$O\
+	dbg.$O\
+	dev.$O\
+	exportfs.$O\
+	fault.$O\
+	dis.$O\
+	discall.$O\
+	latin1.$O\
+	ns.$O\
+	pgrp.$O\
+	print.$O\
+	proc.$O\
+	qio.$O\
+	qlock.$O\
+	styx.$O\
+	inferno.$O\
+	sysfile.$O\
+	dial.$O\
+	taslock.$O\
+	$DEV\
+	$IP $MISC $LINK\
+	utils.$O\
+
+i$CONF:	$OBJ $CONF.c $LIBS
+	$CC $CFLAGS '-DKERNDATE='`{date -n} $CONF.c
+	$LD -o $target -T0x8000C020 -l $OBJ $CONF.$O $LIBS
+	size $target
+
+install:V: i$CONF
+# should be ia7000, fix bootp
+	cp i$CONF /$objtype/b7000
+#	cp i$CONF /n/bootes/$objtype/tv$CONF
+
+<../port/portmkfile
+
+clock.$O devether.$O:	/$objtype/include/ureg.h
+
+osinit.root.s:		../init/$INIT.dis
+			cp $prereq osinit.out
+			../port/mkroot osinit osinit
+
+../init/$INIT.dis:	../init/$INIT.b
+			builtin cd ../init; mk $INIT.dis
+
+phone.root.s:		$ROOT/icons/phone.bit
+			cp $prereq phone.out
+			../port/mkroot phone phone
+
+lucent.root.s:		$ROOT/icons/lucent.bit
+			cp $prereq lucent.out
+			../port/mkroot lucent lucent
+
+screen.$O: lucent.root.s
+
+%.$O:	../ip/%.c
+	$CC $CFLAGS ../ip/$stem.c

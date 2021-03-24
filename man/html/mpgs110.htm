@@ -1,0 +1,371 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs109.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs111.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="846072">
+<center><h1> prog </h1></center>
+</a><a name="846073">
+prog - interface to running programs<p>
+</a><a name="846074">
+<h2> Synopsis</h2>
+</a><pre><tt>bind '#p' /prog
+/prog/n/ctl
+/prog/n/dbgctl
+/prog/n/heap
+/prog/n/ns
+/prog/n/nsgrp
+/prog/n/pgrp
+/prog/n/stack
+/prog/n/status
+/prog/n/text
+/prog/n/wait
+...
+</tt></pre></p><a name="846087">
+<h2> Description</h2>
+</a><a name="846088">
+The <em>prog</em> device serves a two-level directory structure. The first level contains numbered directories corresponding to pids of live Inferno processes; each such directory contains a set of files representing the corresponding process. All files operate on <em>utf</em> strings.<p>
+</a><a name="846089">
+<h3> status (read-only)</h3>
+</a><a name="846111">
+The status file contains six fields, each separated by a blank. The fields are:<strong>	 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="867285">
+process identifiers<p>
+</a><td><a name="867287">
+8 characters right justified<p>
+</a>
+<tr><td><a name="867265">
+process group identifiers<p>
+</a><td><a name="867267">
+8 characters right justified<p>
+</a>
+<tr><td><a name="867269">
+user name<p>
+</a><td><a name="867271">
+at least 10 characters left justified<p>
+</a>
+<tr><td><a name="867273">
+process state<p>
+</a><td><a name="867275">
+10 characters left justified<p>
+</a>
+<tr><td><a name="867277">
+process memory<p>
+</a><td><a name="867279">
+amount of memory used by the process in units of 1024 bytes<p>
+</a><a name="878274">
+at least 5 characters, right justified, followed by a K<p>
+</a>
+<tr><td><a name="867281">
+name of the current program module<p>
+</a><td><a name="867283">
+up to 28 characters, left justified<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</strong><p>
+</a><a name="846112">
+<h3> pgrp (read-only)</h3>
+</a><a name="846113">
+The <kbd>pgrp</kbd> file contains the process group identifier, in decimal.<p>
+</a><a name="846114">
+<h3> nsgrp (read-only)</h3>
+</a><a name="846115">
+The nsgrp file contains the name space group identifier, in decimal.<p>
+</a><a name="846116">
+<h3> ns (read-only)</h3>
+</a><a name="846117">
+The <kbd>ns</kbd> file contains an ordered set of triples, separated by a space, which describe the <kbd><a href="mpgs72.htm#844334"></kbd><em>bind</em><kbd></a> </kbd>and <kbd>mount</kbd> operations used to construct the name space. The fields are: the integer <em>flags</em>, the <em>to</em> file, and the <em>from</em> file.<p>
+</a><a name="846118">
+<h3> wait (read-only)</h3>
+</a><a name="846119">
+The <kbd>wait</kbd> file may be read to recover information about the exiting children of the process. A read of <kbd>wait</kbd> will block until a child of the process, created after <kbd>wait</kbd> was opened, exits. When such a child exits, the read returns a string with three fields: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="867306">
+pid of exiting process<p>
+</a><td><a name="867308">
+decimal value, followed by a space<p>
+</a>
+<tr><td><a name="867310">
+module name<p>
+</a><td><a name="867312">
+string, enclosed in double-quotes<p>
+</a>
+<tr><td><a name="867314">
+error message<p>
+</a><td><a name="867316">
+zero to 64 characters<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="846133">
+<h3> ctl</h3>
+</a><a name="846143">
+Messages written to the <kbd>ctl</kbd> file control the execution of the process. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="846136">
+"kill"<p>
+</a><td><a name="846138">
+Kill the process.<p>
+</a>
+<tr><td><a name="846140">
+"killgrp"<p>
+</a><td><a name="846142">
+Kill all processes in the same group as the process. A process writing to its own <kbd>ctl</kbd> file does not kill itself.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="846144">
+<h3> dbgctl</h3>
+</a><a name="846145">
+The <kbd>dbgctl</kbd> file provides facilities for debugging a process. Messages written to the file control the execution of the process. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="846148">
+"step n" <p>
+</a><td><a name="846150">
+Step the interpreter for at most <em>n</em> instructions<em>,</em> or until a breakpoint is reached.<p>
+</a>
+<tr><td><a name="846152">
+"toret"<p>
+</a><td><a name="846154">
+Step the interpreter until a return from the current activation frame or a breakpoint is reached.<p>
+</a>
+<tr><td><a name="846156">
+"cont"<p>
+</a><td><a name="846158">
+Step the interpreter until a breakpoint is reached.<p>
+</a>
+<tr><td><a name="846160">
+"start"<p>
+</a><td><a name="846162">
+Run the process, ignoring any breakpoints.<p>
+</a>
+<tr><td><a name="846164">
+"bpt set <em>pc path </em>"<p>
+</a><td><a name="846166">
+Set a breakpoint at <em>pc</em> (program counter) for a the module given by <em>path</em>.<p>
+</a>
+<tr><td><a name="846168">
+"bpt del <em>pc path </em>"<p>
+</a><td><a name="846170">
+Clear a breakpoint if one exists.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="846171">
+Reading <kbd>dbgctl</kbd> gives updates for some state transitions while the process is being debugged. Each update is terminated by a newline. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="846174">
+"exited"<p>
+</a><td><a name="846176">
+The process exited without error.<p>
+</a>
+<tr><td><a name="846178">
+"broken: <em>error</em> "<p>
+</a><td><a name="846180">
+The process died due to <em>error</em>, a string with up to 64 characters.<p>
+</a>
+<tr><td><a name="846182">
+"send"<p>
+</a><td><a name="846184">
+The process is blocked sending on a channel.<p>
+</a>
+<tr><td><a name="846186">
+"recv"<p>
+</a><td><a name="846188">
+The process is blocked receiving on a channel.<p>
+</a>
+<tr><td><a name="846190">
+"alt"<p>
+</a><td><a name="846192">
+The process is blocked in an alt statement.<p>
+</a>
+<tr><td><a name="846194">
+"run"<p>
+</a><td><a name="846196">
+The process is unblocked and now ready to run.<p>
+</a>
+<tr><td><a name="846198">
+"new <em>pid</em>" <p>
+</a><td><a name="846200">
+The process has spawned a new process identified by <em>pid</em>.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="846201">
+<h3> stack (read-only)</h3>
+</a><a name="846202">
+The stack file contains the dynamic call stack trace. Each activation frame is described by one line with six fields, each separated by a space: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="846205">
+Frame pointer <p>
+</a><td><a name="846207">
+8 hexadecimal digits<p>
+</a>
+<tr><td><a name="846209">
+Program counter<p>
+</a><td><a name="846211">
+8 hexadecimal digits<p>
+</a>
+<tr><td><a name="846213">
+Module data pointer <p>
+</a><td><a name="846215">
+8 hexadecimal digits<p>
+</a>
+<tr><td><a name="846217">
+Module code pointer <p>
+</a><td><a name="846219">
+8 hexadecimal digits<p>
+</a>
+<tr><td><a name="846221">
+Execution method for the module <p>
+</a><td><a name="846223">
+0 means interpreted, 1 compiled<p>
+</a>
+<tr><td><a name="846225">
+The path name of the module<p>
+</a><td><a name="846227">
+<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="846228">
+The top activation frame starts at offset 0.<p>
+</a><a name="846229">
+<h3> heap</h3>
+</a><a name="846230">
+The <kbd>heap</kbd> file may be queried to examine the state of the process. The file must be opened for both read and write (<kbd>ORDWR</kbd>). Moreover, access to this debugging facility may be not be allowed in production systems.<p>
+</a><a name="846231">
+A data query contains an address, a period, a format character, and a count. <p>
+</a><a name="867317">
+An instruction query contains a <em>pc </em>(program counter), a plus, a mode address, a period, the format <em>I</em>, and a count. <p>
+</a><a name="867318">
+The addresses in the query may be decimal, hexadecimal preceded by <kbd>0x</kbd> or 0X, or octal preceded by 0. Count gives the number of consecutive data items retrieved by reading <kbd>heap</kbd> starting at offset 0; the format varies according to the format character. <p>
+</a><a name="895831">
+All data items other than strings are terminated by a newline. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="895808">
+W<p>
+</a><td><a name="895810">
+32-bit decimal integers.<p>
+</a>
+<tr><td><a name="895812">
+B<p>
+</a><td><a name="895814">
+8-bit unsigned decimal bytes.<p>
+</a>
+<tr><td><a name="895816">
+V<p>
+</a><td><a name="895818">
+64-bit decimal integers.<p>
+</a>
+<tr><td><a name="895820">
+R<p>
+</a><td><a name="895822">
+64-bit reals.<p>
+</a>
+<tr><td><a name="895824">
+I<p>
+</a><td><a name="895826">
+Disassembled Dis instructions.<p>
+</a>
+<tr><td><a name="895828">
+P<p>
+</a><td><a name="895830">
+32-bit hexadecimal address, or nil.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="895849">
+The following formats examine properties of specific 32-bit pointers. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="895834">
+L<p>
+</a><td><a name="895836">
+Examine a list, yielding a pair of hexadecimal addresses separated by a period, giving the address of the head and tail of a list. It is an error to use<kbd> L</kbd> on nil.<p>
+</a>
+<tr><td><a name="895838">
+A<p>
+</a><td><a name="895840">
+Examine an array, yielding a decimal length, a period, and the address of the 0th element of an array, or nil.<p>
+</a>
+<tr><td><a name="895842">
+C<p>
+</a><td><a name="895844">
+Examine a string, yielding the decimal length in characters, a period, and the <em>utf</em> representation of the string.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="895852">
+<h3> text</h3>
+</a><a name="895858">
+The <kbd>text</kbd> file is currently unimplemented.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs109.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs111.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

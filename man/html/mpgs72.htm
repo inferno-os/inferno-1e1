@@ -1,0 +1,88 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs71.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs73.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844334">
+<center><h1> bind </h1></center>
+</a><a name="844335">
+bind, mount, unmount - change file name space<p>
+</a><a name="844336">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+bind: fn(name, old: string, flag: int): int;
+mount:fn(fd: ref FD; old: string, flag: int, aname: string):
+       int;
+unmount: fn(name, old: string): int;
+</tt></pre></p><a name="844343">
+<h2> Description</h2>
+</a><a name="844344">
+The bind, mount and unmount commands modify the file name space of the current process and its name space group. For both calls, <em>old</em> is the name of an existing file or directory in the current name space where the modification is to be made. The name <em>old</em> is evaluated as described in <a href="mpgs26.htm#841334"><em>File Name Expansion</em></a> of <a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a> except that no translation of the final path element is done.<p>
+</a><a name="844345">
+<h3> bind (name, old, flag)</h3>
+</a><a name="844346">
+For bind, name <em>is</em> the name of another (or possibly the same) existing file or directory in the current name space. After a successful bind call, the file name old <em>is</em> an alias for the object originally named by <em>name</em>; if the modification doesn't hide it, <em>name</em> will also still refer to its original file. The evaluation of <em>name</em> happens at the time of the bind, not when the binding is later used.<p>
+</a><a name="844347">
+<h3> mount (fd, old, flag, aname)</h3>
+</a><a name="844348">
+The <em>fd</em> argument to <kbd>mount</kbd> is a file descriptor of an open pipe or network connection to a file server ready to receive Styx messages. The old <em>file</em> must be a directory. After a successful <kbd>mount</kbd> the file tree served <em>(see</em> below) by <em>fd</em> will be visible with its root directory having name <em>old</em>. <p>
+</a><a name="844349">
+With mount, the file descriptor <em>fd</em> must be open for reading and writing and connected to a file server. <p>
+</a><a name="844350">
+After the mount, the file tree starting at <em>old</em> is served by a kernel <em>mnt </em>device. That device will turn operations in the tree into messages on <em>fd</em>. <p>
+</a><a name="844351">
+The string <em>aname</em> selects among different file trees on the server; the empty (or <kbd>nil</kbd>) string chooses the default tree.<p>
+</a><a name="844352">
+For both commands, the <em>flag</em> controls details of the modification made to the name space. In the following, <em>new</em> refers to the file as defined by <em>name</em> or the root directory served by <em>fd</em>. Either both <em>old</em> and new files must be directories, or both must not be directories. The <em>flag</em> parameter can be one of:<p>
+</a><a name="844353">
+<h3> Sys-&gt;MREPL</h3>
+</a><a name="844354">
+Replace the old <em>file</em> by the new one. Henceforth, an evaluation of old <em>will</em> be translated to the new file. If they are directories (for mount, this condition is true by definition), old <em>becomes</em> a <em>"union</em> directory" consisting of one directory (the new file).<p>
+</a><a name="844355">
+<h3> Sys-&gt;MBEFORE</h3>
+</a><a name="844356">
+Both the <em>old</em> and <em>new</em> files must be directories. Add the constituent files of the new directory to the union directory at <em>old</em> so its contents appear first in the union. After a <kbd>Sys-&gt;MBEFORE bind</kbd> or mount, the new directory will be searched first when evaluating file names in the union directory.<p>
+</a><a name="844357">
+<h3> Sys-&gt;MAFTER</h3>
+</a><a name="844358">
+Like <kbd>Sys-&gt;MBEFORE</kbd> but the new directory goes at the end of the union.<p>
+</a><a name="844359">
+In addition, there is a Sys-&gt;MCREATE flag that can be OR'ed with any of the above. When a create call (see <a href="mpgs80.htm#844653"><em>open</em></a>) attempts to create in a union directory, and the file does not exist, the elements of the union are searched in order until one is found with Sys-&gt;MCREATE set. The file is created in that directory; if that attempt fails, the create fails.<p>
+</a><a name="844360">
+<h3> unmount (name, old)</h3>
+</a><a name="844361">
+The effects of <kbd>bind</kbd> and <kbd>mount</kbd> can be undone by unmount. If <em>name</em> is nil, everything bound to or mounted upon <em>old</em> is unbound or unmounted. If <em>name</em> is not nil, it is evaluated as described above for bind, and the effect of binding or mounting that particular result on <em>old</em> is undone.<p>
+</a><a name="844362">
+<h2> See Also</h2>
+</a><a name="844363">
+<a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a><p>
+</a><a name="844364">
+<h2> Diagnostics</h2>
+</a><a name="844365">
+The return value is a positive integer (a unique sequence number) for success, -1 for failure.<p>
+</a><a name="844366">
+<h2> Caveat</h2>
+</a><a name="844367">
+The <kbd>mount</kbd> command will not return until it has successfully attached to the file server, so the thread doing a <kbd>mount</kbd> cannot be the one serving.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs71.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs73.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

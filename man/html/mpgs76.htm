@@ -1,0 +1,49 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs75.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs77.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844528">
+<center><h1> dirread </h1></center>
+</a><a name="844529">
+dirread - read directory<p>
+</a><a name="844530">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+dirread: fn(fd: ref FD, dir: array of Dir): int;
+</tt></pre></p><a name="844534">
+<h2> Description</h2>
+</a><a name="844535">
+<h3> dirread (fd, dir) </h3>
+</a><a name="844536">
+The dirread function reads the contents of the directory pointed to by the open file descriptor <em>fd</em>, filling in the array <em>dir</em> with one Dir structure for each element. These Dir structures are equivalent to the result of a stat call on each file in the directory. See <a href="mpgs87.htm#844841"><em>stat</em></a> for a description of stat and Dir. <p>
+</a><a name="844537">
+A successful dirread returns the number of entries read, up to the length of array <em>dir</em>; the number returned may be less than the number requested. The file offset is advanced by the number of bytes actually read. A return of 0 indicates the end of the directory.<p>
+</a><a name="844538">
+Seeks (see <a href="mpgs85.htm#844801"><em>seek</em></a>) are not allowed on directories.<p>
+</a><a name="844539">
+<h2> See Also </h2>
+</a><a name="844540">
+<a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a>, <a href="mpgs80.htm#844653"><em>open</em></a>, <a href="mpgs83.htm#844766"><em>read</em></a>, <a href="mpgs85.htm#844801"><em>seek</em></a>, <a href="mpgs87.htm#844841"><em>stat</em></a>, and <a href="mpgs59.htm#862154"><em>readdir</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs75.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs77.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

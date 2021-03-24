@@ -1,0 +1,82 @@
+$(LCLOBJ_S):	$*.s
+	$(AS) $*.s
+
+$(LCLOBJ_C):	$*.c
+	$(CC) $(CFLAGS) $*.c
+
+$(PORTOBJ_C):	..\port\$*.c
+	$(CC) -o $@ $(CFLAGS) ..\port\$*.c
+
+$(IPOBJ_C):	..\ip\$*.c
+	$(CC) -o $@ -I..\ip $(CFLAGS) ..\ip\$*.c
+
+installall:
+	-@for %%i in ( $(CONFLIST) ) do $(MAKE) CONF=%%i install
+
+all:
+	-@for %%i in ( $(CONFLIST) ) do $(MAKE) CONF=%%i
+
+package:	all\
+		$(PREFIX_PKG)\$(OBJDIR)\bin
+	-@for %%i in ( $(CONFLIST) ) do $(DEL) $(DELFLAGS) $(PREFIX_PKG)\$(OBJDIR)\bin\tv%%i
+	-@for %%ii in ( $(CONFLIST) ) do $(CP) b%%i $(PREFIX_PKG)\$(OBJDIR)\bin\tv%%i
+
+clean:
+	$(DEL) $(DELFLAGS) *.root.c
+	-@for %%i in ( $(OS) ) do $(DEL) $(DELFLAGS) *.%%i
+	-@for %%i in ( $(CONFLIST) ) do $(DEL) $(DELFLAGS) 9%%i b%%i
+	cd ..\init
+	$(MAKE) clean
+	cd ..\pc
+
+nuke: clean
+	$(DEL) $(DELFLAGS) data2c daten size
+
+%.$O:\
+	u.h \
+	..\port\lib.h \
+	mem.h \
+	dat.h \
+	fns.h \
+	io.h \
+	..\port\error.h \
+	..\port\portdat.h \
+	..\port\portfns.h \
+	devtab.h \
+
+$(CONF).c \
+devtab.h \
+errstr.h:
+	echo Run os/port/ntprep under a Unix shell (e.g. under MKS) to create file $@
+	cat $@
+
+dev.$O:		devtab.h
+proc.$O:	errstr.h
+devroot.$O:	errstr.h
+trap.$O:	..\..\$(OBJDIR)\include\ureg.h
+devproc.$O:	..\..\$(OBJDIR)\include\ureg.h
+segment.$O:	segment.h
+devmouse.$O:	screen.h
+devns16552.$O:	ns16552.h
+
+testlat:	testlat.c latin1.c
+	cl -c testlat.c latin1.c
+	ld testlat.o latin1.o
+	a.out > \lib\keyboard
+	$(DEL) testlat.o latin1.o a.out
+
+# Force data2c, daten, size to build every time in case
+# SYSHOST is different from last time.
+# binmode.obj forces data2c and size to treat input and
+# output files (not stdin/stdout) as binary (not ascii) files.
+data2c:
+	cl -o data2c ..\port\data2c.c binmode.obj
+
+daten:
+	cl -o daten ..\port\daten.c
+
+size:
+	cl -o size ..\port\size.c binmode.obj
+
+$(PREFIX_PKG)/$(OBJDIR)/bin :
+	$(MKDIR) $@

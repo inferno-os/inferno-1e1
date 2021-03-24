@@ -1,0 +1,19 @@
+<../mkconfig
+<../$SYSHOST/mkhost
+<../$OBJDIR/mkfile
+
+CPUS=mips 386
+
+LIB=libkeyring.$A
+OFILES=\
+	egalg.$O\
+
+HFILES=\
+	../include/libcrypt.h\
+	../interp/runt.h\
+	keys.h\
+
+<../$SYSTARG/mksyslib
+
+package:QV:
+	$TRUE

@@ -1,0 +1,38 @@
+#ifdef NOSPOOKS
+#include "lib9.h"
+#include <libcrypt.h>
+
+static void
+bOFMEncrypt(uchar in[8], uchar icv[8], uchar int_key[128], int count)
+{
+	uchar c;
+	int j, chunk;
+	
+	while (count > 0) {
+		block_cipher(int_key, icv, 0);
+		chunk = (count >= 8? 8: count);
+		for (j=0; j < chunk; j++) {
+			c = in[j];
+			c ^= icv[j];
+			in[j] = c;
+		}
+		count -= 8;
+	}
+}
+
+
+void
+blockOFMEncrypt(uchar *in, uchar *icv, uchar *key, int count, DESstate *s)
+{
+	if (s->setup != 0xdeadbeef)
+		setupDESstate(s, key, icv);
+	bOFMEncrypt(in, s->ivec, s->expanded, count);
+}
+
+
+void
+blockOFMDecrypt(uchar *in, uchar *icv, uchar *key, int count, DESstate *s)
+{
+	blockOFMEncrypt(in, icv, key, count, s);
+}
+#endif NOSPOOKS

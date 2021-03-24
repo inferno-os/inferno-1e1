@@ -1,0 +1,144 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs122.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs124.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="848320">
+<center><h1>  styx </h1></center>
+</a><a name="848321">
+Fcall, convS2M, convD2M, convM2S, convM2D, fcallconv, dirconv, dirmodeconv - C interface to Inferno file protocol<p>
+</a><a name="848322">
+<h2> Synopsis</h2>
+</a><pre><tt>#include &lt;lib9.h&gt;
+#include &lt;styx.h&gt;
+int convS2M    (Fcall *f, char *ap)
+int convD2M    (Dir  *d, char *ap)
+int convM2S    (char *ap, Fcall *f, int n)
+int convM2D    (char *ap, Dir *d)
+int dirconv    (va_list *arg, Fconv*)
+int fcallconv  (va_list *arg, Fconv*)
+int dirmodeconv(va_list *arg, Fconv*)
+</tt></pre></p><a name="848332">
+<h2> Description</h2>
+</a><a name="848333">
+These C language routines, which reside in the lib9 library convert messages in the machine-independent format of the Inferno file protocol, Styx, to and from a more convenient form, an Fcall structure:<p>
+</a><pre><tt>typedef struct Fcall {
+     char   type;
+     short  fid;
+     ushort tag;
+     ushort oldtag;      /* T-Flush */
+     Qid    qid;         /* R-Attach, R-Walk, R-Open, R-Create */
+     char   uname[NAMELEN]; /* T-Attach */
+     char   aname[NAMELEN]; /* T-Attach */
+     char   ename[ERRLEN];  /* R-Error */
+     long   perm;           /* T-Create */
+     short  newfid;         /* T-Clone */
+     char   name[NAMELEN];  /* T-Walk, T-Create */
+     char   mode;           /* T-Create, T-Open */
+     long   offset;         /* T-Read, T-Write */
+     long   count;          /* T-Read, T-Write, R-Read */
+     char   *data;          /* T-Write, R-Read */
+     char   stat[DIRLEN];   /* T-Wstat, R-Stat */
+ } Fcall; 
+</tt></pre></p><a name="848352">
+This structure is defined in &lt;styx.h&gt;. See the other pages in this section of the manual for a full description of Styx messages and their encoding. For all message types, the type member of an Fcall structure holds one of Tnop, Rnop, Tattach, Rattach, etc. (defined in an enumerated type in &lt;styx.h&gt;). The fid member is used by most messages, and tag is used by all messages. The other fields are used selectively by the message types given in comments. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="848355">
+convM2S (<em>ap</em>, <em>f</em>, <em>n</em>)<p>
+</a><td><a name="848357">
+The <kbd>convM2S</kbd> function takes a Styx message at <em>ap</em> <em>of</em> length <em>n</em>, and uses it to fill in <kbd>Fcall</kbd> structure <em>f</em>. If the passed message including any data for <kbd>Twrite</kbd> and <kbd>Rread</kbd> messages is formatted properly, the return value is <em>n</em>; otherwise it is 0.<p>
+</a><a name="848358">
+For <kbd>Twrite</kbd> and <kbd>Tread</kbd> messages,<kbd> </kbd><kbd>f</kbd><kbd> -&gt;data</kbd> is set to a pointer into the argument message, not a copy.<p>
+</a>
+<tr><td><a name="848360">
+convS2M <em>(f</em>, <em>ap</em>)<p>
+</a><td><a name="848362">
+The <kbd>convS2M</kbd> does the reverse conversion of the <kbd>convM2S</kbd> function, turning <em>f </em>into a message starting at <em>ap</em>. The length of the resulting message is returned.<p>
+</a><a name="848363">
+For <kbd>Twrite</kbd> and <kbd>Rread</kbd> messages, <em>f</em><kbd> -&gt;count</kbd> bytes starting at <em>f</em><kbd> -&gt;data</kbd> are copied into the message.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="848364">
+The constant MAXMSG (128) is the length of the longest message, excluding data. The constant MAXFDATA (8192) is the maximum count in a read or write message. Thus messages are guaranteed to be shorter than MAXMSG+MAXFDATA bytes long.<p>
+</a><a name="848390">
+Another structure is Dir, used by the routines described in <a href="mpgs87.htm#844841"><em>stat</em></a>. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="848367">
+convM2D (<em>ap</em>, <em>d</em>)<p>
+</a><td><a name="848369">
+The <kbd>convM2D</kbd> function converts the machine-independent form starting at <em>ap</em> into <em>d </em><em>and</em> returns the length of the encoding.<p>
+</a>
+<tr><td><a name="848371">
+convD2M (<em>d</em>, <em>ap</em>)<p>
+</a><td><a name="848373">
+The <kbd>convD2M</kbd> function does the reverse translation of the <kbd>convM2D</kbd> function. also returning the length of the encoding. <p>
+</a>
+<tr><td><a name="848375">
+dirconv (<em>arg</em>, <em>Fconv</em>)<p>
+</a><td><a name="848377">
+Convert a directory buffer,<kbd> Dir*</kbd>, to a string representation. <p>
+</a><a name="848378">
+<p>
+</a><a name="848379">
+The Inferno emulator installs this function with format letter <em>'D'</em>. <p>
+</a>
+<tr><td><a name="848381">
+fcallconv (<em>arg</em>, <em>Fconv</em>)<p>
+</a><td><a name="848383">
+Convert an <kbd>Fcall</kbd> structure, <em>Fcall*</em>, to a string representation.<p>
+</a><a name="848384">
+<p>
+</a><a name="861203">
+The Inferno emulator installs this function with format letter <kbd>'F'</kbd>. Moreover, this function assumes that <em>dirconv</em> has been installed, by the Inferno emulator, with format letter <kbd>'D'</kbd>. <p>
+</a><a name="848385">
+<p>
+</a>
+<tr><td><a name="848387">
+dirmodeconv <em>(arg</em>, <em>Fconv</em>)<p>
+</a><td><a name="848389">
+Convert an <kbd>long</kbd> value, to a string representation of the corresponding file mode value.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="848391">
+<h2> See Also</h2>
+</a><a name="848393">
+<h2> <a href="mpgs36.htm#869014">Limbo Modules</a>, <a href="mpgs87.htm#844841">stat</a>, and <a href="mpgs113.htm#848518">Inferno File Protocol, Styx</a> Notes</h2>
+</a><a name="848394">
+The <em>offset</em> and directory length fields have 8 bytes in the protocol, but these routines assume they fit into a <kbd>long</kbd>.<p>
+</a><a name="848396">
+The convS2M function should check for counts exceeding MAXFMSG.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs122.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs124.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

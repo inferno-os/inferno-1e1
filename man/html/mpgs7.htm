@@ -1,0 +1,71 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs6.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs8.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="840441">
+<center><h1> cp </h1></center>
+</a><a name="840442">
+cp - copy files<p>
+</a><a name="840443">
+<h2> Synopsis</h2>
+</a><pre><tt>cp  	<em>fromfile</em> <em>tofile
+</em>cp  	<em>fromfile...</em> <em>todir
+</em>cp -r 	<em>fromdir...</em> <em>todir
+</em></tt></pre></p><a name="840447">
+<h2> Description</h2>
+</a><a name="840448">
+In the first form <em>fromfile</em> is any name and <em>tofile</em> is any name except an existing directory.<p>
+</a><a name="840449">
+In the second form the commands copy one or more <em>fromfiles</em> into a <em>todir</em> under their original file names, as if by a sequence of commands in the first form. Thus<p>
+</a><pre><tt>  cp f1 f2 dir
+</tt></pre></p><a name="840451">
+is equivalent to<p>
+</a><pre><tt>  cp f1 dir/f1; cp f2 dir/f2
+</tt></pre></p><a name="840453">
+When the cp command copies the contents of plain (non-directory) files <em>fromfile</em> to <em>tofile</em>, the mode and owner of <em>tofile</em> are preserved if it already exists; the mode of <em>fromfile</em> is used otherwise.<p>
+</a><a name="840459">
+<h2> Options 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="840456">
+-r<p>
+</a><td><a name="840458">
+The<kbd> </kbd><kbd>-r </kbd>option directs cp to recursively copy the named directories (<em>fromdir</em>'s) to the target direction (<em>todir</em>), the last entry on the command line.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="840460">
+<h2> See Also</h2>
+</a><a name="840461">
+<a href="mpgs3.htm#840364"><em>cat</em></a> and <a href="mpgs87.htm#844841"><em>stat</em></a> <p>
+</a><a name="840462">
+<h2> Diagnostics</h2>
+</a><a name="840463">
+The <kbd>cp</kbd> command refuses to copy files onto themselves.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs6.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs8.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

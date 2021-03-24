@@ -1,0 +1,109 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs41.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs43.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="852585">
+<center><h1> point </h1></center>
+</a><a name="852586">
+Point - coordinate position<p>
+</a><a name="852587">
+<h2> Synopsis</h2>
+</a><pre><tt>include  "draw.m";
+draw:= load Draw Draw-&gt;PATH;
+Point: adt
+{
+  x:   int;
+  y:   int;
+  add: fn(p: self Point, q: Point): Point;
+  sub: fn(p: self Point, q: Point): Point;
+  mul: fn(p: self Point, i: int):   Point;
+  div: fn(p: self Point, i: int):   Point;
+  eq:  fn(p: self Point, q: Point): int;
+  in:  fn(p: self Point, r: Rect):  int;
+};
+</tt></pre></p><a name="842375">
+<h2> Description</h2>
+</a><a name="842405">
+The Point data type specifies a position in the integer grid. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="842378">
+x, y<p>
+</a><td><a name="842380">
+The coordinate position. The coordinates increase to the right   (<em>x</em>) and down   (<em>y</em>).<p>
+</a>
+<tr><td><a name="842382">
+<em>p</em>.add (<em>q</em>)<p>
+</a><td><a name="842384">
+Returns the point   (<em>p</em>.x+<em>q</em>.x, <em>p</em>.y+<em>q</em>.y).<p>
+</a>
+<tr><td><a name="842386">
+<em>p</em>.sub (<em>q</em>)<p>
+</a><td><a name="842388">
+Returns the point (<em>p</em>.x-<em>q</em>.x, <em>p</em>.y-<em>q</em>.y).<p>
+</a>
+<tr><td><a name="842390">
+p.mul (i)<p>
+</a><td><a name="842392">
+Returns the point (<em>p</em>.x*<em>i</em>, <em>p</em>.y*<em>i</em>).<p>
+</a>
+<tr><td><a name="842394">
+<em>p</em>.div (<em>i</em>)<p>
+</a><td><a name="842396">
+Returns the point (<em>p</em>.x/<em>i</em>, <em>p</em>.y/<em>i</em>).<p>
+</a>
+<tr><td><a name="842398">
+<em>p</em>.eq (<em>q</em>)<p>
+</a><td><a name="842400">
+Returns non-zero if the points' coordinates are equal and zero otherwise.<p>
+</a>
+<tr><td><a name="842402">
+<em>p</em>.in (<em>rect</em>)<p>
+</a><td><a name="842404">
+Returns 1 if point <em>p</em> is within rectangle <em>rect</em>, 0 if outside.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="866713">
+<h2> See Also 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="866733">
+<a href="mpgs36.htm#867451"><em>Limbo Draw Modules</em></a><p>
+</a><td><a name="866736">
+Description of coordinate system<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs41.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs43.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

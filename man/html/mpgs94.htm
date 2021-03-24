@@ -1,0 +1,123 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs93.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs95.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="855571">
+<center><h1> bufio </h1></center>
+</a><a name="855572">
+bufio - buffered input/output module<p>
+</a><a name="855573">
+<h2> Synopsis</h2>
+</a><pre><tt>include "bufio.m";
+Iobuf: import Bufio;
+bufio:= load Bufio Bufio-&gt;PATH;
+OREAD:  con Sys-&gt;OREAD;
+OWRITE: con Sys-&gt;OWRITE;
+ORDWR:  con Sys-&gt;ORDWR;
+EOF:    con -1;
+ERROR:  con -2;
+Iobuf: adt {
+    seek:  fn(b: self ref Iobuf, n, where: int)           : int;
+    read:  fn(b: self ref Iobuf, a: array of byte, n: int): int;
+    write: fn(b: self ref Iobuf, a: array of byte, n: int): int;
+    getb:  fn(b: self ref Iobuf)                          : int;
+    getc:  fn(b: self ref Iobuf)                          : int;
+    gets:  fn(b: self ref Iobuf, sep: int)             : string;
+    gett:  fn(b: self ref Iobuf, sep: string)          : string;
+    putb:  fn(b: self ref Iobuf, b: byte)                 : int;
+    putc:  fn(b: self ref Iobuf, c: int)                  : int;
+    puts:  fn(b: self ref Iobuf, s: string)               : int;
+    flush: fn(b: self ref Iobuf): int;
+    close: fn(b: self ref Iobuf);
+};
+open:   fn(name: string,  mode: int)                : ref Iobuf;
+create: fn(name: string,  mode, perm: int)          : ref Iobuf;
+fopen:  fn(fd: ref Sys-&gt;FD, mode: int)              : ref Iobuf;
+flush:  fn();
+</tt></pre></p><a name="855600">
+<h2> Description</h2>
+</a><a name="865034">
+The Bufio module provides an interface for buffered I/O. A buffer is an adt which is created with bufio-&gt;open or bufio-&gt;fopen.<p>
+</a><a name="855602">
+<h3> open (filename, mode)</h3>
+</a><a name="855603">
+The <kbd>open</kbd> function takes two parameters, a <em>filename</em> and a <em>mode</em>. The <em>mode</em> must be one of OREAD, <kbd>OWRITE, </kbd>or <kbd>ORDWR</kbd> (defined to match the corresponding values in the <kbd>Sys</kbd> module). Both <kbd>open</kbd> and <kbd>fopen</kbd> return a <kbd>ref</kbd> <kbd>Iobuf</kbd> to be used in subsequent calls. <p>
+</a><a name="855604">
+<h3> fopen (fd, mode)</h3>
+</a><a name="855605">
+Buffered I/O on an already open file is made possible using fopen, which takes a file descriptor as its first argument and an open mode as its second argument. The mode of the file descriptor must be compatible with the mode passed to bufio-&gt;fopen.<p>
+</a><a name="855606">
+The Bufio module keeps an internal reference to files opened for writing so that they can be flushed before being garbage collected. Flushing all dirty files is done with an explicit call to bufio-&gt;flush(), usually just before exiting the program.<p>
+</a><a name="865045">
+<h3> seek (n, where), read (a, n), and write (a, n) </h3>
+</a><a name="865052">
+Each has the same parameters as its complement in Sys (see <a href="mpgs85.htm#844801"><em>seek</em></a> and <a href="mpgs83.htm#844766"><em>read</em></a>.<p>
+</a><a name="855616">
+<h3> getb ( )</h3>
+</a><a name="855617">
+Read a single byte from the buffered stream and return its value as an int.<p>
+</a><a name="855618">
+<h3> getc ( )</h3>
+</a><a name="855622">
+Read a single Unicode character, encoded in UTF (see <a href="mpgs130.htm#849689"><em>utf</em></a>), and return its value as an int.<p>
+</a><a name="855623">
+<h3> gets (sepchar)</h3>
+</a><a name="855624">
+Read a line, up to and including a character specified by <em>sepchar</em>, typically a newline. If none is found, read to the end of the file. The returned string includes the terminating character.<p>
+</a><a name="855625">
+<h3> gett (sepstr)</h3>
+</a><a name="855626">
+Read characters until one of the characters in <em>sepstr</em>. The returned string includes the separator. If none of the separator characters is found, read to the end of the file.<p>
+</a><a name="855627">
+<h3> putb (b), putc (c), and puts (s)</h3>
+</a><a name="855628">
+Each writes its argument, a byte, a character, or a string, respectively. Text is encoded in UTF.<p>
+</a><a name="855629">
+<h3> flush ( )</h3>
+</a><a name="855630">
+Write contents of the write buffer to the file. Meaningful only for files opened for writing; has no effect on files opened for reading. <p>
+</a><a name="855631">
+<h3> close ( )</h3>
+</a><a name="855632">
+Flush remaining data in the buffer, if necessary, close the associated file, and discard buffers associated with the file. After close, no further function calls are allowed on the <kbd>iobuf</kbd> adt.<p>
+</a><a name="855633">
+<h2> Diagnostics</h2>
+</a><a name="855634">
+Calls that return a <kbd>ref</kbd> type (<kbd>open</kbd>, fopen, gets, and gett) return <kbd>nil</kbd> when encountering end of file or errors. When an error occurs, the error string, printable with the <kbd>%r</kbd> format, will usually be set as a consequence of an error in the underlying <kbd>Sys</kbd> module. The other functions return <kbd>Bufio-&gt;EOF</kbd> upon encountering end of file, and <kbd>Bufio-&gt;ERROR</kbd> when encountering other errors.<p>
+</a><a name="855635">
+<h2> Example</h2>
+</a><a name="855636">
+The code fragment<p>
+</a><pre><tt>lc:= bufio-&gt;open("/net/tcp/0/local", bufio-&gt;OREAD);     
+addr:= lc.gets('\n');     
+lc = nil; 
+</tt></pre></p><a name="855640">
+<p>
+</a><a name="855641">
+opens the file /net/tcp/0/local and reads a line (including the terminating newline character) from this file to initialize the string variable addr. The file is closed implicitly by discarding (assigning nil to) the only reference to its Iobuf.<p>
+</a><a name="855642">
+<h2> See Also</h2>
+</a><a name="855649">
+<a href="mpgs36.htm#869014"><em>Limbo Modules</em></a>, <a href="mpgs80.htm#844653"><em>open</em></a>, <a href="mpgs83.htm#844766"><em>read</em></a><em> </em>and <a href="mpgs85.htm#844801"><em>seek</em></a><p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs93.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs95.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

@@ -1,0 +1,162 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs86.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs88.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844841">
+<center><h1> stat </h1></center>
+</a><a name="844842">
+fstat, fwstat, stat, wstat - get and put file status<p>
+</a><a name="844843">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+fstat:  fn(fd: ref FD)          : (int, Dir);
+fwstat: fn(fd: ref FD;  d: Dir) : int;
+stat:   fn(name: string)        : (int, Dir);
+wstat:  fn(name: string, d: Dir): int;
+</tt></pre></p><a name="844850">
+<h2> Description</h2>
+</a><a name="844851">
+<h3> stat (name, d) and fstat (fd, d) </h3>
+</a><a name="844852">
+Given a file's <em>name</em>, or an open file descriptor <em>fd</em>, these routines return information about the file into the Dir member of the returned tuple. The int member will be zero for success and -1 for failure.<p>
+</a><a name="844853">
+<h3> wstat (name, d) and fwstat (fd, d)</h3>
+</a><a name="844854">
+The <kbd>wstat</kbd> and <kbd>fwstat</kbd> functions apply the file attributes of <em>d</em> to the file. Only certain attributes can be modified. See section the section titled <em>Modifying File Attributes</em> below. Both functions return zero for success and -1 for failure.<p>
+</a><a name="844855">
+<h3> The Dir Abstract Data Type</h3>
+</a><a name="844856">
+File status is managed via the Dir abstract data type:<p>
+</a><pre><tt>Qid: adt 
+{   
+	path:  int;   
+	vers:  int; 
+}; 
+
+Dir: adt 
+{   
+	name:  string;   
+	uid:  string;   
+	gid:  string;   
+	qid:  Qid;   
+	mode:  int;   
+	atime: int;   
+	mtime: int;   
+	length: int;   
+	dtype: int;   
+	dev:  int; 
+};
+</tt></pre></p><a name="894115">
+<h3> File Mode Bits 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="894092">
+16r80000000 <p>
+</a><td><a name="894094">
+Directory. The <kbd>Sys</kbd> module defines this as <kbd>Sys-&gt;CHDIR</kbd>.<p>
+</a>
+<tr><td><a name="894096">
+8r400<p>
+</a><td><a name="894098">
+Read permission by owner.<p>
+</a>
+<tr><td><a name="894100">
+8r200<p>
+</a><td><a name="894102">
+Write permission by owner.<p>
+</a>
+<tr><td><a name="894104">
+8r100<p>
+</a><td><a name="894106">
+Execute permission (search on directory) by owner<p>
+</a>
+<tr><td><a name="894108">
+8r070<p>
+</a><td><a name="894110">
+Read, write, execute (search) by group.<p>
+</a>
+<tr><td><a name="894112">
+8r007<p>
+</a><td><a name="894114">
+Read, write, execute (search) by others.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h3>
+</a><a name="894116">
+<h3> Modifying File Attributes</h3>
+</a><a name="844920">
+Only some of the fields may be changed by <kbd>wstat</kbd> calls. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="844909">
+name<p>
+</a><td><a name="844911">
+The <kbd>name</kbd> can be changed by anyone with write permission in the parent directory.<p>
+</a>
+<tr><td><a name="844913">
+mode and mtime<p>
+</a><td><a name="844915">
+The <kbd>mode</kbd> and <kbd>mtime</kbd> can be changed by the owner or the group leader of the file's current group.<p>
+</a>
+<tr><td><a name="844917">
+gid<p>
+</a><td><a name="844919">
+The <kbd>gid</kbd> can be changed by the owner.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="844923">
+<h2> See Also</h2>
+</a><a name="844924">
+<a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a>, <a href="mpgs76.htm#844528"><em>dirread</em></a>, <a href="mpgs80.htm#844653"><em>open</em></a>, and <a href="mpgs122.htm#848227"><em>stat</em></a><p>
+</a><a name="844925">
+<h2> Notes</h2>
+</a><a name="844926">
+The following behaviors apply when Inferno is hosted on Windows-based systems.<p>
+</a><a name="844927">
+<h3> FAT File system (Win95 and Windows-NT)</h3>
+</a><a name="844928">
+The values of uid and gid are Everyone.<p>
+</a><a name="844929">
+Files and directories always have read and execute permission. They cannot be changed. Files without write permission cannot be removed.<p>
+</a><a name="844930">
+<h3> NTFS File system (Windows-NT)</h3>
+</a><a name="844931">
+Permissions for read, write, and execute operate as described above.<p>
+</a><a name="844932">
+The uid attribute is supported.<p>
+</a><a name="844933">
+The gid attribute is interpreted always to mean the special group InfernoGroup, even if the underlying Windows system maintains other groups for the file. Special group Everyone is used to represent 'other' for permissions.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs86.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs88.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

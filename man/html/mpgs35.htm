@@ -1,0 +1,313 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs34.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs36.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="854712">
+<center><h1> limbo </h1></center>
+</a><a name="854713">
+limbo - Limbo compiler<p>
+</a><a name="854714">
+<h2> Synopsis</h2>
+</a><pre><tt>limbo [<em>option...</em> ] [<em>file...</em> ]
+</tt></pre></p><a name="854716">
+<h2> Description</h2>
+</a><a name="854717">
+The limbo compiles the named Limbo <em>files</em> into machine-independent object files for the Dis virtual machine. Depending on the options, the compiler may create output files or write information to its standard output. Conventional files and their extensions include the following. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="854720">
+<em>file</em>.b<p>
+</a><td><a name="854722">
+Limbo source file.<p>
+</a>
+<tr><td><a name="854724">
+<em>file</em>.dis<p>
+</a><td><a name="854726">
+Object code for the Dis virtual machine.<p>
+</a>
+<tr><td><a name="854728">
+<em>file</em>.m<p>
+</a><td><a name="854730">
+Limbo source file for module declarations.<p>
+</a>
+<tr><td><a name="854732">
+<em>file</em>.s<p>
+</a><td><a name="854734">
+Assembly code.<p>
+</a>
+<tr><td><a name="854736">
+<em>file</em>.sbl<p>
+</a><td><a name="854738">
+Symbolic debugging information.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="854739">
+With no options, limbo produces a .dis file for each source file.<p>
+</a><a name="854940">
+<h2> Options 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="854742">
+-a<p>
+</a><td colspan=2 rowspan=1><a name="854744">
+Print on standard output type definitions and call frames useful for writing C language implementations of Limbo modules. Suppresses normal output file generation.<p>
+</a>
+<tr><td><a name="854748">
+-C<p>
+</a><td colspan=2 rowspan=1><a name="854750">
+Mark the Dis object file to prevent run-time compilation.<p>
+</a>
+<tr><td><a name="854754">
+-c<p>
+</a><td colspan=2 rowspan=1><a name="854756">
+Mark the Dis object file to guarantee run-time compilation.<p>
+</a>
+<tr><td><a name="854760">
+-D <em>flags</em><p>
+</a><td colspan=2 rowspan=1><a name="854762">
+Turn on debugging flags for specific language features. The flags include:<p>
+</a>
+<tr><td><a name="854766">
+<p>
+</a><td><a name="854768">
+<strong>A </strong><p>
+</a><td><a name="854770">
+arrays<p>
+</a>
+<tr><td><a name="854772">
+<p>
+</a><td><a name="854774">
+<strong>a </strong><p>
+</a><td><a name="854776">
+alt statements<p>
+</a>
+<tr><td><a name="854778">
+<p>
+</a><td><a name="854780">
+<strong>b </strong><p>
+</a><td><a name="854782">
+booleans<p>
+</a>
+<tr><td><a name="854784">
+<p>
+</a><td><a name="854786">
+<strong>C </strong><p>
+</a><td><a name="854788">
+case body statements<p>
+</a>
+<tr><td><a name="854790">
+<p>
+</a><td><a name="854792">
+<strong>c </strong><p>
+</a><td><a name="854794">
+case statements<p>
+</a>
+<tr><td><a name="854796">
+<p>
+</a><td><a name="854798">
+<strong>D </strong><p>
+</a><td><a name="854800">
+use descriptors<p>
+</a>
+<tr><td><a name="854802">
+<p>
+</a><td><a name="854804">
+<strong>d </strong><p>
+</a><td><a name="854806">
+declarations<p>
+</a>
+<tr><td><a name="854808">
+<p>
+</a><td><a name="854810">
+<strong>e </strong><p>
+</a><td><a name="854812">
+expressions<p>
+</a>
+<tr><td><a name="854814">
+<p>
+</a><td><a name="854816">
+<strong>E </strong><p>
+</a><td><a name="854818">
+extended expressions<p>
+</a>
+<tr><td><a name="854820">
+<p>
+</a><td><a name="854822">
+<strong>F </strong><p>
+</a><td><a name="854824">
+function information<p>
+</a>
+<tr><td><a name="854826">
+<p>
+</a><td><a name="854828">
+<strong>f </strong><p>
+</a><td><a name="854830">
+constant folding<p>
+</a>
+<tr><td><a name="854832">
+<p>
+</a><td><a name="854834">
+<strong>m </strong><p>
+</a><td><a name="854836">
+modules<p>
+</a>
+<tr><td><a name="854838">
+<p>
+</a><td><a name="854840">
+<strong>n</strong><p>
+</a><td><a name="854842">
+nil reference<p>
+</a>
+<tr><td><a name="854844">
+<p>
+</a><td><a name="854846">
+<strong>P </strong><p>
+</a><td><a name="854848">
+program counter manipulations<p>
+</a>
+<tr><td><a name="854850">
+<p>
+</a><td><a name="854852">
+<strong>r </strong><p>
+</a><td><a name="854854">
+reference types<p>
+</a>
+<tr><td><a name="854856">
+<p>
+</a><td><a name="854858">
+<strong>S</strong><p>
+</a><td><a name="854860">
+type signature<p>
+</a>
+<tr><td><a name="854862">
+<p>
+</a><td><a name="854864">
+<strong>s </strong><p>
+</a><td><a name="854866">
+code generation summary<p>
+</a>
+<tr><td><a name="854868">
+<p>
+</a><td><a name="854870">
+<strong>T </strong><p>
+</a><td><a name="854872">
+tuples<p>
+</a>
+<tr><td><a name="854874">
+<p>
+</a><td><a name="854876">
+<strong>t </strong><p>
+</a><td><a name="854878">
+type checking<p>
+</a>
+<tr><td><a name="854880">
+<p>
+</a><td><a name="854882">
+<strong>v </strong><p>
+</a><td><a name="854884">
+variable initialization<p>
+</a>
+<tr><td><a name="854887">
+-e<p>
+</a><td colspan=2 rowspan=1><a name="854889">
+Increase the number of errors the compiler will report before exiting from 20, the default, to 1000.<p>
+</a>
+<tr><td><a name="854893">
+-G<p>
+</a><td colspan=2 rowspan=1><a name="854895">
+Annotate assembly language output with debugging information. This option has no effect unless <kbd>-S</kbd> is set.<p>
+</a>
+<tr><td><a name="854899">
+-g<p>
+</a><td colspan=2 rowspan=1><a name="854901">
+Generate debugging information for the input files and place it in a file named by stripping any trailing <kbd>.b</kbd> from the input file name and appending <kbd>.sbl</kbd>.<p>
+</a>
+<tr><td><a name="854905">
+ -I  <em>dir</em><p>
+</a><td colspan=2 rowspan=1><a name="854907">
+An <kbd>include</kbd> file whose name does not begin with slash is sought first relative to the working directory, regardless of the source file argument. If this fails, <kbd>limbo</kbd> sequences through directories named in <kbd>-I</kbd> options, then searches in <kbd>&lt;</kbd><kbd>inferno_root&gt;</kbd><kbd> /module</kbd>. (See Notes section below for value of <em>&lt;inferno_root&gt;</em>.) An <kbd>include</kbd> file contains Limbo source code, normally holding one or more module declarations.<p>
+</a>
+<tr><td><a name="854911">
+ -o <em>obj</em><p>
+</a><td colspan=2 rowspan=1><a name="854913">
+Place output in file <em>obj</em> (allowed only if there is a single input <em>file</em>). The output file will hold either object or assembly code, depending on -S. The default behavior is to take the last element of the input file name, strip any trailing, <kbd>.b</kbd> and append .<kbd>dis</kbd> for object code and <kbd>.s</kbd> for assembly code. Thus, the default output file for <kbd>dir/mod.b</kbd> would be <kbd>mod.dis</kbd>.<p>
+</a>
+<tr><td><a name="854917">
+-S<p>
+</a><td colspan=2 rowspan=1><a name="854919">
+Create assembly language output instead of object code.<p>
+</a>
+<tr><td><a name="854923">
+-T <em>module</em><p>
+</a><td colspan=2 rowspan=1><a name="854925">
+Print on standard output C stub functions, useful for implementing Limbo modules in the C language for linkage with the interpreter.<p>
+</a>
+<tr><td><a name="854929">
+-t <em>module</em><p>
+</a><td colspan=2 rowspan=1><a name="854931">
+Print on standard output a table of runtime functions, to link C language implementations of modules with the Limbo interpreter. Suppresses normal output file generation.<p>
+</a>
+<tr><td><a name="854935">
+-w<p>
+</a><td colspan=2 rowspan=1><a name="854937">
+Print warning messages about unused variables, etc. More <kbd>w</kbd>'s (e.g., &#32;<kbd>-ww</kbd>) increase the pedantry of the checking.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="854941">
+<h2> Files 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="855154">
+<kbd>&lt;</kbd><em>inferno_root</em><kbd>&gt;/module</kbd><p>
+</a><td><a name="855156">
+System directory for Limbo include modules.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+</h2>
+</a><a name="854943">
+<h2> See Also</h2>
+</a><a name="854964">
+<a href="mpgs2.htm#848892"><em>bind</em></a>, <a href="mpgs13.htm#840718"><em>grep</em></a>, <a href="mpgs47.htm#842826"><em>auth</em></a>, <a href="mpgs36.htm#867451"><em>Limbo Draw Modules</em></a>, <a href="mpgs36.htm#869014"><em>Limbo Modules</em></a>, <a href="mpgs97.htm#855746"><em>ir</em></a>, <a href="mpgs62.htm#848707"><em>Limbo Math Modules</em></a>, <a href="mpgs99.htm#856002"><em>mpeg</em></a>, <a href="mpgs66.htm#843703"><em>Limbo Prefab Modules</em></a>, <a href="mpgs102.htm#856162"><em>srv</em></a>, <a href="mpgs71.htm#872019"><em>Limbo System Modules</em></a>, and <a href="mpgs91.htm#859355"><em>tk</em></a>     <p>
+</a><a name="854981">
+<h2> Notes</h2>
+</a><a name="854982">
+Default value of <em>&lt;inferno_root&gt;</em> is <kbd>/usr/inferno</kbd> on Unix-based systems and <kbd>\users\inferno</kbd> on Windows-based systems.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs34.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs36.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

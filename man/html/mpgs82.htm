@@ -1,0 +1,139 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs81.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs83.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="844711">
+<center><h1> print </h1></center>
+</a><a name="844712">
+print, fprint, sprint - print formatted output<p>
+</a><a name="844713">
+<h2> Synopsis</h2>
+</a><pre><tt>include "sys.m";
+sys:= load Sys Sys-&gt;PATH;
+fprint: fn(fd: ref FD, format: string, *): int;
+print:  fn(format: string, *): int;
+sprint: fn(format: string, *): string;
+</tt></pre></p><a name="844719">
+<h2> Description</h2>
+</a><a name="844733">
+These functions format and print their arguments as UTF text. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="844722">
+print (<em>format</em>, *)<p>
+</a><td><a name="844724">
+Write text to the standard output. Return the number of bytes transmitted or a negative value if an error was encountered when writing the output.<p>
+</a>
+<tr><td><a name="844726">
+fprint (<em>fd</em>, *)<p>
+</a><td><a name="844728">
+Write to the <em>fd</em> file descriptor. Return the number of bytes transmitted or a negative value if an error was encountered when writing the output.<p>
+</a>
+<tr><td><a name="865113">
+sprint (<em>format</em>, *)<p>
+</a><td><a name="844732">
+Format text into a string and return the string. Returns the formatted string.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="844734">
+Each of these functions converts, formats, and prints its trailing arguments under control of a <em>format</em> string. The format contains two types of objects: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="865121">
+plain characters<p>
+</a><td><a name="865123">
+Plain characters are simply copied to the output stream.<p>
+</a>
+<tr><td><a name="865125">
+conversion specifications<p>
+</a><td><a name="865127">
+Each conversion results in fetching of zero or more arguments.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="865116">
+The Limbo compiler recognizes calls to these functions and checks that the arguments match the format specifications in number and type.<p>
+</a><a name="844735">
+Each conversion specification has the following format:<p>
+</a><pre><tt>	%[<em>flags</em>]<em>verb
+</em></tt></pre></p><a name="865111">
+<p>
+</a><a name="910386">
+The <em>verb</em> is a single character and each flag is a single character or a (decimal) numeric string. Up to two numeric strings may be used; the first is called <em>f1</em>, the second <em>f2</em>. A period can be used to separate them, and if the period is present then <em>f1</em> and <em>f2</em> are taken to be zero if missing, otherwise they are omitted. Either or both of the numbers may be replaced with the character *, meaning that the actual number will be obtained from the argument list as an integer. The flags and numbers are arguments to the <em>verb</em> described below. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="844740">
+d, x<p>
+</a><td><a name="844742">
+The numeric verbs d and x format their int arguments in decimal and hexadecimal, respectively. Each interprets the flags # and <kbd>-</kbd> to mean alternate format and left justified. If <em>f2</em> is not omitted, the number is padded on the left with zeros until at least <em>f2</em> digits appear. Then, if alternate format is specified for x conversion, the number is preceded by 16r. Finally, if <em>f1</em> is not omitted, the number is padded on the left (or right, if left justification is specified) with enough blanks to make the field at least <em>f1</em> characters long.<p>
+</a>
+<tr><td><a name="844744">
+e, f, g<p>
+</a><td><a name="894014">
+The floating point verbs e, f, and g take a real argument. Each interprets the flags +, -, and # to mean always print a sign, left justified, and alternate format. The <em>f1</em> flag is the minimum field width and, if the converted value takes up less than <em>f1</em> characters, it is padded on the left (or right, if 'left justified') with spaces. The <em>f2</em> flag is the number of digits that are converted after the decimal place for e and f conversions, and <em>f2</em> is the maximum number of significant digits for g conversions. The f verb produces output of the form [-]<em>digits</em>. [<em>.digits</em>]. The e conversion appends an exponent e[-]<em>digits</em>. The g verb will output the argument in either e or f with the goal of producing the smallest output. Also, trailing zeros are omitted from the fraction part of the output, and a trailing decimal point appears only if it is followed by a digit. When alternate format is specified, the result will always contain a decimal point, and for g conversions, trailing zeros are not removed.<p>
+</a>
+<tr><td><a name="844748">
+c<p>
+</a><td><a name="851494">
+The <kbd>c </kbd>verb copies a single character (integer) argument justified within a field of <em>f1</em> characters as described above.<p>
+</a>
+<tr><td><a name="844752">
+r<p>
+</a><td><a name="844754">
+The <kbd>r</kbd> verb takes no arguments; it prints the error string associated with the most recent system error.<p>
+</a>
+<tr><td><a name="844756">
+s<p>
+</a><td><a name="844758">
+The <kbd>s</kbd> verb copies a <kbd>string</kbd> to the output. The number of characters copied (<em>n</em>) is the minimum of the size of the string and <em>f2</em>. These n <em>characters</em> are justified within a field of <em>f1</em> characters as described above.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="844759">
+<h2> See Also</h2>
+</a><a name="844760">
+<em><a href="mpgs71.htm#872019"></em><em>Limbo System Modules</em><em></a> </em>and <a href="mpgs80.htm#844653"><em>open</em></a><p>
+</a><a name="844761">
+<h2> Errors</h2>
+</a><a name="844762">
+Output longer than 256 bytes is truncated. <p>
+</a><a name="844763">
+The x verb does not apply the 0x prefix when <em>f2</em> is present. <p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs81.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs83.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

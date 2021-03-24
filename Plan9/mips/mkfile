@@ -1,0 +1,26 @@
+SYSTARG=Plan9
+OBJTYPE=mips
+CPUS=mips 386 sparc
+
+A=		av
+O=		v
+OS=		v85o
+
+AR=		ar
+ARFLAGS=	cvru
+
+AS=		va
+ASFLAGS=
+
+CC=		vc
+CFLAGS=\
+		-w\
+		-I$ROOT_DEVEL/$SYSTARG/$OBJTYPE/include\
+		-I$ROOT_DEVEL/include\
+
+LD=		vl
+LDFLAGS=
+LDSYSLIBS=
+
+YACC=		yacc
+YFLAGS=		-d

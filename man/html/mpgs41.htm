@@ -1,0 +1,353 @@
+<html><head><title>Inferno Reference </title></head>
+<body bgcolor=antiquewhite>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs40.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs42.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+ 
+<a name="842167">
+<center><h1> image </h1></center>
+</a><a name="842168">
+Image - pictures and drawing<p>
+</a><a name="842169">
+<h2> Synopsis</h2>
+</a><pre><tt>include "draw.m";
+draw:= load Draw Draw-&gt;PATH;
+Image: adt
+{
+  r:       Rect;
+  clipr:   Rect;
+  ldepth:  int;
+  repl:    int;
+  draw:      fn(dst: self ref Image, r: Rect, src: ref Image,
+               mask: ref Image,
+               p:  Point);
+  gendraw:   fn(dst: self ref Image, r: Rect, src: ref Image,
+               p0:  Point,
+               mask: ref Image,
+               p1:  Point);
+  line:      fn(dst: self ref Image, p0, p1: Point,
+               end0, end1, thick: int,
+               src: ref Image,
+               sp:  Point);
+  poly:      fn(dst: self ref Image, p: array of Point,
+               end0, end1, thick: int,
+               src: ref Image,
+               sp:  Point);
+  bezspline: fn(dst: self ref Image, p: array of Point,
+               end0, end1, thick: int,
+               src: ref Image,
+               sp:  Point);
+  fillpoly:  fn(dst: self ref Image, p: array of Point,
+               wind: int,
+               src: ref Image,
+               wsp: Point);
+  fillbezspline: fn(dst: self ref Image, p: array of Point,
+               wind: int,
+               src: ref Image,
+               sp:  Point);
+  ellipse:   fn(dst: self ref Image, c: Point,
+               a, b, thick: int,
+               src: ref Image,
+               sp:  Point);
+  fillellipse:fn(dst: self ref Image, c: Point,
+               a, b: int,
+               src: ref Image,
+               sp:  Point);
+  arc:        fn(dst: self ref Image, c: Point,
+               a, b, thick: int,
+               src: ref Image,
+               sp:  Point, alpha, phi: int);
+fillarc:     fn(dst: self ref Image, c: Point,
+               a, b, thick: int,
+               src: ref Image,
+               sp:  Point, alpha, phi: int);
+
+  bezier:   fn(dst: self ref Image, a,b,c,d: Point, end0,
+               end1, thick: int,
+               src: ref Image,
+               sp:  Point);
+  fillbezier: fn(dst: self ref Image, a,b,c,d: Point,
+               wind: int,
+               src: ref Image,
+               sp:  Point);
+  arrow:      fn(a,b,c: int): int;
+  text:       fn(dst: self ref Image, p: Point,
+               src: ref Image,
+               sp:  Point,
+               font: ref Font, str: string): Point;
+   readpixels: fn(src: self ref Image, r: Rect, data: array of byte): 
+int;
+  writepixels:fn(dst: self ref Image, r: Rect, data: array of byte): 
+int;
+  top:       fn(win: self ref Image);
+  bottom:    fn(win: self ref Image);
+  flush:     fn(win: self ref Image, func: int);
+  origin:    fn(win: self ref Image, log, scr: Point): int;
+};
+</tt></pre></p><a name="842233">
+<h2> Description</h2>
+</a><a name="842234">
+The Image abstract data type defines rectangular pictures and the functions to draw on them; it is also the building block for higher level objects such as <em>windows</em> and <em>fonts</em>. In particular, a <em>window</em> is represented as an Image; no special operators are needed to draw on a window. 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="842237">
+r<p>
+</a><td><a name="842239">
+The coordinates of the rectangle in the plane for which the <kbd>Image</kbd> has defined pixel values. It should not be modified after the image is created.<p>
+</a>
+<tr><td><a name="842241">
+clipr<p>
+</a><td><a name="842243">
+The clipping rectangle: operations that read or write the image will not access pixels outside clipr. Frequently, <kbd>clipr</kbd> is the same as Image.r, but it may differ. See the discussion of Image.repl. The clipping region may be modified dynamically.<p>
+</a>
+<tr><td><a name="842245">
+ldepth<p>
+</a><td><a name="842247">
+The log base-2 of the number of bits per pixel in the picture: 0 for one bit per pixel, 3 for eight bits per pixel, etc. The library supports <kbd>Image.ldepth</kbd> values 0, 1, 2, and 3 only. The value should not be modified after the image is created. <p>
+</a>
+<tr><td><a name="842253">
+repl<p>
+</a><td><a name="866695">
+A boolean value specifying whether the image is tiled to cover the plane when used as a source for a drawing operation. If Image.repl is zero, operations are restricted to the intersection of Image.r and Image.clipr. If <kbd>Image.repl</kbd> is set, <kbd>Image.r</kbd> defines the tile to be replicated and<kbd> Image.clipr </kbd>defines the portion of the plane covered by the tiling. In other words, <kbd>Image.r</kbd> is replicated to cover Image.clipr; in such cases <kbd>Image.r</kbd> and <kbd>Image.clipr</kbd> are independent.<p>
+</a>
+<tr><td><a name="842257">
+<p>
+</a><td><a name="842259">
+For example, <p>
+</a><a name="842260">
+a replicated image with <kbd>Image.r</kbd> set to ((0,0),(1, 1)) and <kbd>Image.clipr</kbd> set to ((0,0),(100,100)), with the single pixel of <kbd>Image.r</kbd> set to blue, behaves identically to <p>
+</a><a name="842261">
+an image with <kbd>Image.r</kbd> and <kbd>Image.clipr</kbd> both set to ((0,0), (100,100)) and all pixels set to blue. However, the first image requires far less memory.<p>
+</a>
+<tr><td><a name="842263">
+<p>
+</a><td><a name="842265">
+The replication flag may be modified dynamically.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="842266">
+<h3> dst.draw (r, src, mask, p)</h3>
+</a><a name="842267">
+The <kbd>draw</kbd> function is the standard drawing function. Only those pixels within the intersection of <em>dst</em>.<kbd>r </kbd>and <em>dst</em>.<kbd>clipr</kbd> will be affected; <kbd>draw</kbd> ignores <em>dst</em>.<kbd>repl</kbd>. The operation behaves as follows:  
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="842270">
+1<p>
+</a><td><a name="842272">
+If <kbd>repl</kbd> is set in src or <em>mask</em>, replicate their contents to fill their clip rectangles. <p>
+</a>
+<tr><td><a name="842274">
+2<p>
+</a><td><a name="842276">
+Translate <em>src</em> and <em>mask</em> so <em>p</em> is aligned with <kbd>r.min</kbd><p>
+</a>
+<tr><td><a name="842278">
+3<p>
+</a><td><a name="842280">
+Set <em>r</em> <em>to</em> the intersection of<em> r </em>and <em>dst</em>.<kbd>r</kbd>.<p>
+</a>
+<tr><td><a name="842282">
+4<p>
+</a><td><a name="842284">
+Intersect<em> r </em>with <em>src</em>.<kbd>clipr</kbd>. If <em>src</em>.<kbd>repl</kbd> is false, also intersect <em>r</em> with <em>src</em>.<kbd>r</kbd> <p>
+</a>
+<tr><td><a name="842286">
+5<p>
+</a><td><a name="842288">
+Intersect <em>r</em> with <em>mask</em>.<kbd>clipr</kbd>. If <em>mask</em>.<kbd>repl</kbd> is false, also intersect <em>r</em> with <em>mask</em>.<kbd>r</kbd>.<p>
+</a>
+<tr><td><a name="842290">
+6<p>
+</a><td><a name="842292">
+For each location in <em>r </em><em>for</em> which the <em>mask</em> pixel is non-zero, set the <em>dst</em> pixel to be the value of the <em>src</em> pixel.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="842293">
+The various <kbd>ldepth</kbd> values involved need not be identical. If the <em>src</em> or <em>mask</em><kbd> </kbd>images are single replicated pixels, any <kbd>ldepth</kbd> is fine. Otherwise, if their <kbd>ldepth </kbd>is not the same as the destination, they must have <kbd>ldepth</kbd> value 0. These restrictions may weaken in later implementations.<p>
+</a><a name="842294">
+<h3> dst.gendraw (r, src, p0, mask, p1)</h3>
+</a><a name="842295">
+The <kbd>gendraw</kbd> function is similar to <kbd>draw()</kbd> except that it aligns the source and mask differently: <em>src</em> is aligned so <em>p0</em> corresponds to <em>r. min</em> and <em>mask</em> is aligned so <em>p1</em> corresponds to <em>r. min</em>. For most purposes with simple masks and source images, draw is sufficient, but <kbd>gendraw</kbd> is the general operator and the one the other drawing primitives are built on.<p>
+</a><a name="842296">
+<h3> dst.line (p0, p1, end0, end1, thick, src, sp)</h3>
+</a><a name="842297">
+The <kbd>line</kbd> function draws in<em> dst </em><em>a</em> line of width <img src="mpgsa1.gif"> pixels joining points <em>p0</em> and <em>p1</em>. The line is drawn using pixels from the <em>src</em> image aligned so <em>sp</em> in the source corresponds to <em>p0</em> in the destination. The line touches both <em>p0</em> and <em>p1</em>, and <em>end0</em> and <em>end1</em> specify how the ends of the line are drawn.  
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="842300">
+Endsquare<p>
+</a><td><a name="842302">
+terminates the line perpendicularly to the direction of the line; a thick line with <kbd>Endsquare</kbd> on both ends will be a rectangle.<p>
+</a>
+<tr><td><a name="842304">
+Enddisc<p>
+</a><td><a name="842306">
+terminates the line by drawing a disc of diameter <img src="mpgsa.gif"><em> </em>centered on the end point.<p>
+</a>
+<tr><td><a name="842308">
+Endarrow<p>
+</a><td><a name="842310">
+terminates the line with an arrowhead whose tip touches the endpoint. See <em>arrow</em>. <p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="842311">
+The line function and the other geometrical operators are equivalent to calls to gendraw using a mask produced by the geometric procedure. <p>
+</a><a name="842312">
+<h3> dst.poly (p, end0, end1, thick, src, sp)</h3>
+</a><a name="842313">
+The <kbd>poly</kbd> function draws a general polygon; it is equivalent to a series of calls to line joining adjacent points in the array of <kbd>Points</kbd> <em>p</em>. The ends of the polygon are specified as in line; interior lines are terminated with <kbd>Enddisc</kbd> to make smooth joins. The source is aligned so <em>sp</em> corresponds to <em>p</em> <kbd>[0]</kbd>.<p>
+</a><a name="842314">
+<h3> dst.bezspline (p, end0, end1, thick, src, sp)</h3>
+</a><a name="842315">
+The <kbd>bezspline</kbd> function is similar to <kbd>poly</kbd> (it takes the same arguments) but draws a quadratic B-spline (despite its name) rather than a polygon. If the first and last points in <em>p</em> are equal, the spline has periodic end conditions.<p>
+</a><a name="842316">
+<h3> dst.fillpoly (p, wind, src, sp)</h3>
+</a><a name="842317">
+The <kbd>fillpoly</kbd> function is like <kbd>poly</kbd> but fills in the polygon rather than outlining it. The right and bottom edges are left open so filled polygons can share edges without sharing pixels. The source is aligned so <em>sp</em> corresponds to <em>p</em> <kbd>[0]</kbd>. The polygon is closed with a line if necessary. <p>
+</a><a name="842318">
+The winding rule parameter <kbd>wind</kbd> resolves ambiguities about what to fill if the polygon is self-intersecting. If <kbd>wind</kbd> is <kbd>~0</kbd>, a pixel is inside the polygon if the polygon's winding number about the point is non-zero. If <kbd>wind</kbd> is <kbd>1</kbd>, a pixel is inside if the winding number is odd. Complementary values (<kbd>0</kbd> or<kbd> ~1</kbd>)<kbd> </kbd>cause outside pixels to be filled. The meaning of other values is undefined.<p>
+</a><a name="842319">
+<h3> dst.fillbezspline (p, wind, src, sp)</h3>
+</a><a name="842320">
+The <kbd>fillbezspline</kbd> function is like <kbd>fillpoly</kbd> but fills the quadratic B-spline rather than the polygon outlined by <em>p</em>. The polygon is closed with a line if necessary.<p>
+</a><a name="842321">
+<h3> dst.ellipse (c, a, b, thick, src, sp)</h3>
+</a><a name="842322">
+The <kbd>ellipse</kbd> function draws in<em> dst </em>an ellipse centered on <em>c</em> with horizontal and vertical semi-axes <em>a</em> and <em>b</em>. The source is aligned so <em>sp</em> in <em>src</em> corresponds to <em>c</em> in <em>dst</em>. The ellipse is drawn with thickness <img src="mpgsa2.gif">. <p>
+</a><a name="842323">
+<h3> dst.fillellipse (c, a, b, src, sp)</h3>
+</a><a name="842324">
+The <kbd>fillellipse</kbd> function is like <kbd>ellipse</kbd> but fills the ellipse rather than outlining it. <p>
+</a><a name="852288">
+<h3> dst.arc (c, a, b, thick, src, sp, alpha, phi)</h3>
+</a><a name="852289">
+Similar to the <kbd>ellipse</kbd> function but only the arc specified by the last two arguments is drawn. The arc starts <em>alpha</em> (integer) degrees counterclockwise from the x-axis and extends an additional <kbd>phi</kbd><em> </em>(integer) degrees counterclockwise.<p>
+</a><a name="852297">
+<h3> dst.fillarc (c, a, b, thick, src, sp, alpha, phi)</h3>
+</a><a name="852286">
+The <kbd>fillarc</kbd> function is to the <kbd>arc</kbd> function as the <kbd>fillellipse</kbd> function is to the <kbd>ellipse</kbd> function. The fill functions fill rather than outline.<p>
+</a><a name="842325">
+<h3> dst.bezier (a, b, c, d, end0, end1, thick, src, sp)</h3>
+</a><a name="842326">
+Bezier draws the cubic Bezier curve defined by Points <em>a</em>, <em>b</em>, <em>c</em>, and <em>d</em>. The end styles are determined by <em>end0</em> and <em>end1</em>; the thickness of the curve is <img src="mpgsa3.gif">. The source is aligned so <em>sp</em> in <em>src</em> corresponds to <em>a </em>in <em>dst</em>. <p>
+</a><a name="842327">
+<h3> dst.fillellipse (c, a, b, src, sp)</h3>
+</a><a name="842328">
+The <kbd>fillellipse</kbd> function is like <kbd>ellipse</kbd> but fills the ellipse rather than outlining it.<p>
+</a><a name="842329">
+<h3> arrow (a, b, c)</h3>
+</a><a name="842330">
+The arrow function describes general arrowheads; its result is passed as <em>end </em>parameters to line, poly, etc. If all three parameters are zero, it produces the default arrowhead, otherwise, <em>a </em>sets the distance long line from end of the regular line to tip, <em>b </em>sets the distance along line from the barb to the tip, and <em>c </em>sets the distance perpendicular to the line from edge of line to the tip of the barb, all in pixels.<p>
+</a><a name="842331">
+<h3> dst.text (p, src, sp, font, str)</h3>
+</a><a name="842332">
+The text function draws in characters specified by the string <em>str</em> and font <em>font</em>. It is equivalent to a series of calls to gendraw using source <em>src</em> and masks determined by the character shapes. The text is positioned with the left of the first character at <kbd>p</kbd>.<kbd>x </kbd>and the top of the line of text at <kbd>p</kbd>.<kbd>y</kbd>. The source is positioned so <em>sp</em> in <em>src</em> corresponds to <em>p</em> in <em>dst</em>. <kbd>Text</kbd> returns a <kbd>Point</kbd> that is the position of the next character that would be drawn if the string were longer. <p>
+</a><a name="842333">
+For characters with undefined or zero-width images in the font, the character at font position 0 is drawn.<p>
+</a><a name="842334">
+<h3> src.readpixels (r, data)</h3>
+</a><a name="842335">
+The <kbd>readpixels</kbd> function fills the <kbd>data</kbd> array with pixels from the specified rectangle of the <em>src</em> image. The pixels are presented one horizontal line at a time, starting with the top-left pixel of <em>r</em>. Each scan line starts with a new byte in the array, leaving, if necessary, the last byte of the previous line partially empty. Pixels are packed as tightly as possible within <em>data</em>, regardless of the rectangle being extracted. Bytes are filled from most to least significant bit order, as the <em>x </em>coordinate increases, aligned so <em>x =0</em> would appear as the leftmost pixel of its byte. Thus, for <kbd>ldepth 0</kbd>, the pixel at <em>x</em> offset 165 within the rectangle will be in a <em>data</em> byte at bit-position <kbd>16r04</kbd> regardless of the overall rectangle: 165 mod 8 equals 5, and 16r80&gt;&gt;5 equals 16r04. It is an error to call <kbd>readpixels</kbd> with an array that is too small to hold the rectangle's pixels. The return value is the number of bytes copied.<p>
+</a><a name="842336">
+<h3> dst.writepixels (r, data)</h3>
+</a><a name="842337">
+The <kbd>writepixels</kbd> function copies pixel values from the <em>data</em> array to the specified rectangle in the <em>dst </em>image. The format of the data is that produced by readpixels. The return value is the number of bytes copied. It is an error to call <kbd>writepixels</kbd> with an array that is too small to fill the rectangle.<p>
+</a><a name="842338">
+<h3> win.top ( )</h3>
+</a><a name="842339">
+If the image <em>win</em> is a window, <kbd>top</kbd> pulls it to the 'top' of the stack of windows on its Screen, perhaps obscuring other images. If <em>win</em> is not a window, <kbd>top</kbd> has no effect.<p>
+</a><a name="842340">
+<h3> win.bottom ( )</h3>
+</a><a name="842341">
+If the image <em>win</em> is a window, <kbd>bottom</kbd> pulls it to the 'bottom' of the stack of windows on its Screen, perhaps obscuring it. If <em>win</em> is not a window, <kbd>bottom</kbd> has no effect.<p>
+</a><a name="842342">
+<h3> image.flush (flag)</h3>
+</a><a name="842343">
+The connection to a display has a buffer used to gather graphics requests generated by calls to the draw library. By default, the library flushes the buffer at the conclusion of any call that affects the visible display image itself. The <kbd>flush</kbd> routine allows finer control of buffer management. The <em>flag</em> has three possible values: 
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="842346">
+Flushoff<p>
+</a><td><a name="842348">
+This flag turns off all automatic flushing caused by writes to <em>image</em>, typically a window or the display image itself (buffers may still be written when they fill or when other objects on the display are modified).<p>
+</a>
+<tr><td><a name="842350">
+Flushnow<p>
+</a><td><a name="842352">
+This flag causes the buffer to be flushed immediately.<p>
+</a>
+<tr><td><a name="842354">
+Flushon<p>
+</a><td><a name="842356">
+This flag restores the default behavior.<p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="842357">
+<h3> win.origin (log, src)</h3>
+</a><a name="842358">
+When a window is created (see <a href="mpgs45.htm#842503"><em>screen</em></a>), the coordinate system within the window is identical to that of the screen: the upper left corner of the window rectangle is its physical location on the display, not for example (0, 0). This symmetry may be broken, however: <kbd>origin</kbd> allows control of the location of the window on the display and the coordinate system used by programs drawing on the window.  
+<Table Border="3">
+<caption></caption>
+<tr><td><a name="851328">
+log<p>
+</a><td><a name="851330">
+sets the upper left corner of the logical (in-window) coordinate system without changing the position of the window on the screen. <p>
+</a>
+<tr><td><a name="851332">
+ <em>scr</em><p>
+</a><td><a name="851334">
+sets the upper left corner of physical (on-screen) coordinate system, that is, the window's location on the display, without changing the internal coordinate system. Therefore, changing <em>scr</em> without changing log <em>moves</em> the window without requiring the client using it to be notified of the change; changing <em>log</em> without changing <em>scr</em> allows the client to set up a private coordinate system regardless of the window's location. It is permissible for values of scr <em>to</em> move some or all of the window off screen. <p>
+</a>
+
+</Table>
+
+<Table>
+<tr><td>
+</Table>
+<p>
+</a><a name="851325">
+The<kbd> origin</kbd> function returns -1 if the image is not a window, or in the case of changes to <em>scr</em>, if there are insufficient resources available to move the window; otherwise it returns 1.<p>
+</a>
+<hr><br>
+ 
+<a href="mpgs.htm"><img src="Top.gif" alt="[Top]" align=bottom></a> <a href="mpgs40.htm"><img src="Previous.gif" alt="[Prev]" align=bottom></a> <a href="mpgs42.htm"><img src="Next.gif" alt="[Next]" align=bottom></a> 
+<hr><br>
+
+
+
+<address>
+<a href="mailto:infernosupport@lucent.com">infernosupport@lucent.com</a>
+</address>
+
+<i>Copyright &#169; 1996,Lucent Technologies, Inc.   All rights
+reserved.</i>
+
+
+<!-- Last updated: 10/18/96 15:49:33 -->
+
+</body>
+</html>

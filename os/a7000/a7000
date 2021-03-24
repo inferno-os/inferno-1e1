@@ -1,0 +1,38 @@
+
+dev
+	root		/
+	cons		c
+	mnt		M
+	ip		I
+	ssl		D
+	tinyfs		F
+	draw		d
+	srv		s
+	prog		p
+	ether		l	netif
+
+link
+	etherv			ether8390
+
+misc
+	osinit.root
+	phone.root
+	lucent.root
+
+port
+	void consdebug(void){}
+
+boot boot #H/hd0
+	il
+	tcp
+
+lib
+	interp
+	tk
+	prefab
+	image
+	memlayer
+	memimage
+	keyring
+	k
+	crypt

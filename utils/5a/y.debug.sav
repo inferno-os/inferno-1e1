@@ -1,0 +1,334 @@
+char*	yytoknames[] =
+{
+	"$end",
+	"error",
+	"$unk",
+	" |",
+	" ^",
+	" &",
+	" <",
+	" >",
+	" +",
+	" -",
+	" *",
+	" /",
+	" %",
+	"LTYPE1",
+	"LTYPE2",
+	"LTYPE3",
+	"LTYPE4",
+	"LTYPE5",
+	"LTYPE6",
+	"LTYPE7",
+	"LTYPE8",
+	"LTYPE9",
+	"LTYPEA",
+	"LTYPEB",
+	"LTYPEC",
+	"LTYPED",
+	"LTYPEE",
+	"LTYPEF",
+	"LTYPEG",
+	"LTYPEH",
+	"LTYPEI",
+	"LTYPEJ",
+	"LCONST",
+	"LSP",
+	"LSB",
+	"LFP",
+	"LPC",
+	"LTYPEX",
+	"LR",
+	"LREG",
+	"LF",
+	"LFREG",
+	"LC",
+	"LCREG",
+	"LPSR",
+	"LCOND",
+	"LS",
+	"LAT",
+	"LFCONST",
+	"LSCONST",
+	"LNAME",
+	"LLAB",
+	"LVAR",
+	" :",
+	" =",
+	" ;",
+	" ,",
+	" [",
+	" ]",
+	" (",
+	" )",
+	" $",
+	" ~",
+};
+char*	yystates[] =
+{
+	0, /*0*/
+	"$accept:  prog.$end \nprog:  prog.line \n", /*1*/
+	0, /*2*/
+	"line:  LLAB.: $$3 line \n", /*3*/
+	"line:  LNAME.: $$5 line \nline:  LNAME.= expr ; \n", /*4*/
+	"line:  LVAR.= expr ; \n", /*5*/
+	0, /*6*/
+	"line:  inst.; \n", /*7*/
+	"line:  error.; \n", /*8*/
+	0, /*9*/
+	0, /*10*/
+	0, /*11*/
+	0, /*12*/
+	0, /*13*/
+	0, /*14*/
+	0, /*15*/
+	0, /*16*/
+	0, /*17*/
+	0, /*18*/
+	"inst:  LTYPEB.name , imm \ninst:  LTYPEB.name , con , imm \n", /*19*/
+	"inst:  LTYPEC.name / con , ximm \n", /*20*/
+	0, /*21*/
+	0, /*22*/
+	0, /*23*/
+	0, /*24*/
+	"line:  LNAME =.expr ; \n", /*25*/
+	"line:  LVAR =.expr ; \n", /*26*/
+	0, /*27*/
+	0, /*28*/
+	"inst:  LTYPE1 cond.imsr , spreg , reg \ninst:  LTYPE1 cond.imsr , reg \ncond:  cond.LCOND \ncond:  cond.LS \n", /*29*/
+	"inst:  LTYPE2 cond.imsr , reg \ncond:  cond.LCOND \ncond:  cond.LS \n", /*30*/
+	"inst:  LTYPE3 cond.gen , gen \ncond:  cond.LCOND \ncond:  cond.LS \n", /*31*/
+	0, /*32*/
+	"inst:  LTYPE5 comma.rel \n", /*33*/
+	0, /*34*/
+	0, /*35*/
+	"inst:  LTYPE7 cond.imsr , spreg \ncond:  cond.LCOND \ncond:  cond.LS \n", /*36*/
+	"inst:  LTYPE8 cond.ireg , [ reglist ] \ninst:  LTYPE8 cond.[ reglist ] , ireg \ncond:  cond.LCOND \ncond:  cond.LS \n", /*37*/
+	0, /*38*/
+	0, /*39*/
+	"inst:  LTYPEB name., imm \ninst:  LTYPEB name., con , imm \n", /*40*/
+	"name:  con.( pointer ) \n", /*41*/
+	0, /*42*/
+	0, /*43*/
+	0, /*44*/
+	"con:  -.con \n", /*45*/
+	"con:  +.con \n", /*46*/
+	"con:  ~.con \n", /*47*/
+	"con:  (.expr ) \n", /*48*/
+	"inst:  LTYPEC name./ con , ximm \n", /*49*/
+	"inst:  LTYPEH comma.ximm \n", /*50*/
+	"inst:  LTYPEJ cond.con , expr , spreg , creg , creg oexpr \ncond:  cond.LCOND \ncond:  cond.LS \n", /*51*/
+	"line:  LLAB : $$3.line \n", /*52*/
+	"line:  LNAME : $$5.line \n", /*53*/
+	"line:  LNAME = expr.; \nexpr:  expr.+ expr \nexpr:  expr.- expr \nexpr:  expr.* expr \nexpr:  expr./ expr \nexpr:  expr.% expr \nexpr:  expr.< < expr \nexpr:  expr.> > expr \nexpr:  expr.& expr \nexpr:  expr.^ expr \nexpr:  expr.| expr \n", /*54*/
+	0, /*55*/
+	"line:  LVAR = expr.; \nexpr:  expr.+ expr \nexpr:  expr.- expr \nexpr:  expr.* expr \nexpr:  expr./ expr \nexpr:  expr.% expr \nexpr:  expr.< < expr \nexpr:  expr.> > expr \nexpr:  expr.& expr \nexpr:  expr.^ expr \nexpr:  expr.| expr \n", /*56*/
+	"inst:  LTYPE1 cond imsr., spreg , reg \ninst:  LTYPE1 cond imsr., reg \n", /*57*/
+	0, /*58*/
+	0, /*59*/
+	0, /*60*/
+	0, /*61*/
+	0, /*62*/
+	0, /*63*/
+	"imm:  $.con \n", /*64*/
+	0, /*65*/
+	0, /*66*/
+	0, /*67*/
+	0, /*68*/
+	"sreg:  LR.( expr ) \n", /*69*/
+	"inst:  LTYPE2 cond imsr., reg \n", /*70*/
+	"inst:  LTYPE3 cond gen., gen \n", /*71*/
+	0, /*72*/
+	0, /*73*/
+	0, /*74*/
+	0, /*75*/
+	0, /*76*/
+	0, /*77*/
+	0, /*78*/
+	"ximm:  $.con \nximm:  $.oreg \nximm:  $.* $ oreg \nximm:  $.LSCONST \nximm:  $.LFCONST \nximm:  $.- LFCONST \n", /*79*/
+	"oreg:  (.sreg ) \ncon:  (.expr ) \n", /*80*/
+	0, /*81*/
+	0, /*82*/
+	"freg:  LF.( con ) \n", /*83*/
+	"inst:  LTYPE4 cond comma.rel \ninst:  LTYPE4 cond comma.nireg \n", /*84*/
+	0, /*85*/
+	"rel:  con.( LPC ) \n", /*86*/
+	0, /*87*/
+	0, /*88*/
+	"inst:  LTYPE6 cond comma.gen \n", /*89*/
+	"inst:  LTYPE7 cond imsr., spreg \n", /*90*/
+	"inst:  LTYPE8 cond ireg., [ reglist ] \n", /*91*/
+	"inst:  LTYPE8 cond [.reglist ] , ireg \n", /*92*/
+	"ireg:  (.spreg ) \n", /*93*/
+	"inst:  LTYPE9 cond reg., ireg , reg \ninst:  LTYPE9 cond reg., ireg comma \n", /*94*/
+	"inst:  LTYPE9 cond comma.ireg , reg \n", /*95*/
+	0, /*96*/
+	"inst:  LTYPEB name ,.imm \ninst:  LTYPEB name ,.con , imm \n", /*97*/
+	"name:  con (.pointer ) \n", /*98*/
+	"name:  LNAME offset.( pointer ) \n", /*99*/
+	"name:  LNAME <.> offset ( LSB ) \n", /*100*/
+	"offset:  +.con \n", /*101*/
+	"offset:  -.con \n", /*102*/
+	0, /*103*/
+	0, /*104*/
+	0, /*105*/
+	"con:  ( expr.) \nexpr:  expr.+ expr \nexpr:  expr.- expr \nexpr:  expr.* expr \nexpr:  expr./ expr \nexpr:  expr.% expr \nexpr:  expr.< < expr \nexpr:  expr.> > expr \nexpr:  expr.& expr \nexpr:  expr.^ expr \nexpr:  expr.| expr \n", /*106*/
+	"inst:  LTYPEC name /.con , ximm \n", /*107*/
+	0, /*108*/
+	"inst:  LTYPEJ cond con., expr , spreg , creg , creg oexpr \n", /*109*/
+	0, /*110*/
+	0, /*111*/
+	0, /*112*/
+	"expr:  expr +.expr \n", /*113*/
+	"expr:  expr -.expr \n", /*114*/
+	"expr:  expr *.expr \n", /*115*/
+	"expr:  expr /.expr \n", /*116*/
+	"expr:  expr %.expr \n", /*117*/
+	"expr:  expr <.< expr \n", /*118*/
+	"expr:  expr >.> expr \n", /*119*/
+	"expr:  expr &.expr \n", /*120*/
+	"expr:  expr ^.expr \n", /*121*/
+	"expr:  expr |.expr \n", /*122*/
+	0, /*123*/
+	"inst:  LTYPE1 cond imsr ,.spreg , reg \ninst:  LTYPE1 cond imsr ,.reg \n", /*124*/
+	"shift:  spreg <.< rcon \n", /*125*/
+	"shift:  spreg >.> rcon \n", /*126*/
+	"shift:  spreg -.> rcon \n", /*127*/
+	"shift:  spreg LAT.> rcon \n", /*128*/
+	0, /*129*/
+	"sreg:  LR (.expr ) \n", /*130*/
+	"inst:  LTYPE2 cond imsr ,.reg \n", /*131*/
+	"inst:  LTYPE3 cond gen ,.gen \n", /*132*/
+	"oreg:  con (.sreg ) \nname:  con (.pointer ) \n", /*133*/
+	0, /*134*/
+	0, /*135*/
+	"ximm:  $ *.$ oreg \n", /*136*/
+	0, /*137*/
+	0, /*138*/
+	"ximm:  $ -.LFCONST \ncon:  -.con \n", /*139*/
+	"oreg:  ( sreg.) \n", /*140*/
+	"oreg:  name (.sreg ) $$60 ireg \n", /*141*/
+	"freg:  LF (.con ) \n", /*142*/
+	0, /*143*/
+	0, /*144*/
+	"rel:  con.( LPC ) \nname:  con.( pointer ) \n", /*145*/
+	0, /*146*/
+	0, /*147*/
+	0, /*148*/
+	"ireg:  (.spreg ) \ncon:  (.expr ) \n", /*149*/
+	"rel:  con (.LPC ) \n", /*150*/
+	0, /*151*/
+	0, /*152*/
+	0, /*153*/
+	"inst:  LTYPE7 cond imsr ,.spreg \n", /*154*/
+	"inst:  LTYPE8 cond ireg ,.[ reglist ] \n", /*155*/
+	"inst:  LTYPE8 cond [ reglist.] , ireg \n", /*156*/
+	0, /*157*/
+	"ireg:  ( spreg.) \n", /*158*/
+	"inst:  LTYPE9 cond reg ,.ireg , reg \ninst:  LTYPE9 cond reg ,.ireg comma \n", /*159*/
+	"inst:  LTYPE9 cond comma ireg., reg \n", /*160*/
+	0, /*161*/
+	"inst:  LTYPEB name , con., imm \n", /*162*/
+	"name:  con ( pointer.) \n", /*163*/
+	0, /*164*/
+	0, /*165*/
+	0, /*166*/
+	"name:  LNAME offset (.pointer ) \n", /*167*/
+	0, /*168*/
+	0, /*169*/
+	0, /*170*/
+	0, /*171*/
+	"inst:  LTYPEC name / con., ximm \n", /*172*/
+	"inst:  LTYPEJ cond con ,.expr , spreg , creg , creg oexpr \n", /*173*/
+	0, /*174*/
+	0, /*175*/
+	0, /*176*/
+	0, /*177*/
+	0, /*178*/
+	"expr:  expr < <.expr \n", /*179*/
+	"expr:  expr > >.expr \n", /*180*/
+	0, /*181*/
+	0, /*182*/
+	0, /*183*/
+	0, /*184*/
+	0, /*185*/
+	"shift:  spreg < <.rcon \n", /*186*/
+	"shift:  spreg > >.rcon \n", /*187*/
+	"shift:  spreg - >.rcon \n", /*188*/
+	"shift:  spreg LAT >.rcon \n", /*189*/
+	"sreg:  LR ( expr.) \nexpr:  expr.+ expr \nexpr:  expr.- expr \nexpr:  expr.* expr \nexpr:  expr./ expr \nexpr:  expr.% expr \nexpr:  expr.< < expr \nexpr:  expr.> > expr \nexpr:  expr.& expr \nexpr:  expr.^ expr \nexpr:  expr.| expr \n", /*190*/
+	0, /*191*/
+	0, /*192*/
+	"oreg:  con ( sreg.) \n", /*193*/
+	"ximm:  $ * $.oreg \n", /*194*/
+	0, /*195*/
+	0, /*196*/
+	"oreg:  name ( sreg.) $$60 ireg \n", /*197*/
+	"freg:  LF ( con.) \n", /*198*/
+	"rel:  con (.LPC ) \nname:  con (.pointer ) \n", /*199*/
+	0, /*200*/
+	"rel:  con ( LPC.) \n", /*201*/
+	0, /*202*/
+	"inst:  LTYPE8 cond ireg , [.reglist ] \n", /*203*/
+	"inst:  LTYPE8 cond [ reglist ]., ireg \n", /*204*/
+	"reglist:  spreg -.spreg \n", /*205*/
+	"reglist:  spreg comma.reglist \n", /*206*/
+	0, /*207*/
+	0, /*208*/
+	"inst:  LTYPE9 cond comma ireg ,.reg \n", /*209*/
+	"inst:  LTYPEB name , con ,.imm \n", /*210*/
+	0, /*211*/
+	"name:  LNAME offset ( pointer.) \n", /*212*/
+	"name:  LNAME < > offset.( LSB ) \n", /*213*/
+	"inst:  LTYPEC name / con ,.ximm \n", /*214*/
+	"inst:  LTYPEJ cond con , expr., spreg , creg , creg oexpr \nexpr:  expr.+ expr \nexpr:  expr.- expr \nexpr:  expr.* expr \nexpr:  expr./ expr \nexpr:  expr.% expr \nexpr:  expr.< < expr \nexpr:  expr.> > expr \nexpr:  expr.& expr \nexpr:  expr.^ expr \nexpr:  expr.| expr \n", /*215*/
+	0, /*216*/
+	0, /*217*/
+	"inst:  LTYPE1 cond imsr , spreg ,.reg \n", /*218*/
+	0, /*219*/
+	0, /*220*/
+	0, /*221*/
+	0, /*222*/
+	0, /*223*/
+	0, /*224*/
+	0, /*225*/
+	0, /*226*/
+	0, /*227*/
+	"oreg:  con.( sreg ) \nname:  con.( pointer ) \n", /*228*/
+	0, /*229*/
+	0, /*230*/
+	0, /*231*/
+	"inst:  LTYPE8 cond ireg , [ reglist.] \n", /*232*/
+	"inst:  LTYPE8 cond [ reglist ] ,.ireg \n", /*233*/
+	0, /*234*/
+	0, /*235*/
+	0, /*236*/
+	0, /*237*/
+	0, /*238*/
+	0, /*239*/
+	0, /*240*/
+	"name:  LNAME < > offset (.LSB ) \n", /*241*/
+	0, /*242*/
+	"inst:  LTYPEJ cond con , expr ,.spreg , creg , creg oexpr \n", /*243*/
+	0, /*244*/
+	"oreg:  name ( sreg ) $$60.ireg \n", /*245*/
+	0, /*246*/
+	0, /*247*/
+	0, /*248*/
+	"name:  LNAME < > offset ( LSB.) \n", /*249*/
+	"inst:  LTYPEJ cond con , expr , spreg., creg , creg oexpr \n", /*250*/
+	0, /*251*/
+	0, /*252*/
+	"inst:  LTYPEJ cond con , expr , spreg ,.creg , creg oexpr \n", /*253*/
+	"inst:  LTYPEJ cond con , expr , spreg , creg., creg oexpr \n", /*254*/
+	0, /*255*/
+	"creg:  LC.( expr ) \n", /*256*/
+	"inst:  LTYPEJ cond con , expr , spreg , creg ,.creg oexpr \n", /*257*/
+	"creg:  LC (.expr ) \n", /*258*/
+	0, /*259*/
+	"creg:  LC ( expr.) \nexpr:  expr.+ expr \nexpr:  expr.- expr \nexpr:  expr.* expr \nexpr:  expr./ expr \nexpr:  expr.% expr \nexpr:  expr.< < expr \nexpr:  expr.> > expr \nexpr:  expr.& expr \nexpr:  expr.^ expr \nexpr:  expr.| expr \n", /*260*/
+	0, /*261*/
+	"oexpr:  ,.expr \n", /*262*/
+	0, /*263*/
+	0, /*264*/
+};
